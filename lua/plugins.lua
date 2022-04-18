@@ -1,16 +1,16 @@
 local fn = vim.fn
 
 -- Automatically install packer
-local install_path = fn.stdpath "data" .. "/site/pack/packer/start/packer.nvim"
+local install_path = fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
 if fn.empty(fn.glob(install_path)) > 0 then
   PACKER_BOOTSTRAP = fn.system {
-    "git",
-    "clone",
-    "--depth", "1",
-    "https://github.com/wbthomason/packer.nvim",
+    'git',
+    'clone',
+    '--depth', '1',
+    'https://github.com/wbthomason/packer.nvim',
     install_path,
   }
-  print "Install packer. Close and reopen Neovim once done..."
+  print 'Install packer. Close and reopen Neovim once done...'
   vim.cmd [[packadd packer.nvim]]
 end
 
@@ -22,32 +22,116 @@ vim.cmd [[
   augroup end
 ]]
 
-local ok, packer = pcall(require, "packer")
+local ok, packer = pcall(require, 'packer')
 if not ok then
-  print "packer.nvim not installed. No plugins will get installed."
+  print 'packer.nvim not installed. No plugins will get installed.'
   return
 end
 
 packer.init {
   display = {
     open_fn = function()
-      return require("packer.util").float { border = "rounded" }
+      return require('packer.util').float { border = 'rounded' }
     end
   }
 }
 
 return packer.startup(function(use)
 
-  use "wbthomason/packer.nvim"
-  use "nvim-lua/popup.nvim"
-  use "nvim-lua/plenary.nvim"
-  use "windwp/nvim-autopairs"
-  use "numToStr/Comment.nvim"
+  -- Libraries
+  use 'nvim-lua/plenary.nvim'
+  use 'nvim-lua/popup.nvim'
+  use 'lewis6991/impatient.nvim'
 
-  use 'folke/tokyonight.nvim'
+  -- Package management
+  use 'wbthomason/packer.nvim'
+
+  -- Common sense helpers
+  use 'windwp/nvim-autopairs'
+  use 'numToStr/Comment.nvim'
+  use 'tpope/vim-unimpaired'
+  use 'tpope/vim-surround'
+  use 'tpope/vim-repeat'
+
+  -- UI
+  use 'folke/tokyonight.nvim' -- colorscheme
+  use 'kyazdani42/nvim-web-devicons'
+  use {
+    'nvim-lualine/lualine.nvim', -- status line
+    requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+  }
+  use {
+    'akinsho/bufferline.nvim', -- buffers within a tab
+    requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+  }
+
+  use 'kyazdani42/nvim-tree.lua'
+
+  use 'akinsho/toggleterm.nvim'
+  use 'ahmedkhalf/project.nvim'
+  use 'lukas-reineke/indent-blankline.nvim'
+  use 'goolord/alpha-nvim'
+
+  -- Movement
+  use 'folke/which-key.nvim'
+  use 'justinmk/vim-sneak'
+  use 'Lokaltog/vim-easymotion'
+
+  -- LSP, Snippets, Completions
+  use 'hrsh7th/nvim-cmp' -- The completion plugin
+  use 'hrsh7th/cmp-nvim-lsp' -- Lsp completion
+  use 'hrsh7th/cmp-nvim-lua' -- Lua completion
+  use 'hrsh7th/cmp-buffer' -- buffer completions
+  use 'hrsh7th/cmp-path' -- path completions
+  use 'hrsh7th/cmp-cmdline' -- cmdline completions
+  use 'L3MON4D3/LuaSnip' --snippet engine
+  use 'saadparwaiz1/cmp_luasnip' -- snippet completions
+  use 'neovim/nvim-lspconfig' -- enable LSP
+  use 'onsails/lspkind-nvim' -- pictograms for lsp completion items
+  use 'williamboman/nvim-lsp-installer' -- simple to use language server installer
+  use 'j-hui/fidget.nvim' -- LSP status endpoint handler
+
+  -- Diagnostics
+  use 'folke/trouble.nvim'
+  use 'folke/todo-comments.nvim'
+
+  -- Languages
+  use 'ziglang/zig.vim'
+  use 'tmux-plugins/vim-tmux'
+
+  -- Formatting
+  use 'jose-elias-alvarez/null-ls.nvim' -- Formatting engine
+
+  -- Searching
+  use 'junegunn/fzf'
+  use 'junegunn/fzf.vim'
+
+  -- Telescope
+  use {
+    'nvim-telescope/telescope.nvim',
+    requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+  }
+  use {
+    'nvim-telescope/telescope-fzf-native.nvim',
+    run = 'make'
+  }
+  use {
+    'nvim-telescope/telescope-frecency.nvim',
+    requires = {'tami5/sqlite.lua'}
+  }
+  use 'benfowler/telescope-luasnip.nvim'
+
+  -- Treesitter
+  use {
+    'nvim-treesitter/nvim-treesitter',
+    run = ':TSUpdate',
+  }
+
+  -- Git
+  use 'lewis6991/gitsigns.nvim'
 
   if PACKER_BOOTSTRAP then
-    require("packer").sync()
+    require('packer').sync()
   end
 
 end)

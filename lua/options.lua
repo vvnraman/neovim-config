@@ -7,7 +7,10 @@ vimopt.belloff = "all"
 -- be silenced.
 -------------------------------------------------------------------------------
 
-vim.wildmode = "longest:full:lastused"
+vim.g.mapleader = ' '
+-------------------------------------------------------------------------------
+
+vim.wildmode = { 'full', 'longest', 'lastused' }
 -- Completion mode that is used for the character specified with 'wildchar'
 -- "full"
 --    Complete the next full match.  After the last match, the original string
@@ -187,7 +190,7 @@ vimopt.sidescrolloff = 8
 -- the cursor if 'nowrap' is set.
 -------------------------------------------------------------------------------
 
-vimopt.laststatus = 3
+vimopt.laststatus = 2
 -- The value of this option influences when the last window will have a status 
 -- line:
 --  0: never
