@@ -86,8 +86,8 @@ return packer.startup(function(use)
   use 'hrsh7th/cmp-cmdline' -- cmdline completions
   use 'L3MON4D3/LuaSnip' --snippet engine
   use 'saadparwaiz1/cmp_luasnip' -- snippet completions
-  use 'neovim/nvim-lspconfig' -- enable LSP
   use 'onsails/lspkind-nvim' -- pictograms for lsp completion items
+  use 'neovim/nvim-lspconfig' -- enable LSP
   use 'williamboman/nvim-lsp-installer' -- simple to use language server installer
   use 'j-hui/fidget.nvim' -- LSP status endpoint handler
 

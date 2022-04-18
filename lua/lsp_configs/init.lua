@@ -5,5 +5,5 @@
 
 require "lsp_configs.luasnip"
 require "lsp_configs.lspkind"
-require "lsp_configs.nvim-cmp"
-require "lsp_configs.nvim-lspconfig"
+require "lsp_configs.cmp"
+require "lsp_configs.lsp"

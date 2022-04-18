@@ -37,6 +37,7 @@ cmp.setup({
   sources = cmp.config.sources({
     { name = "nvim_lsp" },
     { name = "nvim_lua" },
+    { name = "vim_lsp" },
     { name = "luasnip" },
     { name = "path" },
   }, {
@@ -55,16 +56,24 @@ cmp.setup({
         buffer = "[BUF]",
       },
       maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
-
-      -- The function below will be called before any actual modifications from lspkind
-      -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
-      before = function (entry, vim_item)
-        return vim_item
-      end
     }),
   },
   experimental = {
     native_menu = false,
     ghost_text = true,
   },
+})
+
+-- Completions for command mode
+cmp.setup.cmdline(':', {
+  sources = {
+    { name = 'cmdline' }
+  }
+})
+
+-- Completions for '/' search based on current buffer
+cmp.setup.cmdline('/', {
+  sources = {
+    { name = 'buffer' }
+  }
 })
