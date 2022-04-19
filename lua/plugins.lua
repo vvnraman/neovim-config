@@ -46,16 +46,11 @@ return packer.startup(function(use)
   -- Package management
   use 'wbthomason/packer.nvim'
 
-  -- Common sense helpers
-  use 'windwp/nvim-autopairs'
-  use 'numToStr/Comment.nvim'
-  use 'tpope/vim-unimpaired'
-  use 'tpope/vim-surround'
-  use 'tpope/vim-repeat'
-
   -- UI
   use 'folke/tokyonight.nvim' -- colorscheme
   use 'folke/lsp-colors.nvim'
+  use 'folke/zen-mode.nvim'
+  use 'folke/twilight.nvim'
   use 'kyazdani42/nvim-web-devicons'
   use 'stevearc/dressing.nvim' -- UI hooks
   use {
@@ -67,15 +62,20 @@ return packer.startup(function(use)
     requires = { 'kyazdani42/nvim-web-devicons', opt = true }
   }
 
+  -- Common sense helpers
+  use 'windwp/nvim-autopairs'
+  use 'numToStr/Comment.nvim'
+  use 'tpope/vim-unimpaired'
+  use 'tpope/vim-surround'
+  use 'tpope/vim-repeat'
+
   use 'kyazdani42/nvim-tree.lua'
 
-  use 'akinsho/toggleterm.nvim'
-  use 'ahmedkhalf/project.nvim'
-  use 'lukas-reineke/indent-blankline.nvim'
-  use 'goolord/alpha-nvim'
+  -- Legends
+  use 'folke/which-key.nvim'
+  -- use 'mrjones2014/legendary.nvim'
 
   -- Movement
-  use 'folke/which-key.nvim'
   use 'justinmk/vim-sneak'
   use 'Lokaltog/vim-easymotion'
 
@@ -128,9 +128,17 @@ return packer.startup(function(use)
     'nvim-treesitter/nvim-treesitter',
     run = ':TSUpdate',
   }
+  use 'ray-x/cmp-treesitter'
+  -- use 'ray-x/navigator.lua'
 
   -- Git
   use 'lewis6991/gitsigns.nvim'
+
+  -- Untested
+  use 'akinsho/toggleterm.nvim'
+  use 'ahmedkhalf/project.nvim'
+  use 'lukas-reineke/indent-blankline.nvim'
+  use 'goolord/alpha-nvim'
 
   if PACKER_BOOTSTRAP then
     require('packer').sync()

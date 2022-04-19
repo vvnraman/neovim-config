@@ -16,19 +16,25 @@ require 'plugin_configs.lualine'
 require 'plugin_configs.bufferline'
 require 'plugin_configs.gitsigns'
 
--- This will take some time getting used to. I'm already quite proficient with
--- netrw, so will keep using that for now
--- require 'plugin_configs.nvim-tree'
 
 require 'plugin_configs.trouble'
 require 'plugin_configs.telescope'
 require 'plugin_configs.todo-comments'
+require 'plugin_configs.nvim-treesitter'
+require 'plugin_configs.which-key'
 
 -- TODO
+require 'plugin_configs.null-ls'
 require 'plugin_configs.toggleterm'
 require 'plugin_configs.project'
 require 'plugin_configs.alpha-nvim'
-require 'plugin_configs.which-key'
-require 'plugin_configs.null-ls'
-require 'plugin_configs.nvim-treesitter'
+
+-- This will take some time getting used to. I'm already quite proficient with
+-- netrw, so will keep using that for now
+-- require 'plugin_configs.nvim-tree'
+
+--[[
+require 'plugin_configs.legendary'
+require 'plugin_configs.navigator'
+--]]
 

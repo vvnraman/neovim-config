@@ -40,6 +40,7 @@ cmp.setup({
     { name = "vim_lsp" },
     { name = "luasnip" },
     { name = "path" },
+    { name = "treesitter" },
   }, {
     { name = "buffer", keyword_length = 5 },
   }),
