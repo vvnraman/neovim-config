@@ -10,7 +10,7 @@ if fn.empty(fn.glob(install_path)) > 0 then
     'https://github.com/wbthomason/packer.nvim',
     install_path,
   }
-  print 'Install packer. Close and reopen Neovim once done...'
+  print 'Installing packer. Close and reopen Neovim once done...'
   vim.cmd [[packadd packer.nvim]]
 end
 
@@ -55,7 +55,9 @@ return packer.startup(function(use)
 
   -- UI
   use 'folke/tokyonight.nvim' -- colorscheme
+  use 'folke/lsp-colors.nvim'
   use 'kyazdani42/nvim-web-devicons'
+  use 'stevearc/dressing.nvim' -- UI hooks
   use {
     'nvim-lualine/lualine.nvim', -- status line
     requires = { 'kyazdani42/nvim-web-devicons', opt = true }
@@ -80,7 +82,7 @@ return packer.startup(function(use)
   -- LSP, Snippets, Completions
   use 'hrsh7th/nvim-cmp' -- The completion plugin
   use 'hrsh7th/cmp-nvim-lsp' -- Lsp completion
-  use 'hrsh7th/cmp-nvim-lua' -- Lua completion
+  use 'hrsh7th/cmp-nvim-lua' -- Neovim lua runtime API completion
   use 'hrsh7th/cmp-buffer' -- buffer completions
   use 'hrsh7th/cmp-path' -- path completions
   use 'hrsh7th/cmp-cmdline' -- cmdline completions

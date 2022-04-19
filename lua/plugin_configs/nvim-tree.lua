@@ -1,8 +1,5 @@
 -- 'kyazdani42/nvim-tree.lua'
 
--- This will take some time getting used to. I'm already quite proficient with 
--- netrw, so will keep using that for now
---[[
 local ok, nvim_tree = pcall(require, 'nvim-tree')
 if not ok then
   print '"kyazdani42/nvim-tree.lua" not available'
@@ -32,4 +29,3 @@ nvim_tree.setup{
     }
   }
 }
---]]

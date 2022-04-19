@@ -28,7 +28,10 @@ local lsp_handlers = require('lsp_configs.handlers')
 lsp_handlers.setup()
 
 lsp_installer.on_server_ready(function(server)
-  local opts = {}
+  local opts = {
+    on_attach = lsp_handlers.on_attach,
+    capabilities = lsp_handlers.capabilities,
+  }
 
   if server.name == "sumneko_lua" then
     local sumneko_opts = require("lsp_configs.servers.sumneko_lua")

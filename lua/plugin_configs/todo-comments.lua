@@ -4,4 +4,5 @@ if not ok then
   print '"folke/todo-comments.nvim" not available'
   return
 end
+
 todo_comments.setup()

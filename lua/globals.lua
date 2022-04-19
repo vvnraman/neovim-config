@@ -18,3 +18,7 @@ R = function(name)
     RELOAD(name)
     return require(name)
 end
+
+VIM_KEYMAP_SET = vim.keymap.set
+NOREMAP = { noremap = true }
+NOREMAP_SILENT = { noremap = true, silent = true }

@@ -23,11 +23,11 @@ cmp.setup({
     end,
   },
   mapping = {
-    ["<C-n>"] = cmp.mapping.select_next_item(),
-    ["<C-p>"] = cmp.mapping.select_prev_item(),
+    ["<C-n>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
+    ["<C-p>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "c" }),
     ["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
     ["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
-    ["<C-y>"] = cmp.mapping.confirm({ select = true }),
+    ["<C-y>"] = cmp.mapping(cmp.mapping.confirm({ select = true }), { "i", "c" }),
     ["<C-e>"] = cmp.mapping {
       i = cmp.mapping.abort(),
       c = cmp.mapping.close(),
@@ -50,7 +50,7 @@ cmp.setup({
       with_text = true,
       menu = {
         nvim_lsp = "[LSP]",
-        nvim_lua = "[NLUA]",
+        nvim_lua = "[NVLUA]",
         luasnip = "[SNIP]",
         path = "[Path]",
         buffer = "[BUF]",
@@ -64,16 +64,20 @@ cmp.setup({
   },
 })
 
--- Completions for command mode
-cmp.setup.cmdline(':', {
-  sources = {
-    { name = 'cmdline' }
-  }
-})
-
--- Completions for '/' search based on current buffer
+-- `/` cmdline setup.
 cmp.setup.cmdline('/', {
+  mapping = cmp.mapping.preset.cmdline(),
   sources = {
     { name = 'buffer' }
   }
+})
+
+-- `:` cmdline setup.
+cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = 'path' }
+  }, {
+    { name = 'cmdline' }
+  })
 })

@@ -34,7 +34,7 @@ vimopt.backup = false
 -------------------------------------------------------------------------------
 
 vimopt.clipboard = "unnamedplus"
--- unnamedplus  
+-- unnamedplus
 --    A variant of the "unnamed" flag which uses the clipboard register '+'
 --    (|quoteplus|) instead of register '*' for all yank, delete, change and
 --    put operations which would normally go to the unnamed register.  When
@@ -106,27 +106,27 @@ vimopt.formatoptions = vimopt.formatoptions
   - "o" -- Automatically insert the current comment leader after hitting 'o' or
         -- 'O' in Normal mode. In case comment is unwanted in a specific place
   + "q" -- Allow formatting of comments with "gq".
-  + "w" -- Trailing white space indicates a paragraph continues in the next line. 
-        -- A line that ends in a non-white character ends a paragraph.
-  + "a" -- Automatic formatting of paragraphs. Every time text is inserted or
+  - "a" -- Automatic formatting of paragraphs. Every time text is inserted or
         -- deleted the paragraph will be reformatted. See |auto-format|.
   + "n" -- When formatting text, recognize numbered lists.
-  + "2" -- When formatting text, use the indent of the second line of a
+  - "2" -- When formatting text, use the indent of the second line of a
         -- paragraph for the rest of the paragraph, instead of the indent of
-        -- the first line. This supports paragraphs in which the first line has 
+        -- the first line. This supports paragraphs in which the first line has
         -- a
   + "1" -- Don't break a line after a one-letter word. It's broken before it
         -- instead (if possible).
-  + "j" -- Where it makes sense, remove a comment leader when joining lines. 
+  + "j" -- Where it makes sense, remove a comment leader when joining lines.
 
--- Concept credit: https://github.com/tjdevries 
+vimopt.joinspaces = false
+
+-- Concept credit: https://github.com/tjdevries
 -------------------------------------------------------------------------------
 
 
 vimopt.splitbelow = true
--- When on, splitting a window will put the new window below the current one. 
+-- When on, splitting a window will put the new window below the current one.
 vimopt.splitright = true
--- When on, splitting a window will put the new window right of the current 
+-- When on, splitting a window will put the new window right of the current
 -- one.
 -------------------------------------------------------------------------------
 
@@ -145,8 +145,8 @@ vimopt.undofile = true
 -------------------------------------------------------------------------------
 
 vimopt.updatetime = 300
--- If this many milliseconds nothing is typed the swap file will be written to 
--- disk (see |crash-recovery|). Also used for the |CursorHold| autocommand 
+-- If this many milliseconds nothing is typed the swap file will be written to
+-- disk (see |crash-recovery|). Also used for the |CursorHold| autocommand
 -- event.
 -------------------------------------------------------------------------------
 
@@ -181,17 +181,17 @@ vimopt.wrap = true
 -- in the buffer, see 'textwidth' for that.
 -------------------------------------------------------------------------------
 
-vimopt.scrolloff = 10
+vimopt.scrolloff = 5
 -- Minimal number of screen lines to keep above and below the cursor.
 -------------------------------------------------------------------------------
 
 vimopt.sidescrolloff = 8
--- The minimal number of screen columns to keep to the left and to the right of 
+-- The minimal number of screen columns to keep to the left and to the right of
 -- the cursor if 'nowrap' is set.
 -------------------------------------------------------------------------------
 
 vimopt.laststatus = 2
--- The value of this option influences when the last window will have a status 
+-- The value of this option influences when the last window will have a status
 -- line:
 --  0: never
 -- 	1: only if there are at least two windows
@@ -206,7 +206,7 @@ vimopt.backspace = {'eol', 'start', 'indent'}
 --  eol
 --    allow backspacing over line breaks (join lines)
 --  start
---    allow backspacing over the start of insert; CTRL-W and CTRL-U stop once 
+--    allow backspacing over the start of insert; CTRL-W and CTRL-U stop once
 --    at the start of insert.
 --  nostop
 --    like start, except CTRL-W and CTRL-U do not stop at the start of insert.
@@ -222,8 +222,8 @@ vimopt.whichwrap = vimopt.whichwrap
 -------------------------------------------------------------------------------
 
 vimopt.list = true
--- List mode: By default, show tabs as ">", trailing spaces as "-", and 
--- non-breakable space characters as "+". Useful to see the difference between 
+-- List mode: By default, show tabs as ">", trailing spaces as "-", and
+-- non-breakable space characters as "+". Useful to see the difference between
 -- tabs and spaces and for trailing blanks. Further changed by
 -- set listchars=tab:»·,trail:·,extends:↪,precedes:↩
 vimopt.listchars = { tab = '»·', trail = '·', extends = '↪', precedes = '↩' }
@@ -250,7 +250,7 @@ vimopt.shada = {
 }
 -- If you exit Vim and later start it again, you would normally lose a lot of
 -- information.  The ShaDa file can be used to remember that information, which
--- enables you to continue where you left off.  Its name is the abbreviation of 
+-- enables you to continue where you left off.  Its name is the abbreviation of
 -- SHAred DAta because it is used for sharing data between Neovim sessions.
 --
 -- This is introduced in section |21.3| of the user manual.

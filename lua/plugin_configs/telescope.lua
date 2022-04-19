@@ -4,7 +4,29 @@ if not ok then
   print '"nvim-telescope/telescope.nvim" not available'
   return
 end
+
+local actions = require "telescope.actions"
+
+local open_with_trouble = nil
+local ok_trouble, trouble = pcall(require, 'trouble')
+if ok_trouble then
+  open_with_trouble = trouble.open_with_trouble
+else
+  print '"folke/trouble.nvim" not available, for use in "nvim-telescope/nvim-telescope"'
+end
+
 telescope.setup {
+  defaults = {
+
+    prompt_prefix = " ",
+    selection_caret = " ",
+    path_display = { "smart" },
+
+    mappings = {
+      i = { ["<C-t>"] = open_with_trouble },
+      n = { ["<C-t>"] = open_with_trouble },
+    },
+  },
   extensions = {
     fzf = {
       fuzzy = true,                    -- false will only do exact matching
@@ -25,8 +47,8 @@ local telescope_extensions = require('telescope').extensions
 
 local project_files = function()
   local opts = {}
-  local ok = pcall(telescope_builtin.git_files, opts)
-  if not ok then telescope_builtin.find_files(opts) end
+  local ok_git_files = pcall(telescope_builtin.git_files, opts)
+  if not ok_git_files then telescope_builtin.find_files(opts) end
 end
 
 vim.keymap.set({'n'}, '<leader>ff', function() project_files() end)
