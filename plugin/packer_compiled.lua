@@ -174,6 +174,11 @@ _G.packer_plugins = {
     path = "/home/vvnraman/.local/share/nvim/site/pack/packer/start/lspkind-nvim",
     url = "https://github.com/onsails/lspkind-nvim"
   },
+  ["lua-dev.nvim"] = {
+    loaded = true,
+    path = "/home/vvnraman/.local/share/nvim/site/pack/packer/start/lua-dev.nvim",
+    url = "https://github.com/folke/lua-dev.nvim"
+  },
   ["lualine.nvim"] = {
     loaded = true,
     path = "/home/vvnraman/.local/share/nvim/site/pack/packer/start/lualine.nvim",
@@ -353,6 +358,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/vvnraman/.local/share/nvim/site/pack/packer/start/vim-tmux",
     url = "https://github.com/tmux-plugins/vim-tmux"
+  },
+  ["virt-column.nvim"] = {
+    loaded = true,
+    path = "/home/vvnraman/.local/share/nvim/site/pack/packer/start/virt-column.nvim",
+    url = "https://github.com/lukas-reineke/virt-column.nvim"
   },
   ["which-key.nvim"] = {
     loaded = true,

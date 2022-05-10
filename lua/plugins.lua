@@ -69,6 +69,7 @@ return packer.startup(function(use)
     use("folke/which-key.nvim") -- Legends
     use("mzlogin/vim-markdown-toc")
     use("lukas-reineke/indent-blankline.nvim")
+    use("lukas-reineke/virt-column.nvim")
 
     use("tpope/vim-surround")
     use("tpope/vim-repeat")
@@ -93,6 +94,7 @@ return packer.startup(function(use)
     use("j-hui/fidget.nvim") -- LSP status endpoint handler
     use("weilbith/nvim-code-action-menu") -- Show code actions in a useful manner
     use("kosayoda/nvim-lightbulb") -- Show code actions in a useful manner
+    use("folke/lua-dev.nvim")
 
     -- Diagnostics
     use("folke/trouble.nvim")
