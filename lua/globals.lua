@@ -22,3 +22,4 @@ end
 VIM_KEYMAP_SET = vim.keymap.set
 NOREMAP = { noremap = true }
 NOREMAP_SILENT = { noremap = true, silent = true }
+PLUGIN_MISSING_NOTIFY = false
