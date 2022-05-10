@@ -7,10 +7,10 @@ vimopt.belloff = "all"
 -- be silenced.
 -------------------------------------------------------------------------------
 
-vim.g.mapleader = ' '
+vim.g.mapleader = " "
 -------------------------------------------------------------------------------
 
-vim.wildmode = { 'full', 'longest', 'lastused' }
+vim.wildmode = { "full", "longest", "lastused" }
 -- Completion mode that is used for the character specified with 'wildchar'
 -- "full"
 --    Complete the next full match.  After the last match, the original string
@@ -31,16 +31,6 @@ vim.wildoptions = "pum"
 
 vimopt.backup = false
 -- Make a backup before overwriting a file.  Leave it around after the
--------------------------------------------------------------------------------
-
-vimopt.clipboard = "unnamedplus"
--- unnamedplus
---    A variant of the "unnamed" flag which uses the clipboard register '+'
---    (|quoteplus|) instead of register '*' for all yank, delete, change and
---    put operations which would normally go to the unnamed register.  When
---    "unnamed" is also included to the option, yank and delete operations (but
---    not put) will additionally copy the text into register '*'. See
---    |clipboard|.
 -------------------------------------------------------------------------------
 
 vimopt.cmdheight = 2
@@ -84,7 +74,6 @@ vimopt.wildignore = { "*.o", "*~", "*.pyc", "*pycache*" }
 -- is passed to disable this.
 -------------------------------------------------------------------------------
 
-
 vimopt.pumblend = 20
 vimopt.pumheight = 15
 -- Popup menu options
@@ -97,31 +86,31 @@ vimopt.showtabline = 2
 
 vimopt.smartindent = true
 
-vimopt.formatoptions = vimopt.formatoptions
-  + "t" -- Auto-wrap text using textwidth
-  + "c" -- Auto-wrap comments using textwidth, inserting the current comment
-        -- leader automatically.
-  + "r" -- Automatically insert the current comment leader after hitting
-        -- <Enter> in Insert mode.
-  - "o" -- Automatically insert the current comment leader after hitting 'o' or
-        -- 'O' in Normal mode. In case comment is unwanted in a specific place
-  + "q" -- Allow formatting of comments with "gq".
-  - "a" -- Automatic formatting of paragraphs. Every time text is inserted or
-        -- deleted the paragraph will be reformatted. See |auto-format|.
-  + "n" -- When formatting text, recognize numbered lists.
-  - "2" -- When formatting text, use the indent of the second line of a
-        -- paragraph for the rest of the paragraph, instead of the indent of
-        -- the first line. This supports paragraphs in which the first line has
-        -- a
-  + "1" -- Don't break a line after a one-letter word. It's broken before it
-        -- instead (if possible).
-  + "j" -- Where it makes sense, remove a comment leader when joining lines.
+vimopt.formatoptions:append("tcrqn1j")
+vimopt.formatoptions:remove("oa2")
+--  + "t" -- Auto-wrap text using textwidth
+--  + "c" -- Auto-wrap comments using textwidth, inserting the current comment
+--  -- leader automatically.
+--  + "r" -- Automatically insert the current comment leader after hitting
+--  -- <Enter> in Insert mode.
+--  - "o" -- Automatically insert the current comment leader after hitting 'o' or
+--  -- 'O' in Normal mode. In case comment is unwanted in a specific place
+--  + "q" -- Allow formatting of comments with "gq".
+--  - "a" -- Automatic formatting of paragraphs. Every time text is inserted or
+--  -- deleted the paragraph will be reformatted. See |auto-format|.
+--  + "n" -- When formatting text, recognize numbered lists.
+--  - "2" -- When formatting text, use the indent of the second line of a
+--  -- paragraph for the rest of the paragraph, instead of the indent of
+--  -- the first line. This supports paragraphs in which the first line has
+--  -- a
+--  + "1" -- Don't break a line after a one-letter word. It's broken before it
+--  -- instead (if possible).
+--  + "j" -- Where it makes sense, remove a comment leader when joining lines.
 
 vimopt.joinspaces = false
 
 -- Concept credit: https://github.com/tjdevries
 -------------------------------------------------------------------------------
-
 
 vimopt.splitbelow = true
 -- When on, splitting a window will put the new window below the current one.
@@ -131,6 +120,18 @@ vimopt.splitright = true
 -------------------------------------------------------------------------------
 
 vimopt.swapfile = false
+-------------------------------------------------------------------------------
+
+vim.opt.fillchars = {
+    horiz = "━",
+    horizup = "┻",
+    horizdown = "┳",
+    vert = "┃",
+    vertleft = "┫",
+    vertright = "┣",
+    verthoriz = "╋",
+}
+-- Characters to fill the statuslines and vertical separators
 -------------------------------------------------------------------------------
 
 vimopt.termguicolors = true
@@ -150,7 +151,6 @@ vimopt.updatetime = 300
 -- event.
 -------------------------------------------------------------------------------
 
-
 vimopt.expandtab = true
 vimopt.shiftwidth = 2
 vimopt.tabstop = 2
@@ -162,7 +162,6 @@ vimopt.tabstop = 2
 -- tabstop
 --  Number of spaces that a <Tab> in the file counts for
 -------------------------------------------------------------------------------
-
 
 vimopt.number = true
 -- Print the line number in front of each line.  When the 'n' option is
@@ -199,7 +198,7 @@ vimopt.laststatus = 2
 -- 	3: always and ONLY the last window
 -------------------------------------------------------------------------------
 
-vimopt.backspace = {'eol', 'start', 'indent'}
+vimopt.backspace = { "eol", "start", "indent" }
 -- Influences the working of <BS>, <Del>, CTRL-W and CTRL-U in Insert mode.
 --  indent
 --    allow backspacing over autoindent
@@ -213,10 +212,10 @@ vimopt.backspace = {'eol', 'start', 'indent'}
 -------------------------------------------------------------------------------
 
 vimopt.whichwrap = vimopt.whichwrap
- + "<" -- <   <Left>    Normal and Visual
- + ">" -- >   <Right>   Normal and Visual
- + "h" -- h   "h"       Normal and Visual (not recommended)
- + "l" -- l   "l"       Normal and Visual (not recommended)
+    + "<" -- <   <Left>    Normal and Visual
+    + ">" -- >   <Right>   Normal and Visual
+    + "h" -- h   "h"       Normal and Visual (not recommended)
+    + "l" -- l   "l"       Normal and Visual (not recommended)
 -- This was from my vimrc. I don't really know why these are there though.
 -- The docs now say "h" and "l" are not recommended.
 -------------------------------------------------------------------------------
@@ -226,27 +225,32 @@ vimopt.list = true
 -- non-breakable space characters as "+". Useful to see the difference between
 -- tabs and spaces and for trailing blanks. Further changed by
 -- set listchars=tab:»·,trail:·,extends:↪,precedes:↩
-vimopt.listchars = { tab = '»·', trail = '·', extends = '↪', precedes = '↩' }
+vimopt.listchars = {
+    tab = "»·",
+    trail = "·",
+    extends = "↪",
+    precedes = "↩",
+}
 -------------------------------------------------------------------------------
 
 vimopt.shada = {
-  "!",  -- When included, save and restore global variables that start
-        -- with an uppercase letter, and don't contain a lowercase
-        -- letter.  Thus "KEEPTHIS and "K_L_M" are stored, but "KeepThis"
-        -- and "_K_L_M" are not.  Nested List and Dict items may not be
-        -- read back correctly, you end up with an empty item.
-  "'1000",
-        -- Maximum number of previously edited files for which the marks
-        -- are remembered.  This parameter must always be included when
-        -- 'shada' is non-empty.
-        -- Including this item also means that the |jumplist| and the
-        -- |changelist| are stored in the shada file.
-  "<50",-- Maximum number of lines saved for each register.  If zero then
-        -- registers are not saved.  When not included, all lines are
-  "s100",
-        -- Maximum size of an item contents in KiB.
-  "h"   -- Disable the effect of 'hlsearch' when loading the shada
-        -- file. When not included, it depends on whether ":nohlsearch"
+    "!", -- When included, save and restore global variables that start
+    -- with an uppercase letter, and don't contain a lowercase
+    -- letter.  Thus "KEEPTHIS and "K_L_M" are stored, but "KeepThis"
+    -- and "_K_L_M" are not.  Nested List and Dict items may not be
+    -- read back correctly, you end up with an empty item.
+    "'1000",
+    -- Maximum number of previously edited files for which the marks
+    -- are remembered.  This parameter must always be included when
+    -- 'shada' is non-empty.
+    -- Including this item also means that the |jumplist| and the
+    -- |changelist| are stored in the shada file.
+    "<50", -- Maximum number of lines saved for each register.  If zero then
+    -- registers are not saved.  When not included, all lines are
+    "s100",
+    -- Maximum size of an item contents in KiB.
+    "h", -- Disable the effect of 'hlsearch' when loading the shada
+    -- file. When not included, it depends on whether ":nohlsearch"
 }
 -- If you exit Vim and later start it again, you would normally lose a lot of
 -- information.  The ShaDa file can be used to remember that information, which
