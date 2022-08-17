@@ -45,6 +45,12 @@ M.setup = function()
     if ok_clangd_extensions then
         clangd_extensions.setup({
             server = opts,
+            extensions = {
+                autoSetHints = true,
+                inlay_hints = {
+                    only_current_line = true,
+                },
+            },
         })
     else
         lspconfig.clangd.setup(opts)

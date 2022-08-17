@@ -7,17 +7,17 @@ if not ok then
 end
 trouble.setup()
 
-VIM_KEYMAP_SET({ "n" }, "<leader>xx", "<Cmd>Trouble<Cr>", NOREMAP_SILENT)
-VIM_KEYMAP_SET(
-    { "n" },
-    "<leader>xw",
-    "<Cmd>TroubleToggle workspace_diagnostics<Cr>",
-    NOREMAP_SILENT
-)
+VIM_KEYMAP_SET({ "n" }, "<leader>xx", "<Cmd>TroubleToggle<Cr>", NOREMAP_SILENT)
 VIM_KEYMAP_SET(
     { "n" },
     "<leader>xd",
     "<Cmd>TroubleToggle document_diagnostics<Cr>",
+    NOREMAP_SILENT
+)
+VIM_KEYMAP_SET(
+    { "n" },
+    "<leader>xw",
+    "<Cmd>TroubleToggle workspace_diagnostics<Cr>",
     NOREMAP_SILENT
 )
 VIM_KEYMAP_SET(

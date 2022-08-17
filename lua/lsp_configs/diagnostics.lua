@@ -55,10 +55,10 @@ M.set_mappings = function(_, bufnr)
         )
         vim.keymap.set({ "n" }, "<leader>lds", function()
             TELESCOPE_BUILTIN.lsp_document_symbols()
-        end, { bufnr = bufnr })
+        end, { buffer = bufnr })
         vim.keymap.set({ "n" }, "<leader>ldw", function()
             TELESCOPE_BUILTIN.lsp_dynamic_workspace_symbols()
-        end, { bufnr = bufnr })
+        end, { buffer = bufnr })
     end
 end
 

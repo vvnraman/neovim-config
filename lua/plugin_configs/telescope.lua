@@ -1,5 +1,5 @@
 -- https://github.com/nvim-telescope/telescope.nvim
-local OK_TELESCOPE, TELESCOPE = pcall(require, "telescope")
+OK_TELESCOPE, TELESCOPE = pcall(require, "telescope")
 if not OK_TELESCOPE then
     print('"nvim-telescope/telescope.nvim" not available')
     return
@@ -15,7 +15,7 @@ else
     )
 end
 
-local TELESCOPE_BUILTIN = require("telescope.builtin")
+TELESCOPE_BUILTIN = require("telescope.builtin")
 local telescope_extensions = TELESCOPE.extensions
 
 TELESCOPE.setup({
@@ -67,23 +67,20 @@ end)
 vim.keymap.set({ "n" }, "<leader>fp", function()
     project_files()
 end)
-vim.keymap.set({ "n" }, "<leader>fl", function()
+vim.keymap.set({ "n" }, "<leader>fg", function()
     TELESCOPE_BUILTIN.live_grep()
 end)
-vim.keymap.set({ "n" }, "<leader>fb", function()
+vim.keymap.set({ "n" }, "<leader>ls", function()
     TELESCOPE_BUILTIN.buffers()
-end)
-vim.keymap.set({ "n" }, "<leader>fh", function()
-    TELESCOPE_BUILTIN.help_tags()
 end)
 vim.keymap.set({ "n" }, "<leader>ft", function()
     TELESCOPE_BUILTIN.builtin()
 end)
-vim.keymap.set({ "n" }, "<C-/>", function()
+vim.keymap.set({ "n" }, "<>", function()
     TELESCOPE_BUILTIN.current_buffer_fuzzy_find()
 end)
-vim.keymap.set({ "n" }, "<leader>fo", function()
-    TELESCOPE_BUILTIN.oldfiles()
+vim.keymap.set({ "n" }, "<leader>ht", function()
+    TELESCOPE_BUILTIN.help_tags()
 end)
 vim.keymap.set({ "n" }, "<leader>ch", function()
     TELESCOPE_BUILTIN.command_history()
@@ -91,32 +88,76 @@ end)
 vim.keymap.set({ "n" }, "<leader>sh", function()
     TELESCOPE_BUILTIN.search_history()
 end)
+vim.keymap.set({ "n" }, "<leader>fo", function()
+    TELESCOPE_BUILTIN.oldfiles()
+end)
+vim.keymap.set({ "n" }, "<leader>fb", function()
+    telescope_extensions.file_browser.file_browser()
+end)
 
--- Custom locations
-vim.keymap.set({ "n" }, "<leader>nv", function()
+-- `find_files` and `file_browser` for custom locations which I need to visit
+-- often
+-- `fz` - Find fuzzy
+--      - This is different from `ff` to avoid the `timeoutlen` delay
+-- `fe` - File explorer
+--      - This is different from `fb` to avoid the `timeoutlen` delay
+
+-- Neovim
+vim.keymap.set({ "n" }, "<leader>fzv", function()
     TELESCOPE_BUILTIN.find_files({
         cwd = "~/.config/nvim/",
     })
 end)
-vim.keymap.set({ "n" }, "<leader>cz", function()
+vim.keymap.set({ "n" }, "<leader>fev", function()
+    telescope_extensions.file_browser.file_browser({
+        path = "~/.config/nvim/",
+        cwd_to_path = true,
+    })
+end)
+
+-- Chezmoi
+vim.keymap.set({ "n" }, "<leader>fzc", function()
     TELESCOPE_BUILTIN.find_files({
         cwd = "~/.local/share/chezmoi/",
     })
 end)
+vim.keymap.set({ "n" }, "<leader>fec", function()
+    telescope_extensions.file_browser.file_browser({
+        path = "~/.local/share/chezmoi/",
+        cwd_to_path = true,
+    })
+end)
+
+-- Journal
+vim.keymap.set({ "n" }, "<leader>fzj", function()
+    TELESCOPE_BUILTIN.find_files({
+        cwd = "~/code/notes/journal/journal/",
+    })
+end)
+vim.keymap.set({ "n" }, "<leader>fej", function()
+    telescope_extensions.file_browser.file_browser({
+        path = "~/code/notes/journal/journal/",
+        cwd_to_path = true,
+    })
+end)
+
+-- Chezmoi
+vim.keymap.set({ "n" }, "<leader>fzn", function()
+    TELESCOPE_BUILTIN.find_files({
+        cwd = "~/code/notes/notebook/notebook/",
+    })
+end)
+vim.keymap.set({ "n" }, "<leader>fen", function()
+    telescope_extensions.file_browser.file_browser({
+        path = "~/code/notes/notebook/notebook/",
+        cwd_to_path = true,
+    })
+end)
 
 -- Extensions
-vim.keymap.set({ "n" }, "<leader>fe", function()
-    telescope_extensions.file_browser.file_browser()
-end)
 vim.keymap.set({ "n" }, "<leader>fq", function()
     telescope_extensions.frecency.frecency()
 end)
 vim.keymap.set({ "n" }, "<leader>fs", function()
     telescope_extensions.luasnip.luasnip()
-end)
-vim.keymap.set({ "n" }, "<leader>nd", function()
-    telescope_extensions.file_browser.file_browser({
-        path = "~/.config/nvim/",
-        cwd_to_path = true,
-    })
 end)
