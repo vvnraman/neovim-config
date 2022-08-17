@@ -89,8 +89,12 @@ return packer.startup(function(use)
     use("L3MON4D3/LuaSnip") --snippet engine
     use("saadparwaiz1/cmp_luasnip") -- snippet completions
     use("onsails/lspkind-nvim") -- pictograms for lsp completion items
-    use("neovim/nvim-lspconfig") -- enable LSP
-    use("williamboman/nvim-lsp-installer") -- simple to use language server installer
+
+    use({
+        "williamboman/mason.nvim",
+        "williamboman/mason-lspconfig.nvim",
+        "neovim/nvim-lspconfig",
+    })
     use("j-hui/fidget.nvim") -- LSP status endpoint handler
     use("weilbith/nvim-code-action-menu") -- Show code actions in a useful manner
     use("kosayoda/nvim-lightbulb") -- Show code actions in a useful manner

@@ -76,8 +76,11 @@ end)
 vim.keymap.set({ "n" }, "<leader>ft", function()
     TELESCOPE_BUILTIN.builtin()
 end)
-vim.keymap.set({ "n" }, "<>", function()
-    TELESCOPE_BUILTIN.current_buffer_fuzzy_find()
+vim.keymap.set({ "n" }, "<C-_>", function()
+    TELESCOPE_BUILTIN.current_buffer_fuzzy_find({
+        previewer = false,
+        skip_empty_lines = true,
+    })
 end)
 vim.keymap.set({ "n" }, "<leader>ht", function()
     TELESCOPE_BUILTIN.help_tags()
@@ -144,7 +147,7 @@ end)
 -- Chezmoi
 vim.keymap.set({ "n" }, "<leader>fzn", function()
     TELESCOPE_BUILTIN.find_files({
-        cwd = "~/code/notes/notebook/notebook/",
+        cwd = "~/code/notes/notebook/notebook",
     })
 end)
 vim.keymap.set({ "n" }, "<leader>fen", function()

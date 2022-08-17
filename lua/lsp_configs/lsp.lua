@@ -1,11 +1,26 @@
--- https://github.com/williamboman/nvim-lsp-installer/
-local ok_lsp_installer, lsp_installer = pcall(require, "nvim-lsp-installer")
-if not ok_lsp_installer then
-    print('"williamboman/nvim-lsp-installer" not available')
+-- https://github.com/neovim/nvim-lspconfig
+-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+local ok_lspconfig, lspconfig = pcall(require, "lspconfig")
+if not ok_lspconfig then
+    print('"neovim/nvim-lspconfig" not available')
     return
 end
 
-lsp_installer.settings({
+-- https://github.com/williamboman/mason.nvim
+local ok_mason, mason = pcall(require, "mason")
+if not ok_mason then
+    print('"williamboman/mason.nvim" not available')
+    return
+end
+
+-- https://github.com/williamboman/mason-lspconfig.nvim
+local ok_mason_lspconfig, mason_lspconfig = pcall(require, "mason-lspconfig")
+if not ok_mason_lspconfig then
+    print('"williamboman/mason-lspconfig.nvim" not available')
+    return
+end
+
+mason.setup({
     ui = {
         icons = {
             server_installed = "✓",
@@ -15,18 +30,10 @@ lsp_installer.settings({
     },
 })
 
-lsp_installer.setup({
+mason_lspconfig.setup({
     ensure_installed = { "clangd", "sumneko_lua" },
     automatic_installation = true,
 })
-
--- https://github.com/neovim/nvim-lspconfig
--- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-local ok_lspconfig, lspconfig = pcall(require, "lspconfig")
-if not ok_lspconfig then
-    print('"neovim/nvim-lspconfig" not available')
-    return
-end
 
 local diagnostics = require("lsp_configs.diagnostics")
 diagnostics.setup()
