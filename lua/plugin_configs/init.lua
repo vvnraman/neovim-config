@@ -27,6 +27,8 @@ require("plugin_configs.which-key")
 require("plugin_configs.zen-mode")
 require("plugin_configs.twilight")
 require("plugin_configs.neorg")
+require("plugin_configs.eyeliner")
+require("plugin_configs.surround")
 
 -- TODO
 require("plugin_configs.toggleterm")

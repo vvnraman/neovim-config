@@ -27,6 +27,12 @@ M.set_mappings = function(_, bufnr) -- (client, bufnr)
     )
     vim.keymap.set(
         { "n" },
+        "<leader>gD",
+        vim.lsp.buf.declaration,
+        { buffer = bufnr }
+    )
+    vim.keymap.set(
+        { "n" },
         "<leader>gt",
         vim.lsp.buf.type_definition,
         { buffer = bufnr }
@@ -49,6 +55,14 @@ M.set_mappings = function(_, bufnr) -- (client, bufnr)
         vim.lsp.buf.formatting_sync,
         { buffer = bufnr }
     )
+    if OK_TELESCOPE then
+        vim.keymap.set(
+            { "n" },
+            "<leader>rf",
+            TELESCOPE_BUILTIN.lsp_references,
+            { buffer = bufnr }
+        )
+    end
 end
 
 M.set_autocmds = function(client, _) -- (client, bufnr)
@@ -68,6 +82,24 @@ M.set_autocmds = function(client, _) -- (client, bufnr)
             buffer = 0,
             callback = vim.lsp.buf.clear_references,
         })
+    end
+end
+
+M.set_additional_plugins = function(_, bufnr) -- (client, bufnr)
+    -- https://github.com/ray-x/lsp_signature.nvim
+    local ok_lsp_signature, lsp_signature = pcall(require, "lsp_signature")
+    if ok_lsp_signature then
+        lsp_signature.on_attach({
+            bind = true,
+            handler_opts = {
+                border = "rounded",
+            },
+            close_timeout = 1500, -- close floating window after ms when last
+            -- parameter is entered
+            hint_prefix = "🎈 ",
+            toggle_key = "<M-x>",
+            select_signature_key = "<C-y>",
+        }, bufnr)
     end
 end
 

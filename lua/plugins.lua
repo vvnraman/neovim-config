@@ -51,6 +51,9 @@ return packer.startup(function(use)
     use("bluz71/vim-moonfly-colors")
     use("bluz71/vim-nightfly-guicolors")
     use("marko-cerovac/material.nvim")
+    use("sam4llis/nvim-tundra")
+    use("catppuccin/nvim")
+    use("EdenEast/nightfox.nvim")
 
     -- UI
     use("folke/lsp-colors.nvim")
@@ -62,6 +65,7 @@ return packer.startup(function(use)
         "nvim-lualine/lualine.nvim", -- status line
         requires = { "kyazdani42/nvim-web-devicons", opt = true },
     })
+    use("jinh0/eyeliner.nvim")
 
     -- Common sense helpers
     use("windwp/nvim-autopairs")
@@ -71,7 +75,7 @@ return packer.startup(function(use)
     use("lukas-reineke/indent-blankline.nvim")
     use("lukas-reineke/virt-column.nvim")
 
-    use("tpope/vim-surround")
+    use({ "kylechui/nvim-surround", tag = "*" })
     use("tpope/vim-repeat")
 
     -- use 'mrjones2014/legendary.nvim'
@@ -99,6 +103,7 @@ return packer.startup(function(use)
     use("weilbith/nvim-code-action-menu") -- Show code actions in a useful manner
     use("kosayoda/nvim-lightbulb") -- Show code actions in a useful manner
     use("folke/lua-dev.nvim")
+    use("ray-x/lsp_signature.nvim")
 
     -- Diagnostics
     use("folke/trouble.nvim")

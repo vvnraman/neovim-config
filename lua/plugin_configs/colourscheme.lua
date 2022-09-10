@@ -18,5 +18,12 @@ if ok_material then
     -- deep ocean
     vim.g.material_style = "deep ocean"
     material.setup({})
-    vim.cmd([[colorscheme material]])
+    -- vim.cmd([[colorscheme material]])
+end
+
+-- https://github.com/sam4llis/nvim-tundra
+local ok_tundra, tundra = pcall(require, "nvim-tundra")
+if ok_tundra then
+    tundra.setup()
+    vim.cmd([[colorscheme tundra]])
 end

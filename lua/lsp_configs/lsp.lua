@@ -49,6 +49,7 @@ local setup_lsps = function()
         on_attach = function(client, bufnr)
             lsp_handlers.set_mappings(client, bufnr)
             lsp_handlers.set_autocmds(client, bufnr)
+            lsp_handlers.set_additional_plugins(client, bufnr)
             diagnostics.set_mappings(client, bufnr)
         end,
         capabilities = lsp_handlers.capabilities,

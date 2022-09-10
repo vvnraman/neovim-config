@@ -53,50 +53,52 @@ TELESCOPE.load_extension("file_browser")
 TELESCOPE.load_extension("packer")
 
 local project_files = function()
-    local opts = {}
-    local ok_git_files = pcall(TELESCOPE_BUILTIN.git_files, opts)
+    local ok_git_files = pcall(
+        TELESCOPE_BUILTIN.git_files,
+        { show_untracked = true }
+    )
     if not ok_git_files then
-        TELESCOPE_BUILTIN.find_files(opts)
+        TELESCOPE_BUILTIN.find_files({})
     end
 end
 
 -- Builtins
 vim.keymap.set({ "n" }, "<leader>ff", function()
     TELESCOPE_BUILTIN.find_files()
-end)
+end, NOREMAP_SILENT)
 vim.keymap.set({ "n" }, "<leader>fp", function()
     project_files()
-end)
+end, NOREMAP_SILENT)
 vim.keymap.set({ "n" }, "<leader>fg", function()
     TELESCOPE_BUILTIN.live_grep()
-end)
+end, NOREMAP_SILENT)
 vim.keymap.set({ "n" }, "<leader>ls", function()
     TELESCOPE_BUILTIN.buffers()
-end)
+end, NOREMAP_SILENT)
 vim.keymap.set({ "n" }, "<leader>ft", function()
     TELESCOPE_BUILTIN.builtin()
-end)
+end, NOREMAP_SILENT)
 vim.keymap.set({ "n" }, "<C-_>", function()
     TELESCOPE_BUILTIN.current_buffer_fuzzy_find({
         previewer = false,
         skip_empty_lines = true,
     })
-end)
+end, NOREMAP_SILENT)
 vim.keymap.set({ "n" }, "<leader>ht", function()
     TELESCOPE_BUILTIN.help_tags()
-end)
+end, NOREMAP_SILENT)
 vim.keymap.set({ "n" }, "<leader>ch", function()
     TELESCOPE_BUILTIN.command_history()
-end)
+end, NOREMAP_SILENT)
 vim.keymap.set({ "n" }, "<leader>sh", function()
     TELESCOPE_BUILTIN.search_history()
-end)
+end, NOREMAP_SILENT)
 vim.keymap.set({ "n" }, "<leader>fo", function()
     TELESCOPE_BUILTIN.oldfiles()
-end)
+end, NOREMAP_SILENT)
 vim.keymap.set({ "n" }, "<leader>fb", function()
     telescope_extensions.file_browser.file_browser()
-end)
+end, NOREMAP_SILENT)
 
 -- `find_files` and `file_browser` for custom locations which I need to visit
 -- often
@@ -110,57 +112,57 @@ vim.keymap.set({ "n" }, "<leader>fzv", function()
     TELESCOPE_BUILTIN.find_files({
         cwd = "~/.config/nvim/",
     })
-end)
+end, NOREMAP_SILENT)
 vim.keymap.set({ "n" }, "<leader>fev", function()
     telescope_extensions.file_browser.file_browser({
         path = "~/.config/nvim/",
         cwd_to_path = true,
     })
-end)
+end, NOREMAP_SILENT)
 
 -- Chezmoi
 vim.keymap.set({ "n" }, "<leader>fzc", function()
     TELESCOPE_BUILTIN.find_files({
         cwd = "~/.local/share/chezmoi/",
     })
-end)
+end, NOREMAP_SILENT)
 vim.keymap.set({ "n" }, "<leader>fec", function()
     telescope_extensions.file_browser.file_browser({
         path = "~/.local/share/chezmoi/",
         cwd_to_path = true,
     })
-end)
+end, NOREMAP_SILENT)
 
 -- Journal
 vim.keymap.set({ "n" }, "<leader>fzj", function()
     TELESCOPE_BUILTIN.find_files({
         cwd = "~/code/notes/journal/journal/",
     })
-end)
+end, NOREMAP_SILENT)
 vim.keymap.set({ "n" }, "<leader>fej", function()
     telescope_extensions.file_browser.file_browser({
         path = "~/code/notes/journal/journal/",
         cwd_to_path = true,
     })
-end)
+end, NOREMAP_SILENT)
 
 -- Chezmoi
 vim.keymap.set({ "n" }, "<leader>fzn", function()
     TELESCOPE_BUILTIN.find_files({
         cwd = "~/code/notes/notebook/notebook",
     })
-end)
+end, NOREMAP_SILENT)
 vim.keymap.set({ "n" }, "<leader>fen", function()
     telescope_extensions.file_browser.file_browser({
         path = "~/code/notes/notebook/notebook/",
         cwd_to_path = true,
     })
-end)
+end, NOREMAP_SILENT)
 
 -- Extensions
 vim.keymap.set({ "n" }, "<leader>fq", function()
     telescope_extensions.frecency.frecency()
-end)
+end, NOREMAP_SILENT)
 vim.keymap.set({ "n" }, "<leader>fs", function()
     telescope_extensions.luasnip.luasnip()
-end)
+end, NOREMAP_SILENT)
