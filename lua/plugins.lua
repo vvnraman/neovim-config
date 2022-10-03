@@ -130,16 +130,15 @@ return packer.startup(function(use)
         run = "make",
     })
     use("nvim-telescope/telescope-file-browser.nvim")
-    use({
-        "nvim-telescope/telescope-frecency.nvim",
-        requires = { "tami5/sqlite.lua" },
-    })
     use("benfowler/telescope-luasnip.nvim")
     use("nvim-telescope/telescope-symbols.nvim")
     use("nvim-telescope/telescope-packer.nvim")
     use({
         "AckslD/nvim-neoclip.lua",
-        requires = { "tami5/sqlite.lua", module = "sqlite" },
+        requires = {
+          {"kkharji/sqlite.lua", module = "sqlite" },
+          {'nvim-telescope/telescope.nvim'},
+        },
     })
 
     -- Treesitter
@@ -152,6 +151,7 @@ return packer.startup(function(use)
     -- use 'ray-x/navigator.lua'
 
     -- Git
+    use("tpope/vim-fugitive")
     use("lewis6991/gitsigns.nvim")
     use({ "sindrets/diffview.nvim", requires = "nvim-lua/plenary.nvim" })
 

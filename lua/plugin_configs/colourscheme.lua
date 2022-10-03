@@ -24,6 +24,11 @@ end
 -- https://github.com/sam4llis/nvim-tundra
 local ok_tundra, tundra = pcall(require, "nvim-tundra")
 if ok_tundra then
-    tundra.setup()
+    tundra.setup({
+        plugins = {
+            cmp = true,
+            telescope = true,
+        },
+    })
     vim.cmd([[colorscheme tundra]])
 end

@@ -38,16 +38,11 @@ TELESCOPE.setup({
             case_mode = "smart_case", -- or "ignore_case" or "respect_case"
             -- the default case_mode is "smart_case"
         },
-        frecency = {
-            show_scores = true,
-            db_safe_mode = false,
-        },
     },
 })
 
 -- Extensions
 TELESCOPE.load_extension("fzf")
-TELESCOPE.load_extension("frecency")
 TELESCOPE.load_extension("luasnip")
 TELESCOPE.load_extension("file_browser")
 TELESCOPE.load_extension("packer")

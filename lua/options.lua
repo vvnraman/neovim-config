@@ -86,26 +86,30 @@ vimopt.showtabline = 2
 
 vimopt.smartindent = true
 
-vimopt.formatoptions:append("tcrqn1j")
-vimopt.formatoptions:remove("oa2")
+-------------------------------------------------------------------------------
+-- formatoptions default: "tcqj"
 --  + "t" -- Auto-wrap text using textwidth
 --  + "c" -- Auto-wrap comments using textwidth, inserting the current comment
 --  -- leader automatically.
+--  + "q" -- Allow formatting of comments with "gq".
+--  + "j" -- Where it makes sense, remove a comment leader when joining lines.
+
+vimopt.formatoptions:append("rn1")
 --  + "r" -- Automatically insert the current comment leader after hitting
 --  -- <Enter> in Insert mode.
+--  + "n" -- When formatting text, recognize numbered lists.
+--  + "1" -- Don't break a line after a one-letter word. It's broken before it
+--  -- instead (if possible).
+
+vimopt.formatoptions:remove("oa2")
 --  - "o" -- Automatically insert the current comment leader after hitting 'o' or
 --  -- 'O' in Normal mode. In case comment is unwanted in a specific place
---  + "q" -- Allow formatting of comments with "gq".
 --  - "a" -- Automatic formatting of paragraphs. Every time text is inserted or
 --  -- deleted the paragraph will be reformatted. See |auto-format|.
---  + "n" -- When formatting text, recognize numbered lists.
 --  - "2" -- When formatting text, use the indent of the second line of a
 --  -- paragraph for the rest of the paragraph, instead of the indent of
 --  -- the first line. This supports paragraphs in which the first line has
 --  -- a
---  + "1" -- Don't break a line after a one-letter word. It's broken before it
---  -- instead (if possible).
---  + "j" -- Where it makes sense, remove a comment leader when joining lines.
 
 vimopt.joinspaces = false
 

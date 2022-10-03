@@ -16,4 +16,8 @@ which_key.setup({
     window = {
         border = "single",
     },
+    layout = {
+        height = { min = 4, max = 10 },
+    },
+    ignore_missing = true,
 })

@@ -26,6 +26,6 @@ neoclip.setup({
 })
 
 if OK_TELESCOPE then
-    TELESCOPE.load_extension("neoclip")
+    -- TELESCOPE.load_extension("neoclip")
     VIM_KEYMAP_SET({ "n" }, "<leader>cl", "<Cmd>Telescope neoclip<Cr>")
 end
