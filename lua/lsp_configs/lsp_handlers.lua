@@ -52,7 +52,7 @@ M.set_mappings = function(_, bufnr) -- (client, bufnr)
     vim.keymap.set(
         { "n" },
         "<leader>gf",
-        vim.lsp.buf.formatting_sync,
+        vim.lsp.buf.format,
         { buffer = bufnr }
     )
     if OK_TELESCOPE then
