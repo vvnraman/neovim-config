@@ -102,7 +102,7 @@ return packer.startup(function(use)
     use("j-hui/fidget.nvim") -- LSP status endpoint handler
     use("weilbith/nvim-code-action-menu") -- Show code actions in a useful manner
     use("kosayoda/nvim-lightbulb") -- Show code actions in a useful manner
-    use("folke/lua-dev.nvim")
+    use("folke/neodev.nvim")
     use("ray-x/lsp_signature.nvim")
 
     -- Diagnostics
@@ -158,6 +158,7 @@ return packer.startup(function(use)
     -- Journal/Orgmode
     use({
         "nvim-neorg/neorg",
+        run = ":Neorg sync-parseres",
         requires = "nvim-lua/plenary.nvim",
     })
 

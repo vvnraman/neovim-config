@@ -31,7 +31,7 @@ mason.setup({
 })
 
 mason_lspconfig.setup({
-    ensure_installed = { "clangd", "sumneko_lua" },
+    ensure_installed = { "clangd", "lua_ls" },
     automatic_installation = true,
 })
 
@@ -39,7 +39,7 @@ local diagnostics = require("lsp_configs.diagnostics")
 diagnostics.setup()
 
 require("lsp_configs.servers.clangd").setup()
-require("lsp_configs.servers.sumneko_lua").setup()
+require("lsp_configs.servers.lua_ls").setup()
 
 local setup_lsps = function()
     local lsp_handlers = require("lsp_configs.lsp_handlers")
