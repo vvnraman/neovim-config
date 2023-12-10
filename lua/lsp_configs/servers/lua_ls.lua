@@ -12,10 +12,14 @@ table.insert(runtime_path, "lua/?/init.lua")
 
 -- https://github.com/folke/lua-dev.nvim
 local ok_neodev, neodev = pcall(require, "neodev")
+-- This must come before lsp, as per its setup
+-- docs. This is a leaky abstraction, as this
+-- top level init file has to be aware of the
+-- ordering.
 
 local on_attach = function(client, bufnr)
     -- formatting is done by null-ls
-    client.resolved_capabilities.document_formatting = false
+    client.server_capabilities.document_formatting = false
     lsp_handlers.set_mappings(client, bufnr)
     lsp_handlers.set_autocmds(client, bufnr)
     diagnostics.set_mappings(client, bufnr)

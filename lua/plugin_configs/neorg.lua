@@ -7,8 +7,8 @@ end
 neorg.setup({
     load = {
         ["core.defaults"] = {},
-        ["core.norg.concealer"] = {},
-        ["core.norg.dirman"] = {
+        ["core.concealer"] = {},
+        ["core.dirman"] = {
             config = {
                 workspaces = {
                     home = "~/code/neorg/",
@@ -17,7 +17,7 @@ neorg.setup({
                 index = "index.norg",
             },
         },
-        ["core.norg.journal"] = {
+        ["core.journal"] = {
             config = {
                 workspace = "home",
                 journal_folder = "journal",

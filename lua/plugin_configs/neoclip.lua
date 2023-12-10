@@ -1,7 +1,6 @@
 -- https://github.com/AckslD/nvim-neoclip.lua
 local ok, neoclip = pcall(require, "neoclip")
 if not ok then
-    print("'AckslD/nvim-neoclip.lua' not available")
     return
 end
 

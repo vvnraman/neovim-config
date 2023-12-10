@@ -59,20 +59,27 @@ return packer.startup(function(use)
     use("folke/lsp-colors.nvim")
     use("folke/zen-mode.nvim")
     use("folke/twilight.nvim")
-    use("kyazdani42/nvim-web-devicons")
+    use("nvim-tree/nvim-web-devicons")
     use("stevearc/dressing.nvim") -- UI hooks
     use({
         "nvim-lualine/lualine.nvim", -- status line
-        requires = { "kyazdani42/nvim-web-devicons", opt = true },
+        requires = { "nvim-tree/nvim-web-devicons", opt = true },
     })
     use("jinh0/eyeliner.nvim")
+
+    -- Files and folders
+    use({
+        "nvim-tree/nvim-tree.lua",
+        requires = { "nvim-tree/nvim-web-devicons", opt = true },
+    })
+    use("stevearc/oil.nvim")
 
     -- Common sense helpers
     use("windwp/nvim-autopairs")
     use("numToStr/Comment.nvim")
     use("folke/which-key.nvim") -- Legends
     use("mzlogin/vim-markdown-toc")
-    use("lukas-reineke/indent-blankline.nvim")
+    use({ "lukas-reineke/indent-blankline.nvim", tag = "2.20.8" })
     use("lukas-reineke/virt-column.nvim")
 
     use({ "kylechui/nvim-surround", tag = "*" })
@@ -81,7 +88,7 @@ return packer.startup(function(use)
     -- use 'mrjones2014/legendary.nvim'
 
     -- Movement
-    use("ggandor/lightspeed.nvim")
+    use("ggandor/leap.nvim")
 
     -- LSP, Snippets, Completions
     use("hrsh7th/nvim-cmp") -- The completion plugin
@@ -99,11 +106,12 @@ return packer.startup(function(use)
         "williamboman/mason-lspconfig.nvim",
         "neovim/nvim-lspconfig",
     })
-    use("j-hui/fidget.nvim") -- LSP status endpoint handler
+    use({ "j-hui/fidget.nvim", tag = "legacy" }) -- LSP status endpoint handler
     use("weilbith/nvim-code-action-menu") -- Show code actions in a useful manner
     use("kosayoda/nvim-lightbulb") -- Show code actions in a useful manner
     use("folke/neodev.nvim")
     use("ray-x/lsp_signature.nvim")
+    use("simrat39/symbols-outline.nvim")
 
     -- Diagnostics
     use("folke/trouble.nvim")
@@ -123,7 +131,7 @@ return packer.startup(function(use)
     -- Telescope
     use({
         "nvim-telescope/telescope.nvim",
-        requires = { "kyazdani42/nvim-web-devicons", opt = true },
+        requires = { "nvim-tree/nvim-web-devicons", opt = true },
     })
     use({
         "nvim-telescope/telescope-fzf-native.nvim",
@@ -133,13 +141,13 @@ return packer.startup(function(use)
     use("benfowler/telescope-luasnip.nvim")
     use("nvim-telescope/telescope-symbols.nvim")
     use("nvim-telescope/telescope-packer.nvim")
-    use({
-        "AckslD/nvim-neoclip.lua",
-        requires = {
-          {"kkharji/sqlite.lua", module = "sqlite" },
-          {'nvim-telescope/telescope.nvim'},
-        },
-    })
+    -- use({
+    --     "AckslD/nvim-neoclip.lua",
+    --     requires = {
+    --       {"kkharji/sqlite.lua", module = "sqlite" },
+    --       {'nvim-telescope/telescope.nvim'},
+    --     },
+    -- })
 
     -- Treesitter
     use({
@@ -158,7 +166,7 @@ return packer.startup(function(use)
     -- Journal/Orgmode
     use({
         "nvim-neorg/neorg",
-        run = ":Neorg sync-parseres",
+        run = ":Neorg sync-parsers",
         requires = "nvim-lua/plenary.nvim",
     })
 
