@@ -8,8 +8,8 @@ These are kept in sync with my `dotfiles`_. The ``dotfiles`` are managed using
 The ``Neovim`` configuration here is extracted out for trying it out on other
 platforms, without necesarily depending upon the rest of my ``dotfiles``.
 
-.. dotfiles: https://github.com/vvnraman/dotfiles
-.. chezmoi: https://github.com/twpayne/chezmoi
+.. _dotfiles: https://github.com/vvnraman/dotfiles
+.. _chezmoi: https://github.com/twpayne/chezmoi
 
 ----
 

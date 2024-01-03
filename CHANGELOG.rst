@@ -63,8 +63,10 @@ most of them also configured alongside the spec.
 
 For some of the plugins, the configuration has been extracted out into
 ``lua/plugins/config`` folder. I did this for either of the following reasons
+
 - A plugin specific config was getting quite large, or I intended it to grow
   larger in the future.
+
 - lsp configuration. I would quickly like to navigate to a specific part using
   ``telescope`` files.
 
@@ -82,41 +84,41 @@ setting a keymap in the configuration.
 Directory structure
 ^^^^^^^^^^^^^^^^^^^
 
-```sh
-lua/plugins/
-├── config
-│   ├── format.lua
-│   ├── lsp
-│   │   ├── clangd.lua
-│   │   ├── init.lua
-│   │   ├── lua_ls.lua
-│   │   └── vanilla.lua
-│   ├── neorg.lua
-│   ├── snippets.lua
-│   ├── telescope.lua
-│   └── treesitter.lua
-└── spec
-    ├── buffers_tabs.lua
-    ├── cardio.lua
-    ├── cmp.lua
-    ├── colourschemes.lua
-    ├── editing.lua
-    ├── filenav.lua
-    ├── git.lua
-    ├── linting.lua
-    ├── looks.lua
-    ├── lsp.lua
-    ├── luasnip.lua
-    ├── neorg.lua
-    ├── neovim.lua
-    ├── nifty_lsp.lua
-    ├── telescope.lua
-    ├── tmux.lua
-    ├── treesitter.lua
-    ├── trouble.lua
-    ├── ui.lua
-    └── which-key.lua
-```
+.. code-block:: console
+
+   lua/plugins/
+   ├── config
+   │   ├── format.lua
+   │   ├── lsp
+   │   │   ├── clangd.lua
+   │   │   ├── init.lua
+   │   │   ├── lua_ls.lua
+   │   │   └── vanilla.lua
+   │   ├── neorg.lua
+   │   ├── snippets.lua
+   │   ├── telescope.lua
+   │   └── treesitter.lua
+   └── spec
+       ├── buffers_tabs.lua
+       ├── cardio.lua
+       ├── cmp.lua
+       ├── colourschemes.lua
+       ├── editing.lua
+       ├── filenav.lua
+       ├── git.lua
+       ├── linting.lua
+       ├── looks.lua
+       ├── lsp.lua
+       ├── luasnip.lua
+       ├── neorg.lua
+       ├── neovim.lua
+       ├── nifty_lsp.lua
+       ├── telescope.lua
+       ├── tmux.lua
+       ├── treesitter.lua
+       ├── trouble.lua
+       ├── ui.lua
+       └── which-key.lua
 
 ----
 
