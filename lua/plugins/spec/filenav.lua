@@ -23,19 +23,17 @@ local oil_lazy_config = function()
   })
 
   require("which-key").register({
-    o = {
-      ["o"] = {
-        function()
-          oil.toggle_float()
-        end,
-        "Oil: Toggle float",
-      },
-      ["l"] = {
-        function()
-          oil.open()
-        end,
-        "Oil: Open",
-      },
+    ["<leader>o"] = {
+      function()
+        oil.toggle_float()
+      end,
+      "Oil: Toggle float",
+    },
+    ["ol"] = {
+      function()
+        oil.open()
+      end,
+      "Oil: Open",
     },
   }, { prefix = "<leader>" })
 end
@@ -45,13 +43,9 @@ local M = {
     "stevearc/oil.nvim",
     event = "VeryLazy",
     dependencies = {
-      {
-        "nvim-tree/nvim-web-devicons",
-      },
-      {
-        -- spec elsewhere
-        "folke/which-key.nvim",
-      },
+      "nvim-tree/nvim-web-devicons",
+      -- spec elsewhere
+      "folke/which-key.nvim",
     },
     config = oil_lazy_config,
   },
@@ -74,6 +68,74 @@ local M = {
           end,
         },
       })
+    end,
+  },
+  {
+    -- https://github.com/nvim-neo-tree/neo-tree.nvim
+    "nvim-neo-tree/neo-tree.nvim",
+    branch = "v3.x",
+    event = "VeryLazy",
+    cmd = "Neotree",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-tree/nvim-web-devicons",
+      "MunifTanjim/nui.nvim",
+      "folke/which-key.nvim",
+    },
+    init = function()
+      if vim.fn.argc(-1) == 1 then
+        local stat = vim.loop.fs_stat(vim.fn.argv(0))
+        if stat and stat.type == "directory" then
+          require("neo-tree")
+        end
+      end
+    end,
+    config = function()
+      local neotree = require("neo-tree")
+      neotree.setup({
+        close_if_last_window = true,
+        sources = {
+          "filesystem",
+          "buffers",
+          "git_status",
+          "document_symbols",
+        },
+        open_files_do_not_replace_types = {
+          "terminal",
+          "Trouble",
+          "trouble",
+          "qf",
+          "Outline",
+        },
+        filesystem = {
+          bind_to_cwd = false,
+          follow_current_file = { enabled = true },
+          use_libuv_file_watcher = true,
+        },
+        hijack_netrw_behaviour = "disabled",
+      })
+      -- init.lua
+      local neotree_command = require("neo-tree.command")
+      require("which-key").register({
+        ["\\\\"] = {
+          function()
+            neotree_command.execute({ toggle = true })
+          end,
+          "Neotree Explore",
+        },
+        ["\\b"] = {
+          function()
+            neotree_command.execute({ toggle = true, source = "buffers" })
+          end,
+          "Neotree Buffers",
+        },
+        ["\\g"] = {
+          function()
+            neotree_command.execute({ toggle = true, source = "git_status" })
+          end,
+          "Neotree Git Status",
+        },
+      }, {})
     end,
   },
 }

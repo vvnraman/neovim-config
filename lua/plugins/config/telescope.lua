@@ -171,7 +171,7 @@ M.setup = function()
 
   -- leader is set at prefix at the end, just to avoid additional indentation
   which_key.register({
-    ["<leader>b"] = {
+    ["b"] = {
       function()
         find_files_in_buffer_dir()
       end,
