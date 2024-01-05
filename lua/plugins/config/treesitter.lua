@@ -99,7 +99,7 @@ local setup_treesitter = function()
     -- FIXME: - highlight is too slow in general
     --        - to test open `~/.config/nvim/lua/options.lua` and scroll
     --          down using `j` key, which `htop` running.
-    -- highlight = { enable = true },
+    highlight = { enable = true },
     incremental_selection = {
       enable = true,
       keymaps = {

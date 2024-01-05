@@ -112,7 +112,7 @@ local M = {
           follow_current_file = { enabled = true },
           use_libuv_file_watcher = true,
         },
-        hijack_netrw_behaviour = "disabled",
+        hijack_netrw_behavior = "disabled",
       })
       -- init.lua
       local neotree_command = require("neo-tree.command")

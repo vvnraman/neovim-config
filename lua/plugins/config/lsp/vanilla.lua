@@ -60,12 +60,12 @@ M.setup_plugin_buffer_mappings = function(
     ["sd"] = {
       function()
         telescope_builtin.lsp_document_symbols(
-          require("telescope.themes").get_dropdown({
-            winblend = 10,
+          require("telescope.themes").get_ivy({
+            winblend = 20,
           })
         )
       end,
-      "LSP: [s]earch [d]iagnostics with telescope",
+      "LSP: search [s]ymbols in [d]ocument",
     },
   }, { prefix = "<leader>", buffer = bufnr })
 
