@@ -23,13 +23,13 @@ local oil_lazy_config = function()
   })
 
   require("which-key").register({
-    ["<leader>o"] = {
+    ["o"] = {
       function()
         oil.toggle_float()
       end,
       "Oil: Toggle float",
     },
-    ["ol"] = {
+    ["<leader>o"] = {
       function()
         oil.open()
       end,

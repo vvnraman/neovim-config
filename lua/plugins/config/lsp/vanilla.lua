@@ -13,7 +13,7 @@ M.setup_native_buffer_mappings = function(
   bufnr
 )
   local lsp_prefix = function(desc)
-    return "LSP: " .. desc
+    return "[l]sp: " .. desc
   end
 
   local which_key = require("which-key")
@@ -30,12 +30,12 @@ M.setup_native_buffer_mappings = function(
       vim.lsp.buf.implementation,
       lsp_prefix("goto [i]mplementation"),
     },
-    ["rn"] = {
+    ["lr"] = {
       vim.lsp.buf.rename,
-      lsp_prefix("[r]e[n]ame identifier under cursor"),
+      lsp_prefix("[r]ename identifier under cursor"),
     },
     -- `Format` user command is setup during `conform` setup.
-    ["<leader>f"] = { "<Cmd>Format<Cr>", lsp_prefix("[f]ormat buffer") },
+    ["f"] = { "<Cmd>Format<Cr>", lsp_prefix("[f]ormat buffer") },
   }, { prefix = "<leader>", buffer = bufnr })
 end
 
@@ -55,7 +55,7 @@ M.setup_plugin_buffer_mappings = function(
           winblend = 20,
         }))
       end,
-      "LSP: re[f]erences in telescope",
+      "[l]sp: re[f]erences in telescope",
     },
     ["sd"] = {
       function()
@@ -65,7 +65,7 @@ M.setup_plugin_buffer_mappings = function(
           })
         )
       end,
-      "LSP: search [s]ymbols in [d]ocument",
+      "lsp: search [s]ymbols in [d]ocument",
     },
   }, { prefix = "<leader>", buffer = bufnr })
 
@@ -74,9 +74,9 @@ M.setup_plugin_buffer_mappings = function(
   --============================================================================
   -- https://github.com/aznhe21/actions-preview.nvim
   which_key.register({
-    ["ca"] = {
+    ["la"] = {
       require("actions-preview").code_actions,
-      "LSP: [c]ode [a]ctions",
+      "[l]sp: code [a]ctions",
     },
   }, { prefix = "<leader>", buffer = bufnr })
 
@@ -89,7 +89,7 @@ M.setup_plugin_buffer_mappings = function(
       function()
         require("ray-x/lsp_signature.nvim").toggle_float_win()
       end,
-      "LSP: Signature help",
+      "lsp: Signature help",
     },
   }, { buffer = bufnr })
 
@@ -98,7 +98,7 @@ M.setup_plugin_buffer_mappings = function(
   --============================================================================
   -- https://github.com/simrat39/symbols-outline.nvim
   which_key.register({
-    ["lo"] = { "<Cmd>SymbolsOutline<Cr>", "[L]SP: symbols [o]utline" },
+    ["lo"] = { "<Cmd>SymbolsOutline<Cr>", "[l]sp: symbols [o]utline" },
   }, { prefix = "<leader>", buffer = bufnr })
 
   -----------------------------------------------------------------------------

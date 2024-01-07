@@ -25,7 +25,7 @@ local which_key_lazy_config = function()
   which_key.register({
     ["<leader><leader>w"] = { "<Cmd>WhichKey<Cr>", "Which Key" },
     ["<leader><leader>"] = {
-      name = "buf dir | diag | format | tab ",
+      name = "oil | which_key",
       _ = "which_key_ignore",
     },
     ["<leader>c"] = { name = "code | colour ", _ = "which_key_ignore" },

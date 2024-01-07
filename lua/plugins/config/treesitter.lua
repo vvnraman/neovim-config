@@ -63,14 +63,6 @@ local get_textobject_config = function()
         ["[]"] = "@class.outer",
       },
     },
-    lsp_interop = {
-      enable = true,
-      border = "none",
-      peek_definition_code = {
-        ["<leader>df"] = "@function.outer",
-        ["<leader>dF"] = "@class.outer",
-      },
-    },
   }
 end
 
@@ -103,10 +95,10 @@ local setup_treesitter = function()
     incremental_selection = {
       enable = true,
       keymaps = {
-        init_selection = "<C-space>",
-        node_incremental = "<C-space>",
-        scope_incremental = "<C-s>",
-        node_decremental = "<M-space>",
+        init_selection = "<Enter>",
+        node_incremental = "<Enter>",
+        scope_incremental = "<C-Enter>",
+        node_decremental = "<BS>",
       },
     },
     indent = { enable = true },

@@ -158,6 +158,9 @@ M.setup = function()
     }))
   end, NOREMAP("Chose [c]o[l]ourschemes"))
 
+  vim.keymap.set({ "n" }, "\\s", function()
+    telescope_builtin.resume()
+  end, NOREMAP("Re[s]ume telescope"))
   ------------------------------------------------------------------------------
 
   --[[==========================================================================
@@ -215,19 +218,20 @@ M.setup = function()
       s = { telescope_builtin.search_history, "[s]earch [s]search history" },
       h = { telescope_builtin.help_tags, "[s]earch [h]elp tags" },
     },
-    f = {
-      name = "+File browser",
-      b = {
+    e = {
+      name = "+File [e]xplorer",
+      w = {
         function()
           browse_files_in_cwd()
         end,
-        "[f]ile [b]browser in CWD",
+        "browser files in c[w]d",
       },
-      d = {
+      e = {
         function()
           browse_files_in_buffer_dir()
         end,
-        "[f]ile browser in buffer [d]irectory",
+        -- `b` would have been better here but `ee` is quicker to type
+        "browse files in buff[e]r dir",
       },
     },
   }, { prefix = "<leader>" })
@@ -282,8 +286,8 @@ M.setup = function()
         "fu[z]zy find [t]mux config",
       },
     },
-    e = {
-      name = "+Favourite locations explore",
+    v = {
+      name = "+Fa[v]ourite locations explore",
       n = {
         function()
           file_browser.file_browser({
@@ -292,7 +296,7 @@ M.setup = function()
             prompt_path = true,
           })
         end,
-        "[e]xplore [n]eovim config folder",
+        "fa[v]: [n]eovim config folder",
       },
       j = {
         function()
@@ -302,7 +306,7 @@ M.setup = function()
             prompt_path = true,
           })
         end,
-        "[e]xplore [j]ournal folder",
+        "fa[v]: [j]ournal folder",
       },
       b = {
         function()
@@ -311,7 +315,7 @@ M.setup = function()
             cwd = "~/dot-bash/",
           })
         end,
-        "[e]xplore [b]ash config",
+        "fa[v]: [b]ash config",
       },
       t = {
         function()
@@ -320,7 +324,7 @@ M.setup = function()
             cwd = "~/dot-tmux/",
           })
         end,
-        "[e]xplore [t]mux config",
+        "fa[v]: [t]mux config",
       },
     },
   }, { prefix = "<leader>" })

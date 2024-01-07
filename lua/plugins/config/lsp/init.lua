@@ -37,7 +37,7 @@ local setup_diagnostic_config = function()
   which_key.register({
     ["]d"] = { vim.diagnostic.goto_next, "Next [d]iagnostic" },
     ["[d"] = { vim.diagnostic.goto_prev, "Prev [d]iagnostic" },
-    ["<leader><leader>d"] = {
+    ["<leader>d"] = {
       vim.diagnostic.open_float,
       "[d]iagnostics under cursor",
     },
