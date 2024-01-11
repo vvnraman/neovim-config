@@ -77,6 +77,7 @@ M.setup = function()
     telescope_builtin.find_files({
       prompt_title = "Files " .. prompt_suffix,
       cwd = cwd,
+      hidden = true,
     })
   end
 
@@ -84,12 +85,14 @@ M.setup = function()
     telescope_builtin.find_files({
       prompt_title = "Current buffer directory",
       cwd = require("telescope.utils").buffer_dir(),
+      hidden = true,
     })
   end
 
   local find_files_under_git = function()
     telescope_builtin.git_files({
       show_untracked = true,
+      hidden = true,
     })
   end
 
@@ -99,6 +102,7 @@ M.setup = function()
     telescope_builtin.live_grep({
       prompt_title = "Live Grep " .. prompt_suffix,
       cwd = cwd,
+      hidden = true,
     })
   end
 
@@ -118,6 +122,7 @@ M.setup = function()
       prompt_title = "Browse Files " .. prompt_suffix,
       cwd = cwd,
       prompt_path = true,
+      hidden = true,
     })
   end
 
@@ -127,6 +132,7 @@ M.setup = function()
       prompt_title = "Browse Files in " .. prompt_suffix,
       cwd = cwd,
       prompt_path = true,
+      hidden = true,
     })
   end
 
@@ -212,11 +218,55 @@ M.setup = function()
       b = { telescope_builtin.buffers, "[s]earch open [b]uffers" },
       o = { telescope_builtin.oldfiles, "[s]earch [o]ld files" },
       c = {
-        telescope_builtin.command_history,
+        function()
+          telescope_builtin.command_history(
+            require("telescope.themes").get_dropdown({
+              winblend = 20,
+              skip_empty_lines = true,
+            })
+          )
+        end,
         "[s]earch [c]ommands in history",
       },
-      s = { telescope_builtin.search_history, "[s]earch [s]search history" },
+      s = {
+        function()
+          telescope_builtin.search_history(
+            require("telescope.themes").get_dropdown({
+              winblend = 20,
+              skip_empty_lines = true,
+            })
+          )
+        end,
+        "[s]earch [s]search history",
+      },
       h = { telescope_builtin.help_tags, "[s]earch [h]elp tags" },
+      m = {
+        function()
+          telescope_builtin.marks(require("telescope.themes").get_ivy({
+            winblend = 30,
+            skip_empty_lines = true,
+          }))
+        end,
+        "[s]earch [m]arks",
+      },
+      r = {
+        function()
+          telescope_builtin.registers(require("telescope.themes").get_dropdown({
+            winblend = 20,
+            skip_empty_lines = true,
+          }))
+        end,
+        "[s]earch [r]egisters",
+      },
+      k = {
+        function()
+          telescope_builtin.keymaps(require("telescope.themes").get_dropdown({
+            winblend = 20,
+            skip_empty_lines = true,
+          }))
+        end,
+        "[s]earch [k]eymaps",
+      },
     },
     e = {
       name = "+File [e]xplorer",
@@ -254,6 +304,7 @@ M.setup = function()
           telescope_builtin.find_files({
             prompt_title = "Neovim config fuzzy",
             cwd = "~/.config/nvim",
+            hidden = true,
           })
         end,
         "fu[z]zy find [n]eovim config",
@@ -263,6 +314,7 @@ M.setup = function()
           telescope_builtin.find_files({
             prompt_title = "Journal files fuzzy",
             cwd = "~/code/notes/journal/journal/",
+            hidden = true,
           })
         end,
         "fu[z]zy find in [j]ournal",
@@ -272,6 +324,7 @@ M.setup = function()
           telescope_builtin.find_files({
             prompt_title = "bash config fuzzy",
             cwd = "~/dot-bash/",
+            hidden = true,
           })
         end,
         "fu[z]zy find [b]ash config",
@@ -281,6 +334,7 @@ M.setup = function()
           telescope_builtin.find_files({
             prompt_title = "tmux config fuzzy",
             cwd = "~/dot-tmux/",
+            hidden = true,
           })
         end,
         "fu[z]zy find [t]mux config",
@@ -294,6 +348,7 @@ M.setup = function()
             prompt_title = "Explore Neovim config",
             cwd = "~/.config/nvim",
             prompt_path = true,
+            hidden = true,
           })
         end,
         "fa[v]: [n]eovim config folder",
@@ -304,6 +359,7 @@ M.setup = function()
             prompt_title = "Explore Journal",
             cwd = "~/code/notes/journal/journal/",
             prompt_path = true,
+            hidden = true,
           })
         end,
         "fa[v]: [j]ournal folder",
@@ -313,6 +369,7 @@ M.setup = function()
           file_browser.file_browser({
             prompt_title = "Explore bash config",
             cwd = "~/dot-bash/",
+            hidden = true,
           })
         end,
         "fa[v]: [b]ash config",
@@ -322,6 +379,7 @@ M.setup = function()
           file_browser.file_browser({
             prompt_title = "Explore tmux config",
             cwd = "~/dot-tmux/",
+            hidden = true,
           })
         end,
         "fa[v]: [t]mux config",
