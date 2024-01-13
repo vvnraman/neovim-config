@@ -70,7 +70,7 @@ local M = {
           "markdown",
           "rst",
         },
-        min_count_to_highlight = 1,
+        min_count_to_highlight = 2,
       })
 
       require("which-key").register({

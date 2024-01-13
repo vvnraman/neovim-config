@@ -12,15 +12,17 @@ Current
 
 - Set up a docker harness for testing and benchmarking
 
-- Add some scenarios with tmux later
-
 ----
 
 ****
 Next
 ****
 
-TBD
+- Automatically document keymaps on the readme (separate file is okay)
+
+  - Find out how LazyVim does it.
+
+- Add some scenarios with tmux later
 
 ----
 
