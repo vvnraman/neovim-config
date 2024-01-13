@@ -18,6 +18,10 @@ local M = {
         "folke/lua-dev.nvim",
       },
       {
+        -- https://github.com/b0o/SchemaStore.nvim
+        "b0o/schemastore.nvim",
+      },
+      {
         -- spec elsewhere
         "folke/which-key.nvim",
       },

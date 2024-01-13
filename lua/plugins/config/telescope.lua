@@ -4,6 +4,7 @@ M.setup = function()
   local telescope = require("telescope")
   local telescope_builtin = require("telescope.builtin")
   local which_key = require("which-key")
+  local trouble_telescope = require("trouble.providers.telescope")
 
   pcall(telescope.load_extension, "fzf")
   telescope.load_extension("luasnip")
@@ -14,8 +15,8 @@ M.setup = function()
   telescope.setup({
     defaults = {
       mappings = {
-        i = { ["<M-x>"] = require("trouble").open_with_trouble },
-        n = { ["<M-x>"] = require("trouble").open_with_trouble },
+        i = { ["<C-q>"] = trouble_telescope.open_with_trouble },
+        n = { ["<C-q>"] = trouble_telescope.open_with_trouble },
       },
     },
     extensions = {

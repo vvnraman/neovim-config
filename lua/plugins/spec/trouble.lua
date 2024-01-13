@@ -16,6 +16,21 @@ local M = {
     config = function()
       local trouble = require("trouble")
       require("which-key").register({
+        ["[q"] = {
+          function()
+            trouble.previous({ skip_groups = true, jump = true })
+          end,
+          "trouble: previous",
+        },
+        ["]q"] = {
+          function()
+            trouble.next({ skip_groups = true, jump = true })
+          end,
+          "trouble: next",
+        },
+      }, {})
+
+      require("which-key").register({
         x = {
           name = "+Trouble",
           x = {

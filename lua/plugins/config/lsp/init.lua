@@ -70,7 +70,6 @@ local setup_other_lsps = function(lspconfig)
     "cmake",
     "dockerls",
     "dotls",
-    "jsonls",
     "pyright",
     "tsserver",
     "vimls",
@@ -85,6 +84,21 @@ local setup_other_lsps = function(lspconfig)
       capabilities = vanilla.capabilities,
     })
   end
+
+  lspconfig["jsonls"].setup({
+    settings = {
+      json = {
+        schemas = require("schemastore").json.schemas(),
+        validate = { enable = true },
+      },
+    },
+    on_attach = function(client, bufnr)
+      vanilla.setup_native_buffer_mappings(client, bufnr)
+      vanilla.setup_plugin_buffer_mappings(client, bufnr)
+      vanilla.setup_autocmds(client, bufnr)
+    end,
+    capabilities = vanilla.capabilities,
+  })
 end
 
 M.setup = function(mason, mason_lspconfig, lspconfig, neodev)

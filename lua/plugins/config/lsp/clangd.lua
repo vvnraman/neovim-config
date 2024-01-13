@@ -11,7 +11,7 @@ local root_dir_func = function(fname)
   return require("lspconfig.util").root_pattern(unpack(root_files))(fname)
 end
 
-local setup_clangd_mappings = function(_, bufnr)
+local clangd_custom_setup = function(_, bufnr)
   local which_key = require("which-key")
 
   -- https://github.com/p00f/clangd_extensions.nvim
@@ -35,7 +35,7 @@ M.setup = function()
       vanilla.setup_native_buffer_mappings(client, bufnr)
       vanilla.setup_plugin_buffer_mappings(client, bufnr)
       vanilla.setup_autocmds(client, bufnr)
-      setup_clangd_mappings(client, bufnr)
+      clangd_custom_setup(client, bufnr)
     end,
     capabilities = vanilla.capabilities,
     root_dir = root_dir_func,

@@ -12,7 +12,7 @@ Current
 
 - Set up a docker harness for testing and benchmarking
 
-  - Start without tmux first
+- Add some scenarios with tmux later
 
 ----
 
@@ -28,6 +28,14 @@ TBD
 *******
 Backlog
 *******
+
+TBD
+
+----
+
+****
+DONE
+****
 
 TBD
 
