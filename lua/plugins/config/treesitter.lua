@@ -76,6 +76,7 @@ local setup_treesitter = function()
       "comment",
       "cpp",
       "go",
+      "hjson",
       "json",
       "lua",
       "markdown",

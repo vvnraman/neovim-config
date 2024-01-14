@@ -10,13 +10,15 @@ Project plan for my Neovim configuration.
 Current
 *******
 
-- Set up a docker harness for testing and benchmarking
+- Automatically and intuitively save and restore session
 
 ----
 
 ****
 Next
 ****
+
+- Set up a docker harness for testing and benchmarking
 
 - Automatically document keymaps on the readme (separate file is okay)
 
