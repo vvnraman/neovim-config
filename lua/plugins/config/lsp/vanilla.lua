@@ -85,9 +85,9 @@ M.setup_plugin_buffer_mappings = function(
   --============================================================================
   -- https://github.com/ray-x/lsp_signature.nvim
   require("which-key").register({
-    ["<C-k>"] = {
+    ["<C-h>"] = {
       function()
-        require("ray-x/lsp_signature.nvim").toggle_float_win()
+        require("lsp_signature").toggle_float_win()
       end,
       "lsp: Signature help",
     },

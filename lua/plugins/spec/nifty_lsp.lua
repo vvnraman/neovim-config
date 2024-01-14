@@ -18,8 +18,8 @@ local M = {
     opts = {
       close_timeout = 1500,
       transparency = 15,
-      toggle_key = "<M-k>",
-      select_signature_key = "<M-n>",
+      toggle_key = "<M-l>",
+      select_signature_key = "<M-e>",
     },
   },
   {

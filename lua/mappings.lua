@@ -5,12 +5,12 @@
 vim.keymap.set("i", "jk", "<Esc>", NOREMAP("Escape using jk"))
 
 -- Move lines
-vim.keymap.set("n", "<A-j>", "<cmd>m .+1<cr>==", { desc = "Move down" })
-vim.keymap.set("n", "<A-k>", "<cmd>m .-2<cr>==", { desc = "Move up" })
-vim.keymap.set("i", "<A-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move down" })
-vim.keymap.set("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move up" })
-vim.keymap.set("v", "<A-j>", ":m '>+1<cr>gv=gv", { desc = "Move down" })
-vim.keymap.set("v", "<A-k>", ":m '<-2<cr>gv=gv", { desc = "Move up" })
+vim.keymap.set("i", "<C-j>", "<Esc><Cmd>m .+1<Cr>==gi", { desc = "Move down" })
+vim.keymap.set("i", "<C-k>", "<Esc><Cmd>m .-2<Cr>==gi", { desc = "Move up" })
+vim.keymap.set("n", "<C-j>", "<cmd>m .+1<Cr>==", { desc = "Move down" })
+vim.keymap.set("n", "<C-k>", "<cmd>m .-2<Cr>==", { desc = "Move up" })
+vim.keymap.set("v", "<C-j>", ":m '>+1<Cr>gv=gv", { desc = "Move down" })
+vim.keymap.set("v", "<C-k>", ":m '<-2<Cr>gv=gv", { desc = "Move up" })
 
 -- Resize with arrows
 vim.keymap.set(
