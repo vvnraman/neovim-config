@@ -38,7 +38,7 @@ require("lazy").setup("plugins.spec")
 
 -------------------------------------------------------------------------------
 require("options")
-require("mappings")
+require("keymaps")
 require("autocommands")
 
 -------------------------------------------------------------------------------
