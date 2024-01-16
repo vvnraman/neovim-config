@@ -14,6 +14,9 @@ M.setup = function()
 
   telescope.setup({
     defaults = {
+      file_ignore_patterns = {
+        "^.git/",
+      },
       mappings = {
         i = { ["<C-q>"] = trouble_telescope.open_with_trouble },
         n = { ["<C-q>"] = trouble_telescope.open_with_trouble },
@@ -58,10 +61,20 @@ M.setup = function()
         .. " rev-parse --show-toplevel"
     )[1]
     if vim.v.shell_error == 0 then
-      return git_root, "In Project Root (git)"
+      local is_git_true = true
+      return git_root, is_git_true
     else
+      local is_git_false = false
       print("Using current working directory, no git repo found")
-      return cwd, "In Current Working Dir"
+      return cwd, is_git_false
+    end
+  end
+
+  local get_prompt = function(prefix, is_git)
+    if is_git then
+      return prefix .. "In Project Root (git)"
+    else
+      return prefix .. "In Current Working Dir"
     end
   end
 
@@ -74,9 +87,23 @@ M.setup = function()
 
   -- fuzzy find file functions
   local find_files_in_cwd = function()
-    local cwd, prompt_suffix = get_project_root()
+    local cwd, is_git = get_project_root()
+    -- if is_git then
+    --   telescope_builtin.git_files({
+    --     show_untracked = true,
+    --   })
+    --   return
+    -- end
+
+    -- FIXME: I don't want '.git' contents to be shown, but I do want all
+    --        hidden files to be shown. Using `find_files` with
+    --        `hidden = true` shows '.git' folder contents as well. For now
+    --        I'm using `file_ignore_patterns` configuration to ignore '.git'.
+    --        I'd like to find out a more local way to do this in this method
+    --        itself.
+    --        The `git_files` block above was one way to deal with it.
     telescope_builtin.find_files({
-      prompt_title = "Files " .. prompt_suffix,
+      prompt_title = get_prompt("Files ", is_git),
       cwd = cwd,
       hidden = true,
     })
@@ -99,18 +126,18 @@ M.setup = function()
 
   -- grep functions
   local live_grep_in_project = function()
-    local cwd, prompt_suffix = get_project_root()
+    local cwd, is_git = get_project_root()
     telescope_builtin.live_grep({
-      prompt_title = "Live Grep " .. prompt_suffix,
+      prompt_title = get_prompt("Live Grep ", is_git),
       cwd = cwd,
       hidden = true,
     })
   end
 
   local grep_current_word_in_project = function()
-    local cwd, prompt_suffix = get_project_root()
+    local cwd, is_git = get_project_root()
     telescope_builtin.grep_string({
-      prompt_title = "Current Word " .. prompt_suffix,
+      prompt_title = get_prompt("Current Word ", is_git),
       cwd = cwd,
       word_match = "-w",
     })
@@ -118,9 +145,9 @@ M.setup = function()
 
   -- File browser functions
   local browse_files_in_cwd = function()
-    local cwd, prompt_suffix = get_project_root()
+    local cwd, is_git = get_project_root()
     file_browser.file_browser({
-      prompt_title = "Browse Files " .. prompt_suffix,
+      prompt_title = get_prompt("Browse Files ", is_git),
       cwd = cwd,
       prompt_path = true,
       hidden = true,
@@ -128,9 +155,9 @@ M.setup = function()
   end
 
   local browse_files_in_buffer_dir = function()
-    local cwd, prompt_suffix = get_project_root()
+    local cwd, is_git = get_project_root()
     file_browser.file_browser({
-      prompt_title = "Browse Files in " .. prompt_suffix,
+      prompt_title = get_prompt("Browse Files in ", is_git),
       cwd = cwd,
       prompt_path = true,
       hidden = true,

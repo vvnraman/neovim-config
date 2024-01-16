@@ -29,13 +29,13 @@ local get_textobject_config = function()
     swap = {
       enable = true,
       swap_next = {
-        ["<leader>p"] = {
+        ["<leader>a"] = {
           query = "@parameter.inner",
           desc = "Swap: parameter.next",
         },
       },
       swap_previous = {
-        ["<leader>P"] = {
+        ["<leader>A"] = {
           query = "@parameter.inner",
           desc = "Swap: parameter.prev",
         },

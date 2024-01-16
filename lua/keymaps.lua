@@ -4,6 +4,9 @@
 -- Esc on jk as well
 vim.keymap.set("i", "jk", "<Esc>", NOREMAP("Escape using jk"))
 
+-- Purge selection into black hole and paste over it
+vim.keymap.set("x", "<leader>p", [["_dP]])
+
 -- Move lines
 vim.keymap.set("i", "<C-j>", "<Esc><Cmd>m .+1<Cr>==gi", { desc = "Move down" })
 vim.keymap.set("i", "<C-k>", "<Esc><Cmd>m .-2<Cr>==gi", { desc = "Move up" })
