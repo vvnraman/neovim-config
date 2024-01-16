@@ -30,13 +30,13 @@ local telescope_tabs_lazy_config = function()
   })
 
   require("which-key").register({
-    ["\\t"] = {
+    ["<leader><leader>t"] = {
       function()
         telescope_tabs.list_tabs()
       end,
       "tab: [t]ab list",
     },
-    ["<leader>t"] = {
+    ["\\t"] = {
       function()
         telescope_tabs.go_to_previous()
       end,
