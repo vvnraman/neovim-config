@@ -16,18 +16,8 @@ vim.keymap.set("v", "<C-j>", ":m '>+1<Cr>gv=gv", { desc = "Move down" })
 vim.keymap.set("v", "<C-k>", ":m '<-2<Cr>gv=gv", { desc = "Move up" })
 
 -- Resize with arrows
-vim.keymap.set(
-  "n",
-  "<C-Up>",
-  "<Cmd>resize -4<Cr>",
-  NOREMAP("Resize window ⬆️ by 4")
-)
-vim.keymap.set(
-  "n",
-  "<C-Down>",
-  "<Cmd>resize +4<Cr>",
-  NOREMAP("Resize window ⬇️ by 4")
-)
+vim.keymap.set("n", "<C-Up>", "<Cmd>resize -4<Cr>", NOREMAP("Resize window ⬆️ by 4"))
+vim.keymap.set("n", "<C-Down>", "<Cmd>resize +4<Cr>", NOREMAP("Resize window ⬇️ by 4"))
 vim.keymap.set(
   "n",
   "<C-Left>",
@@ -42,18 +32,8 @@ vim.keymap.set(
 )
 
 -- Remap for dealing with word wrap
-vim.keymap.set(
-  "n",
-  "k",
-  "v:count == 0 ? 'gk' : 'k'",
-  { expr = true, silent = true }
-)
-vim.keymap.set(
-  "n",
-  "j",
-  "v:count == 0 ? 'gj' : 'j'",
-  { expr = true, silent = true }
-)
+vim.keymap.set("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
 -- Cycle through windows in a tab
 vim.keymap.set("n", "<Tab>", "<C-W>w", NOREMAP("Next window in tab"))

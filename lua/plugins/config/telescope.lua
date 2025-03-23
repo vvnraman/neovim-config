@@ -4,7 +4,7 @@ M.setup = function()
   local telescope = require("telescope")
   local telescope_builtin = require("telescope.builtin")
   local which_key = require("which-key")
-  local trouble_telescope = require("trouble.providers.telescope")
+  local trouble_telescope = require("trouble.sources.telescope")
 
   pcall(telescope.load_extension, "fzf")
   telescope.load_extension("luasnip")
@@ -18,8 +18,8 @@ M.setup = function()
         "^.git/",
       },
       mappings = {
-        i = { ["<C-q>"] = trouble_telescope.open_with_trouble },
-        n = { ["<C-q>"] = trouble_telescope.open_with_trouble },
+        i = { ["<C-q>"] = trouble_telescope.open },
+        n = { ["<C-q>"] = trouble_telescope.open },
       },
     },
     extensions = {
@@ -56,9 +56,7 @@ M.setup = function()
 
     -- find the Git root directory from the current file's path
     local git_root = vim.fn.systemlist(
-      "git -C "
-        .. vim.fn.escape(current_dir, " ")
-        .. " rev-parse --show-toplevel"
+      "git -C " .. vim.fn.escape(current_dir, " ") .. " rev-parse --show-toplevel"
     )[1]
     if vim.v.shell_error == 0 then
       local is_git_true = true
@@ -72,21 +70,58 @@ M.setup = function()
 
   local get_prompt = function(prefix, is_git)
     if is_git then
-      return prefix .. "In Project Root (git)"
+      return "Git " .. prefix
     else
-      return prefix .. "In Current Working Dir"
+      return "CWD " .. prefix
     end
   end
 
   ------------------------------------------------------------------------------
 
   --[[==========================================================================
-  Custom search functions using telescope
+  Uncategorized search mappings
+  --]]
+  --------------------------------------------------------------------------
+  vim.keymap.set({ "n" }, "<leader>/", function()
+    -- You can pass additional configuration to telescope to change theme, layout, etc.
+    telescope_builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
+      winblend = 10,
+      previewer = false,
+      skip_empty_lines = true,
+    }))
+  end, NOREMAP("[/] Fuzzy search current buffer"))
+
+  vim.keymap.set({ "n" }, "<leader>cl", function()
+    telescope_builtin.colorscheme(require("telescope.themes").get_ivy({
+      enable_preview = true,
+      winblend = 30,
+    }))
+  end, NOREMAP("Chose [c]o[l]ourschemes"))
+
+  vim.keymap.set({ "n" }, "<leader>ss", function()
+    telescope_builtin.resume()
+  end, NOREMAP("Re[s]ume telescope"))
+  ------------------------------------------------------------------------------
+
+  --[[==========================================================================
+  Standard fuzzy search and file browser mappings
   --]]
   --------------------------------------------------------------------------
 
-  -- fuzzy find file functions
-  local find_files_in_cwd = function()
+  -- TODO: There seems to be an abstraction here between the highlighted letters
+  -- in the description and the keymaps. I would like to automatically obtain
+  -- the keymap, given a description with highlighted letters.
+
+  vim.keymap.set("n", "<leader>b", function()
+    telescope_builtin.find_files({
+      prompt_title = "Current buffer directory",
+      cwd = require("telescope.utils").buffer_dir(),
+      hidden = true,
+    })
+  end, { desc = "search files in [b]uffer's directory" })
+
+  which_key.add({ "s", group = "+Search fuzzy" })
+  vim.keymap.set("n", "<leader>sf", function()
     local cwd, is_git = get_project_root()
     -- if is_git then
     --   telescope_builtin.git_files({
@@ -107,212 +142,65 @@ M.setup = function()
       cwd = cwd,
       hidden = true,
     })
-  end
-
-  local find_files_in_buffer_dir = function()
-    telescope_builtin.find_files({
-      prompt_title = "Current buffer directory",
-      cwd = require("telescope.utils").buffer_dir(),
-      hidden = true,
-    })
-  end
-
-  local find_files_under_git = function()
+  end, { desc = "[s]earch [f]iles in project (cwd/git)" })
+  vim.keymap.set("n", "<leader>sg", function()
     telescope_builtin.git_files({
       show_untracked = true,
       hidden = true,
     })
-  end
-
-  -- grep functions
-  local live_grep_in_project = function()
+  end, { desc = "[s]earch [g]it files, also see [s][f]" })
+  vim.keymap.set("n", "<leader>sl", function()
     local cwd, is_git = get_project_root()
     telescope_builtin.live_grep({
       prompt_title = get_prompt("Live Grep ", is_git),
       cwd = cwd,
       hidden = true,
     })
-  end
-
-  local grep_current_word_in_project = function()
-    local cwd, is_git = get_project_root()
-    telescope_builtin.grep_string({
-      prompt_title = get_prompt("Current Word ", is_git),
-      cwd = cwd,
-      word_match = "-w",
-    })
-  end
-
-  -- File browser functions
-  local browse_files_in_cwd = function()
-    local cwd, is_git = get_project_root()
-    file_browser.file_browser({
-      prompt_title = get_prompt("Browse Files ", is_git),
-      cwd = cwd,
-      prompt_path = true,
-      hidden = true,
-    })
-  end
-
-  local browse_files_in_buffer_dir = function()
-    local cwd, is_git = get_project_root()
-    file_browser.file_browser({
-      prompt_title = get_prompt("Browse Files in ", is_git),
-      cwd = cwd,
-      prompt_path = true,
-      hidden = true,
-    })
-  end
-
-  local current_buffer_fuzzy_find = function()
-    -- You can pass additional configuration to telescope to change theme, layout, etc.
-    telescope_builtin.current_buffer_fuzzy_find(
-      require("telescope.themes").get_dropdown({
-        winblend = 10,
-        previewer = false,
-        skip_empty_lines = true,
-      })
-    )
-  end
-
-  ------------------------------------------------------------------------------
-
-  --[[==========================================================================
-  Uncategorized search mappings
-  --]]
-  --------------------------------------------------------------------------
-  vim.keymap.set({ "n" }, "<leader>/", function()
-    current_buffer_fuzzy_find()
-  end, NOREMAP("[/] Fuzzy search current buffer"))
-
-  vim.keymap.set({ "n" }, "<leader>cl", function()
-    telescope_builtin.colorscheme(require("telescope.themes").get_ivy({
-      enable_preview = true,
-      winblend = 30,
+  end, { desc = "[s]earch pattern [l]ive in project" })
+  vim.keymap.set("n", "\\b", telescope_builtin.buffers, { desc = "[s]earch [b]uffers" })
+  vim.keymap.set(
+    "n",
+    "<leader>so",
+    telescope_builtin.oldfiles,
+    { desc = "[s]earch [o]ld files" }
+  )
+  vim.keymap.set("n", "<leader>sc", function()
+    telescope_builtin.command_history(require("telescope.themes").get_dropdown({
+      winblend = 20,
+      skip_empty_lines = true,
     }))
-  end, NOREMAP("Chose [c]o[l]ourschemes"))
+  end, { desc = "[s]earch [c]ommands in history" })
+  vim.keymap.set("n", "<leader>st", function()
+    telescope_builtin.search_history(require("telescope.themes").get_dropdown({
+      winblend = 20,
+      skip_empty_lines = true,
+    }))
+  end, { desc = "[s]earch his[t]ory" })
+  vim.keymap.set(
+    "n",
+    "<leader>sh",
+    telescope_builtin.help_tags,
+    { desc = "[s]earch [h]elp tags" }
+  )
 
-  vim.keymap.set({ "n" }, "\\s", function()
-    telescope_builtin.resume()
-  end, NOREMAP("Re[s]ume telescope"))
-  ------------------------------------------------------------------------------
-
-  --[[==========================================================================
-  Standard fuzzy search and file browser mappings
-  --]]
-  --------------------------------------------------------------------------
-
-  -- TODO: There seems to be an abstraction here between the highlighted letters
-  -- in the description and the keymaps. I would like to automatically obtain
-  -- the keymap, given a description with highlighted letters.
-
-  -- leader is set at prefix at the end, just to avoid additional indentation
-  which_key.register({
-    ["b"] = {
-      function()
-        find_files_in_buffer_dir()
-      end,
-      "search files in [b]uffer's directory",
-    },
-  }, { prefix = "<leader>" })
-
-  which_key.register({
-    s = {
-      name = "+Search fuzzy",
-      f = {
-        function()
-          find_files_in_cwd()
-        end,
-        "[s]earch [f]iles in project (cwd/git)",
-      },
-      g = {
-        function()
-          find_files_under_git()
-        end,
-        "[s]earch [g]it files, also see [s][f]",
-      },
-      l = {
-        function()
-          live_grep_in_project()
-        end,
-        "[s]earch pattern [l]ive in project",
-      },
-      w = {
-        function()
-          grep_current_word_in_project()
-        end,
-        "[s]earch current [w]ord in project",
-      },
-      b = { telescope_builtin.buffers, "[s]earch open [b]uffers" },
-      o = { telescope_builtin.oldfiles, "[s]earch [o]ld files" },
-      c = {
-        function()
-          telescope_builtin.command_history(
-            require("telescope.themes").get_dropdown({
-              winblend = 20,
-              skip_empty_lines = true,
-            })
-          )
-        end,
-        "[s]earch [c]ommands in history",
-      },
-      s = {
-        function()
-          telescope_builtin.search_history(
-            require("telescope.themes").get_dropdown({
-              winblend = 20,
-              skip_empty_lines = true,
-            })
-          )
-        end,
-        "[s]earch [s]search history",
-      },
-      h = { telescope_builtin.help_tags, "[s]earch [h]elp tags" },
-      m = {
-        function()
-          telescope_builtin.marks(require("telescope.themes").get_ivy({
-            winblend = 30,
-            skip_empty_lines = true,
-          }))
-        end,
-        "[s]earch [m]arks",
-      },
-      r = {
-        function()
-          telescope_builtin.registers(require("telescope.themes").get_dropdown({
-            winblend = 20,
-            skip_empty_lines = true,
-          }))
-        end,
-        "[s]earch [r]egisters",
-      },
-      k = {
-        function()
-          telescope_builtin.keymaps(require("telescope.themes").get_dropdown({
-            winblend = 20,
-            skip_empty_lines = true,
-          }))
-        end,
-        "[s]earch [k]eymaps",
-      },
-    },
-    e = {
-      name = "+File [e]xplorer",
-      w = {
-        function()
-          browse_files_in_cwd()
-        end,
-        "browser files in c[w]d",
-      },
-      e = {
-        function()
-          browse_files_in_buffer_dir()
-        end,
-        -- `b` would have been better here but `ee` is quicker to type
-        "browse files in buff[e]r dir",
-      },
-    },
-  }, { prefix = "<leader>" })
+  vim.keymap.set("n", "<leader>sm", function()
+    telescope_builtin.marks(require("telescope.themes").get_ivy({
+      winblend = 20,
+      skip_empty_lines = true,
+    }))
+  end, { desc = "[s]earch [m]arks" })
+  vim.keymap.set("n", "<leader>sr", function()
+    telescope_builtin.registers(require("telescope.themes").get_dropdown({
+      winblend = 20,
+      skip_empty_lines = true,
+    }))
+  end, { desc = "[s]earch [r]egisters" })
+  vim.keymap.set("n", "<leader>sk", function()
+    telescope_builtin.keymaps(require("telescope.themes").get_dropdown({
+      winblend = 20,
+      skip_empty_lines = true,
+    }))
+  end, { desc = "[s]earch [k]eymaps" })
 
   ------------------------------------------------------------------------------
 
@@ -324,96 +212,35 @@ M.setup = function()
   --]]
   --------------------------------------------------------------------------
 
-  which_key.register({
-    z = {
-      name = "+Favourite locations fuzzy",
-      n = {
-        function()
-          telescope_builtin.find_files({
-            prompt_title = "Neovim config fuzzy",
-            cwd = "~/.config/nvim",
-            hidden = true,
-          })
-        end,
-        "fu[z]zy find [n]eovim config",
-      },
-      j = {
-        function()
-          telescope_builtin.find_files({
-            prompt_title = "Journal files fuzzy",
-            cwd = "~/code/notes/journal/journal/",
-            hidden = true,
-          })
-        end,
-        "fu[z]zy find in [j]ournal",
-      },
-      b = {
-        function()
-          telescope_builtin.find_files({
-            prompt_title = "bash config fuzzy",
-            cwd = "~/dot-bash/",
-            hidden = true,
-          })
-        end,
-        "fu[z]zy find [b]ash config",
-      },
-      t = {
-        function()
-          telescope_builtin.find_files({
-            prompt_title = "tmux config fuzzy",
-            cwd = "~/dot-tmux/",
-            hidden = true,
-          })
-        end,
-        "fu[z]zy find [t]mux config",
-      },
-    },
-    v = {
-      name = "+Fa[v]ourite locations explore",
-      n = {
-        function()
-          file_browser.file_browser({
-            prompt_title = "Explore Neovim config",
-            cwd = "~/.config/nvim",
-            prompt_path = true,
-            hidden = true,
-          })
-        end,
-        "fa[v]: [n]eovim config folder",
-      },
-      j = {
-        function()
-          file_browser.file_browser({
-            prompt_title = "Explore Journal",
-            cwd = "~/code/notes/journal/journal/",
-            prompt_path = true,
-            hidden = true,
-          })
-        end,
-        "fa[v]: [j]ournal folder",
-      },
-      b = {
-        function()
-          file_browser.file_browser({
-            prompt_title = "Explore bash config",
-            cwd = "~/dot-bash/",
-            hidden = true,
-          })
-        end,
-        "fa[v]: [b]ash config",
-      },
-      t = {
-        function()
-          file_browser.file_browser({
-            prompt_title = "Explore tmux config",
-            cwd = "~/dot-tmux/",
-            hidden = true,
-          })
-        end,
-        "fa[v]: [t]mux config",
-      },
-    },
-  }, { prefix = "<leader>" })
+  which_key.add({ "e", group = "+Edit configs" })
+  vim.keymap.set("n", "<leader>en", function()
+    telescope_builtin.find_files({
+      prompt_title = "Neovim config fuzzy",
+      cwd = vim.fn.stdpath("config"),
+      hidden = true,
+    })
+  end, { desc = "[e]dit [n]vim config" })
+  vim.keymap.set("n", "<leader>ej", function()
+    telescope_builtin.find_files({
+      prompt_title = "Journal files fuzzy",
+      cwd = "~/code/notes/journal/journal/",
+      hidden = true,
+    })
+  end, { desc = "fu[z]zy find in [j]ournal" })
+  vim.keymap.set("n", "<leader>eb", function()
+    telescope_builtin.find_files({
+      prompt_title = "bash config fuzzy",
+      cwd = "~/dot-bash/",
+      hidden = true,
+    })
+  end, { desc = "fu[z]zy find [b]ash config" })
+  vim.keymap.set("n", "<leader>et", function()
+    telescope_builtin.find_files({
+      prompt_title = "tmux config fuzzy",
+      cwd = "~/dot-tmux/",
+      hidden = true,
+    })
+  end, { desc = "fu[z]zy find [t]mux config" })
 
   ------------------------------------------------------------------------------
 end

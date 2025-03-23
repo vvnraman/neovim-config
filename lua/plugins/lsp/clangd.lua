@@ -12,23 +12,17 @@ local root_dir_func = function(fname)
 end
 
 local clangd_custom_setup = function(_, bufnr)
-  local which_key = require("which-key")
-
   -- https://github.com/p00f/clangd_extensions.nvim
-
-  which_key.register({
-    ["<leader>s"] = {
-      "<Cmd>ClangdSwitchSourceHeader<Cr>",
-      "Clangd: Switch Cpp/Header file",
-    },
-  }, { prefix = "<leader>", buffer = bufnr })
-
-  require("clangd_extensions.inlay_hints").setup_autocmd()
-  require("clangd_extensions.inlay_hints").set_inlay_hints()
+  vim.keymap.set(
+    "n",
+    "\\s",
+    "<Cmd>ClangdSwitchSourceHeader<Cr>",
+    { desc = "Clangd: Switch Cpp/Header file", buffer = bufnr }
+  )
 end
 
 M.setup = function()
-  local vanilla = require("plugins.config.lsp.vanilla")
+  local vanilla = require("plugins.lsp.vanilla")
 
   local opts = {
     on_attach = function(client, bufnr)

@@ -61,10 +61,9 @@ local M = {
     -- https://github.com/RRethy/vim-illuminate
     "RRethy/vim-illuminate",
     event = "VeryLazy",
-    dependencies = { "folke/which-key.nvim" },
     config = function()
-      local illuminate = require("illuminate")
-      illuminate.configure({
+      local ilmn = require("illuminate")
+      ilmn.configure({
         delay = 250,
         filetype_denylist = {
           "markdown",
@@ -73,16 +72,8 @@ local M = {
         min_count_to_highlight = 2,
       })
 
-      require("which-key").register({
-        ["<C-p>"] = {
-          illuminate.goto_prev_reference,
-          "illuminate: [p]rev reference",
-        },
-        ["<C-n>"] = {
-          illuminate.goto_next_reference,
-          "illuminate: [n]ext reference",
-        },
-      }, {})
+      vim.keymap.set("n", "<C-p>", ilmn.goto_prev_reference, { desc = "illuminate: [p]rev" })
+      vim.keymap.set("n", "<C-n>", ilmn.goto_next_reference, { desc = "illuminate: [n]ext" })
     end,
   },
 }

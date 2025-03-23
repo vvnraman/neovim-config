@@ -1,7 +1,4 @@
--- https://github.com/stevearc/conform.nvim
-M = {}
-
-M.setup_conform = function()
+local setup_conform = function()
   local conform = require("conform")
   conform.setup({
     format_on_save = function(bufnr)
@@ -22,12 +19,7 @@ M.setup_conform = function()
   vim.api.nvim_create_user_command("Format", function(args)
     local range = nil
     if args.count ~= -1 then
-      local end_line = vim.api.nvim_buf_get_lines(
-        0,
-        args.line2 - 1,
-        args.line2,
-        true
-      )[1]
+      local end_line = vim.api.nvim_buf_get_lines(0, args.line2 - 1, args.line2, true)[1]
       range = {
         start = { args.line1, 0 },
         ["end"] = { args.line2, end_line:len() },
@@ -55,5 +47,15 @@ M.setup_conform = function()
     desc = "Re-enable autoformat-on-save",
   })
 end
+
+local M = {
+  {
+    -- https://github.com/stevearc/conform.nvim
+    "stevearc/conform.nvim",
+    event = "VeryLazy",
+    cmd = { "ConformInfo" },
+    config = setup_conform,
+  },
+}
 
 return M

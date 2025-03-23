@@ -22,12 +22,6 @@ local M = {
       select_signature_key = "<M-e>",
     },
   },
-  {
-    -- https://github.com/simrat39/symbols-outline.nvim
-    "simrat39/symbols-outline.nvim",
-    cmd = "SymbolsOutline",
-    config = true,
-  },
   --[[
   -- Required Neovim version 0.10
   {

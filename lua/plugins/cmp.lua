@@ -15,10 +15,7 @@ local lazy_cmp_config = function()
       ["<Up>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "c" }),
       ["<C-d>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
       ["<C-u>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
-      ["<C-y>"] = cmp.mapping(
-        cmp.mapping.confirm({ select = true }),
-        { "i", "c" }
-      ),
+      ["<C-y>"] = cmp.mapping(cmp.mapping.confirm({ select = true }), { "i", "c" }),
       ["<C-e>"] = cmp.mapping({
         i = cmp.mapping.abort(),
         c = cmp.mapping.close(),
