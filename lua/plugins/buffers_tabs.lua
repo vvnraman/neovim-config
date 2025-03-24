@@ -11,12 +11,7 @@ local telescope_tabs_lazy_config = function()
       is_current
     )
       local tab_name = require("tabby.feature.tab_name").get(tab_id)
-      return string.format(
-        "%d: %s%s",
-        tab_id,
-        tab_name,
-        is_current and " <" or ""
-      )
+      return string.format("%d: %s%s", tab_id, tab_name, is_current and " <" or "")
     end,
     entry_ordinal = function(
       tab_id,
@@ -29,24 +24,17 @@ local telescope_tabs_lazy_config = function()
     end,
   })
 
-  require("which-key").register({
-    ["<leader><leader>t"] = {
-      function()
-        telescope_tabs.list_tabs()
-      end,
-      "tab: [t]ab list",
-    },
-    ["\\t"] = {
-      function()
-        telescope_tabs.go_to_previous()
-      end,
-      "tab: [t]oggle",
-    },
-  }, {})
+  vim.keymap.set("n", "<leader>t", function()
+    telescope_tabs.list_tabs()
+  end, { desc = "tab: [t]ab list" })
+  vim.keymap.set("n", "\\t", function()
+    telescope_tabs.go_to_previous()
+  end, { desc = "tab: [t]oggle" })
 end
 
 local M = {
   {
+    -- https://github.com/nanozuki/tabby.nvim/
     "nanozuki/tabby.nvim",
     event = "VeryLazy",
     config = function()
@@ -59,16 +47,13 @@ local M = {
     end,
   },
   {
+    -- https://github.com/LukasPietzschmann/telescope-tabs
     "LukasPietzschmann/telescope-tabs",
     event = "VeryLazy",
     dependencies = {
       {
         -- spec is elsewhere
         "nvim-telescope/telescope.nvim",
-      },
-      {
-        -- spec is elsewhere
-        "folke/which-key.nvim",
       },
       {
         -- spec above

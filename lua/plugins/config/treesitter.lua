@@ -112,7 +112,6 @@ local setup_treesitter = function()
     },
     indent = { enable = true },
     textobjects = get_textobject_config(),
-    autotag = { enable = true },
   })
 end
 

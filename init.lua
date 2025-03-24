@@ -34,7 +34,25 @@ if not vim.loop.fs_stat(lazypath) then
   })
 end
 vim.opt.rtp:prepend(lazypath)
-require("lazy").setup("plugins.spec")
+require("lazy").setup({
+  require("plugins.buffers_tabs"),
+  require("plugins.cardio"),
+  require("plugins.cmp"),
+  require("plugins.colourschemes"),
+  require("plugins.editing"),
+  require("plugins.filenav"),
+  require("plugins.git"),
+  require("plugins.hotkeys"),
+  require("plugins.linting"),
+  require("plugins.looks"),
+  require("plugins.lsp.init"),
+  require("plugins.neorg.init"),
+  require("plugins.nifty_lsp"),
+  require("plugins.telescope.init"),
+  require("plugins.treesitter.init"),
+  require("plugins.trouble"),
+  require("plugins.ui"),
+})
 
 -------------------------------------------------------------------------------
 require("options")
