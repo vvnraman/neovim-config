@@ -46,7 +46,6 @@ require("lazy").setup({
   require("plugins.linting"),
   require("plugins.looks"),
   require("plugins.lsp.init"),
-  require("plugins.neorg.init"),
   require("plugins.nifty_lsp"),
   require("plugins.telescope.init"),
   require("plugins.treesitter.init"),

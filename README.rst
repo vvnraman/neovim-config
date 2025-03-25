@@ -13,18 +13,20 @@ platforms, without necesarily depending upon the rest of my ``dotfiles``.
 
 ----
 
-How to install Neovim AppImage on Linux
-=======================================
+Install Neovim AppImage on Linux
+================================
 
 Assumes github release link
 https://github.com/neovim/neovim/releases/download/v0.9.4/nvim.appimage
 
 .. code-block:: sh
 
+   nvim_version="stable"
+   # or nvim_version="v0.10.4"
    # download
-   mkdir -p ~/downloads/neovim/v0.9.4/
-   cd ~/downloads/neovim/v0.9.4/
-   curl --fail --location --remote-name https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
+   mkdir -p ~/downloads/neovim/"${nvim_version}"
+   cd ~/downloads/neovim/"${nvim_version}"/
+   curl --fail --location --remote-name https://github.com/neovim/neovim/releases/download/"${nvim_version}"/nvim.appimage
 
    # verify
    sha256sum nvim.appimage
@@ -55,8 +57,10 @@ Pre-requisites
 Assumptions
 -----------
 
-1. ``~/.local/bin/`` already exists in user's $PATH
-2. Neovim executable is present at ``/usr/bin/nvim`` (see previous section)
+1. Neovim executable is present at ``/usr/bin/nvim`` (see previous section)
+
+2. `bash` - ``~/.local/bin/`` already exists in user's `$PATH`
+   `fish` - We'll use a fish function instead
 
 If these assumptions are not met, one can alter the instructions as needed.
 
@@ -69,7 +73,9 @@ Steps
 
       git clone https://github.com/vvnraman/neovim-config ~/.config/pvim
 
-2. Create a file ``~/.local/bin/pvim`` and mark it executable
+2. For `bash`
+
+   Create a file ``~/.local/bin/pvim`` and mark it executable
 
    .. code-block:: sh
 
@@ -77,12 +83,22 @@ Steps
       touch ~/.local/bin/pvim
       chmod +x ~/.local/bin/pvim
 
-3. Add the following contents to ``~/.local/bin/pvim``
- 
+   Add the following contents to ``~/.local/bin/pvim``
    .. code-block:: sh
 
       #/usr/bin/env bash
       NVIM_APPNAME=pvim /usr/bin/nvim $@
+ 
+
+3. For `fish`
+
+   Create a function at `~/.config/fish/functions/pvim.fish`
+
+   .. code-block:: fish
+
+      function pvim
+        NVIM_APPNAME="pvim" /usr/bin/nvim $argv
+      end
 
 4. Run ``pvim``
 
