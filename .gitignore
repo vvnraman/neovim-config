@@ -1,2 +1,5 @@
-plugin/packer_compiled.lua
-plugin/packer_compiled.lua
+.venv/
+dist/
+docs/_build/
+*.egg-info/
+__pycache__/

@@ -3,12 +3,11 @@ Neovim automatically adds a 'lua' folder, if present here, to be available in
 vim's runtimepath. This allows us to import the files and folders in the `lua`
 directory as lua modules as we're doing below.
 
-We also don't need to refer to them by their full path which includes '.lua',
-we can omit the extension. This is standard lua setup.
-
-On top of this, we can also `require` a folder as long as it has an 'init.lua'
-inside the folder. Its the job of that 'init.lua' file to 'require' any other
-sub-modules inside the folder.
+- We don't need to refer to them by their full path which includes '.lua',
+  this is standard lua setup.
+- We can `require()` a folder as long as it has an 'init.lua' inside. Its the
+  job of that `init.lua` file to `require()` any other sub-modules inside.
+  When doing so, the `require` path should always be fully qualified.
 --]]
 -------------------------------------------------------------------------------
 
@@ -35,27 +34,27 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
-  require("plugins.buffers_tabs"),
-  require("plugins.cardio"),
-  require("plugins.cmp"),
-  require("plugins.colourschemes"),
-  require("plugins.editing"),
-  require("plugins.filenav"),
+  require("plugins.dev"),
+  require("plugins.pde.cmp"),
+  require("plugins.pde.lsp"),
+  require("plugins.pde.nifty"),
+  require("plugins.persona.outfit"),
+  require("plugins.persona.theme"),
+  require("plugins.persona.concierge"),
+  require("plugins.persona.physique"),
+  require("plugins.author"),
   require("plugins.git"),
   require("plugins.hotkeys"),
-  require("plugins.linting"),
-  require("plugins.looks"),
-  require("plugins.lsp.init"),
-  require("plugins.nifty_lsp"),
-  require("plugins.telescope.init"),
-  require("plugins.treesitter.init"),
-  require("plugins.trouble"),
-  require("plugins.ui"),
+  require("plugins.expedition.cardio"),
+  require("plugins.expedition.rucking"),
+  require("plugins.expedition.telescope"),
+  require("plugins.treesitter.config"),
+  require("plugins.quagmire.trouble"),
+  require("plugins.quagmire.quicker"),
 })
-
 -------------------------------------------------------------------------------
+
 require("options")
 require("keymaps")
 require("autocommands")
-
 -------------------------------------------------------------------------------
