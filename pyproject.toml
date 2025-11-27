@@ -33,5 +33,7 @@ exclude = [
 ignore = [
   "lua/",
 ]
-
 reportMissingImports = "error"
+reportImplicitStringConcatenation = false
+reportUnannotatedClassAttribute  = false
+reportImplicitOverride = false
