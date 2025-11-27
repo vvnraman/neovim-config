@@ -6,4 +6,6 @@ How to guides
    :maxdepth: 1
    :caption: How to:
 
-TBD.
+   install-neovim
+   isolated-install
+   iterate-on-config
