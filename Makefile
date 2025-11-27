@@ -1,3 +1,5 @@
+PROJECT   := nvim-config
+
 .DEFAULT: help
 
 .PHONY: help
@@ -7,3 +9,18 @@ help: ## Show this help
 .PHONY: format
 format: ## Run stylua for all files in the lua directores
 	fd --glob "*.lua" --exclude plugin/ --exec stylua --search-parent-directories
+
+.PHONY: docs
+docs: ## Generate docs
+docs:
+	uv run $(PROJECT) docs
+
+.PHONY: clean
+clean: ## Clean generated docs
+clean:
+	uv run $(PROJECT) clean
+
+.PHONY: live
+live: ## Generate live docs
+live:
+	uv run $(PROJECT) live

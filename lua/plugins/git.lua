@@ -25,45 +25,75 @@ local gitsigns_on_attach = function(bufnr)
       gs.prev_hunk()
     end)
     return "<Ignore>"
-  end, { "Git hunk: previous", buffer = bufnr, expr = true })
+  end, { desc = "Git hunk: previous", buffer = bufnr, expr = true })
 
-  local h_desc = function(desc)
+  local help = function(desc)
     return { desc = "Git [h]unk: " .. desc, buffer = bufnr }
-  end
-  local g_desc = function(desc)
-    return { desc = "[g]it: " .. desc, buffer = bufnr }
   end
 
   which_key.add({ "<leader>h", group = "+Git [h]unk" })
 
-  vim.keymap.set("n", "<leader>hs", gs.stage_hunk, h_desc("[s]tage"))
-  vim.keymap.set("v", "<leader>hs", function()
-    gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
-  end, h_desc("[s]tage"))
-
-  vim.keymap.set("n", "<leader>hr", gs.reset_hunk, h_desc("[r]reset"))
-  vim.keymap.set("v", "<leader>hr", function()
-    gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
-  end, h_desc("[r]eset"))
-
-  vim.keymap.set("n", "<leader>gs", gs.stage_buffer, g_desc("[s]tage buffer"))
-  vim.keymap.set("n", "<leader>hu", gs.undo_stage_hunk, h_desc("[u]ndo"))
-  vim.keymap.set("n", "<leader>gr", gs.reset_buffer, g_desc("[r]eset buffer"))
-  vim.keymap.set("n", "<leader>hp", gs.preview_hunk, h_desc("[p]review"))
-  vim.keymap.set("n", "<leader>hi", gs.preview_hunk_inline, h_desc("[i]nline preview"))
+  vim.keymap.set("n", "<leader>hs", gs.stage_hunk, help("[s]tage"))
+  vim.keymap.set("n", "<leader>hr", gs.reset_hunk, help("[r]reset"))
+  vim.keymap.set("n", "<leader>hu", gs.undo_stage_hunk, help("[u]ndo"))
+  vim.keymap.set("n", "<leader>hS", gs.stage_buffer, help("[S]tage buffer"))
+  vim.keymap.set("n", "<leader>hR", gs.reset_buffer, help("[R]eset buffer"))
+  vim.keymap.set("n", "<leader>hp", gs.preview_hunk, help("[p]review"))
+  vim.keymap.set("n", "<leader>hi", gs.preview_hunk_inline, help("[i]nline preview"))
   vim.keymap.set("n", "<leader>hb", function()
     gs.blame_line({ full = true })
-  end, h_desc("[b]lame"))
-  vim.keymap.set("n", "<leader>gd", gs.diffthis, g_desc("[d]iff - index"))
-  vim.keymap.set("n", "<leader>gc", function()
+  end, help("[b]lame"))
+  vim.keymap.set("n", "<leader>hd", gs.diffthis, help("[d]iff - index"))
+  vim.keymap.set("n", "<leader>hD", function()
     gs.diffthis("~")
-  end, g_desc("diff - [c]ommit"))
-  vim.keymap.set("n", "<leader>ht", gs.toggle_current_line_blame, h_desc("[t]oggle blame"))
-  vim.keymap.set("n", "<leader>hd", gs.toggle_deleted, h_desc("toggle [d]eleted"))
-  vim.keymap.set("n", "<leader>hw", gs.toggle_word_diff, h_desc("toggle [w]ord"))
+  end, help("[D]iff - commit"))
+
+  -- Toggles
+  vim.keymap.set("n", "<leader>hl", gs.toggle_current_line_blame, help("toggle [l]ine blame"))
+  vim.keymap.set("n", "<leader>hL", gs.toggle_linehl, help("toggle [L]ine highlight"))
+  vim.keymap.set("n", "<leader>hd", gs.toggle_deleted, help("toggle [d]eleted"))
 
   -- Text object
-  vim.keymap.set({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", g_desc("inside hunk"))
+  vim.keymap.set({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", help("[i]nside hunk"))
+end
+
+local diffview_config = function()
+  local toggle_dv = function(cmd)
+    if next(require("diffview.lib").views) == nil then
+      vim.cmd(cmd)
+    else
+      vim.cmd("DiffviewClose")
+    end
+  end
+
+  require("diffview").setup({
+    keymaps = {
+      view = {
+        -- The `view` bindings are active in the diff buffers, only when the current
+        -- tabpage is a Diffview.
+        { "n", "q", require("diffview.actions").close, { desc = "Close help menu" } },
+      },
+      file_panel = {
+        { "n", "q", "<Cmd>DiffviewClose<Cr>", { desc = "Close help menu" } },
+      },
+      file_history_panel = {
+        { "n", "q", "<Cmd>DiffviewClose<Cr>", { desc = "Close help menu" } },
+      },
+    },
+  })
+
+  vim.keymap.set("n", "<leader>gd", function()
+    toggle_dv("DiffviewOpen")
+  end, { desc = "[g]it [d]iff index" })
+  vim.keymap.set("n", "<leader>gf", function()
+    toggle_dv("DiffviewFileHistory")
+  end, { desc = "[g]it diff [f]ile" })
+  vim.keymap.set("n", "<leader>gm", function()
+    toggle_dv("DiffviewOpen master..HEAD")
+  end, { desc = "[g]it diff [m]aster" })
+  vim.keymap.set("n", "<leader>gn", function()
+    toggle_dv("DiffviewOpen main..HEAD")
+  end, { desc = "[g]it diff mai[n]" })
 end
 
 local M = {
@@ -81,6 +111,11 @@ local M = {
       })
     end,
     dependencies = { "folke/which-key.nvim" },
+  },
+  {
+    -- https://github.com/sindrets/diffview.nvim
+    "sindrets/diffview.nvim",
+    config = diffview_config,
   },
 }
 
