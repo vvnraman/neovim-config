@@ -100,15 +100,38 @@ local M = {
   },
   {
     -- https://github.com/norcalli/nvim-colorizer.lua
-    "norcalli/nvim-colorizer.lua",
-    event = "VeryLazy",
+    -- https://github.com/catgoose/nvim-colorizer.lua
+    "catgoose/nvim-colorizer.lua",
+    event = "BufReadPre",
     config = function()
-      require("colorizer").setup()
+      require("colorizer").setup({
+        user_default_options = {
+          -- Options are "background", "foreground", and "virtualtext"
+          mode = "virtualtext",
+          virtualtext_inline = "after",
+        },
+      })
+
       vim.keymap.set(
         "n",
-        "<leader>ct",
+        "<leader>cc",
         "<Cmd>ColorizerToggle<Cr>",
-        { desc = "[c]olorizer [t]oggle", noremap = true }
+        { desc = "[c]olorizer [c]olour toggle", noremap = true }
+      )
+
+      vim.keymap.set("n", "<leader>cb", function()
+        require("colorizer").attach_to_buffer(0, { mode = "background" })
+      end, { desc = "[c]olorizer [b]ackground", noremap = true })
+
+      vim.keymap.set("n", "<leader>cf", function()
+        require("colorizer").attach_to_buffer(0, { mode = "foreground" })
+      end, { desc = "[c]olorizer [f]oreground", noremap = true })
+
+      vim.keymap.set(
+        "n",
+        "<leader>cd",
+        "<Cmd>ColorizerDetachFromBuffer<Cr>",
+        { desc = "[c]olorizer [d]etach", noremap = true }
       )
     end,
   },
