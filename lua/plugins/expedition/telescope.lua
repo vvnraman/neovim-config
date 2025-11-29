@@ -75,6 +75,7 @@ local telescope_setup = function()
     winblend = 30,
   })
   pcall(telescope.load_extension, "fzf")
+  pcall(telescope.load_extension, "egrepify")
 
   -- Show hidden files, but ignore git files always
   -- Clone default telescope vimgrep config
@@ -92,7 +93,7 @@ local telescope_setup = function()
     local selection = action_state.get_selected_entry()
 
     if not selection then
-      require("notify")("Open oil <C-o>: No entry selected")
+      Snacks.notifier.notify("Open oil <C-o>: No entry selected", "warn")
       return
     end
 
@@ -110,8 +111,9 @@ local telescope_setup = function()
     local dir = require("vvn.path").dir_or_parent(selection.path)
     -- log.info(vim.inspect(dir))
     if not dir then
-      require("notify")(
-        "Open oil <C-o>:" .. selection.path .. " could not be resolved as a directory."
+      Snacks.notifier.notify(
+        "Open oil <C-o>:" .. selection.path .. " could not be resolved as a directory.",
+        "warn"
       )
       return
     end
@@ -130,6 +132,7 @@ local telescope_setup = function()
         i = {
           ["<C-q>"] = require("trouble.sources.telescope").open,
           ["<C-o>"] = open_oil,
+          ["<C-e>"] = require("telescope._extensions.egrepify.actions").toggle_prefixes,
         },
       },
     },
@@ -217,7 +220,15 @@ local telescope_setup = function()
       prompt_title = get_prompt("Live Grep ", is_git),
       cwd = cwd,
     })
-  end, { desc = "[s]earch pattern [l]ive in project" })
+  end, { desc = "[s]earch [l]ive in project" })
+
+  vim.keymap.set("n", "<leader>sr", function()
+    local cwd, is_git = get_project_root()
+    telescope.extensions.egrepify.egrepify({
+      prompt_title = get_prompt("Enhanced Grep ", is_git),
+      cwd = cwd,
+    })
+  end, { desc = "Enhanced [s]search with [r]ipgrep flags" })
 
   vim.keymap.set("n", "\\b", telescope_builtin.buffers, { desc = "[s]earch [b]uffers" })
 
@@ -247,17 +258,17 @@ local telescope_setup = function()
     telescope_builtin.symbols(telescope_ivy)
   end, { desc = "[s]earch s[y]mbols" })
 
-  vim.keymap.set("n", "<leader>sm", function()
+  vim.keymap.set("n", "\\m", function()
     telescope_builtin.marks(telescope_ivy)
-  end, { desc = "[s]earch [m]arks" })
+  end, { desc = "search [m]arks" })
 
-  vim.keymap.set("n", "<leader>sr", function()
+  vim.keymap.set("n", "\\r", function()
     telescope_builtin.registers(telescope_ivy)
-  end, { desc = "[s]earch [r]egisters" })
+  end, { desc = "search [r]egisters" })
 
-  vim.keymap.set("n", "<leader>sk", function()
+  vim.keymap.set("n", "\\k", function()
     telescope_builtin.keymaps(telescope_ivy)
-  end, { desc = "[s]earch [k]eymaps" })
+  end, { desc = "search [k]eymaps" })
 
   ------------------------------------------------------------------------------
 
@@ -290,8 +301,8 @@ local telescope_setup = function()
 
   -- <leader>en, <leader>zn
   favourite_edit_grep("n", vim.fn.stdpath("config"), "Neovim", "[n]vim")
-  -- <leader>ej, <leader>zj
-  favourite_edit_grep("j", "~/code/notes/journal/journal/", "Jounral", "[j]ournal")
+  -- <leader>ec, <leader>zc
+  favourite_edit_grep("c", "~/.local/share/chezmoi/", "Chezmoi", "[c]hezmoi")
   -- <leader>ef, <leader>zf
   favourite_edit_grep("f", "~/.config/fish/", "Fish", "[f]ish")
   -- <leader>eb, <leader>zb
@@ -335,6 +346,10 @@ local M = {
       },
       {
         "stevearc/oil.nvim",
+      },
+      {
+        -- https://github.com/fdschmidt93/telescope-egrepify.nvim
+        "fdschmidt93/telescope-egrepify.nvim",
       },
     },
   },

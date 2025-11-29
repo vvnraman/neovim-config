@@ -25,9 +25,9 @@ local setup_sensible_mappings = function()
   vim.keymap.set("n", "<C-u>", "<C-u>zz")
   vim.keymap.set("n", "<C-d>", "<C-d>zz")
 
-  vim.keymap.set("n", "<leader>i", function()
-    vim.cmd("lua print(vim.api.nvim_buf_get_name(0))")
-  end, { desc = "show current buffer path", noremap = true })
+  vim.keymap.set("n", "\\i", function()
+    Snacks.notifier.notify(vim.api.nvim_buf_get_name(0), "info", { title = "Current Buffer" })
+  end, { desc = "Show current buffer path", noremap = true })
 end
 
 local setup_window_mappings = function()
@@ -84,7 +84,7 @@ local setup_quick_edit_locations = function()
   vim.keymap.set(
     "n",
     "<leader>es",
-    "<Cmd>tabe ~/.config/starship.toml<Cr>",
+    "<Cmd>tabe ~/.config/starship/starship.toml<Cr>",
     { desc = "Open starship config", noremap = true }
   )
 end

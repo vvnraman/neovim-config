@@ -18,8 +18,9 @@ M.setup_native_buffer_mappings = function(bufnr)
 
   vim.keymap.set("n", "<leader>ll", function()
     vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-    require("notify")(
-      vim.lsp.inlay_hint.is_enabled() and "Inlay Hints Enabled" or "Inlay Hints Disabled"
+    Snacks.notifier.notify(
+      vim.lsp.inlay_hint.is_enabled() and "Inlay Hints Enabled" or "Inlay Hints Disabled",
+      "info"
     )
   end, help("in[l]ay hints"))
 

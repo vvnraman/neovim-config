@@ -54,6 +54,7 @@ require("lazy").setup({
 })
 -------------------------------------------------------------------------------
 
+-- These come later as I use some plugins in the mappings as well.
 require("options")
 require("keymaps")
 require("autocommands")

@@ -52,6 +52,7 @@
   "schemastore.nvim": { "branch": "main", "commit": "aa25399c48236b77af71d4b64cdf157d2ba4e990" },
   "snacks.nvim": { "branch": "main", "commit": "fe7cfe9800a182274d0f868a74b7263b8c0c020b" },
   "tabby.nvim": { "branch": "main", "commit": "b3affa6db7eab80fca2a2db5b73b473144507039" },
+  "telescope-egrepify.nvim": { "branch": "master", "commit": "5e6fb91f52a595a0dd554c7eea022c467ff80d86" },
   "telescope-fzf-native.nvim": { "branch": "main", "commit": "6fea601bd2b694c6f2ae08a6c6fab14930c60e2c" },
   "telescope-symbols.nvim": { "branch": "master", "commit": "a6d0127a53d39b9fc2af75bd169d288166118aec" },
   "telescope-tabs": { "branch": "master", "commit": "777b1f630f3d6a12a2e71635a82581c988d6da2e" },

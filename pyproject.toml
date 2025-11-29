@@ -1,9 +1,10 @@
 [project]
 name = "nvim-config"
-version = "0.1.0"
+version = "1.0"
 description = "Prateek's Neovim config"
+readme = "README.rst"
 authors = [
-    { name = "Prateek Raman", email = "vvnraman@gmail.com" }
+    { name = "Prateek Raman", email = "vvnraman at gmail dot com" }
 ]
 requires-python = ">=3.14"
 dependencies = [

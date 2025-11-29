@@ -153,14 +153,30 @@ local M = {
     end,
   },
   {
-    -- https://github.com/rcarriga/nvim-notify
-    "rcarriga/nvim-notify",
-  },
-  {
     -- https://github.com/folke/snacks.nvim
     "folke/snacks.nvim",
     priority = 1000,
     lazy = false,
+    opts = {
+      input = {
+        enabled = true,
+        win = {
+          relative = "cursor",
+        },
+      },
+      notifier = {
+        enabled = true,
+      },
+    },
+    init = function()
+      vim.keymap.set("n", "<leader>nh", function()
+        Snacks.notifier.show_history()
+      end, { desc = "Show notification history", noremap = true })
+
+      vim.keymap.set("n", "<leader>ne", function()
+        Snacks.notifier.show_history({ filter = vim.log.levels.ERROR })
+      end, { desc = "Show error history", noremap = true })
+    end,
   },
 }
 
