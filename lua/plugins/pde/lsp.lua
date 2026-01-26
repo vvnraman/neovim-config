@@ -1,3 +1,26 @@
+local get_current_line_diagnostics = function()
+  local bufnr = 0
+  ---@type vim.Diagnostic[]
+  local diagnostics = vim.diagnostic.get(bufnr, { lnum = GET_CURRENT_LINE() })
+
+  if #diagnostics == 0 then
+    return nil
+  end
+
+  ---@type string[]
+  local messages = {}
+
+  for _, d in ipairs(diagnostics) do
+    local msg = d.message
+    if d.source then
+      msg = string.format("[%s] %s", d.source, msg)
+    end
+    table.insert(messages, msg)
+  end
+
+  return table.concat(messages, "\n")
+end
+
 local setup_diagnostic_config = function()
   vim.diagnostic.config({
     underline = true,
@@ -25,12 +48,51 @@ local setup_diagnostic_config = function()
     vim.diagnostic.jump({ count = -1, float = true })
   end, { desc = "Prev [d]iagnostic" })
 
-  vim.keymap.set(
-    "n",
-    "<leader>d",
-    vim.diagnostic.open_float,
-    { desc = "[d]iagnostics under cursor" }
-  )
+  vim.keymap.set("n", "\\d", vim.diagnostic.open_float, { desc = "[d]iagnostics under cursor" })
+
+  local no_diagnostics_notify = function(line_diagnostics)
+    if not line_diagnostics or line_diagnostics == "" then
+      Snacks.notifier.notify(
+        "No diagnostics for current line",
+        "info",
+        { title = "Current Buffer" }
+      )
+      return true
+    end
+    return false
+  end
+
+  vim.keymap.set("n", "<leader>dd", function()
+    local line_diagnostics = get_current_line_diagnostics()
+    if no_diagnostics_notify(line_diagnostics) then
+      return
+    end
+    vim.fn.setreg("+", line_diagnostics)
+    Snacks.notifier.notify(
+      "Line diagnostics copied to clipboard",
+      "info",
+      { title = "Current Buffer" }
+    )
+  end, { desc = "[d]ump [d]iagnostics to clipboard" })
+
+  vim.keymap.set("n", "<leader>dl", function()
+    local line_diagnostics = get_current_line_diagnostics()
+    if no_diagnostics_notify(line_diagnostics) then
+      return
+    end
+    local content_to_copy = {
+      GET_CURRENT_FILE_PATH() .. ":" .. tostring(GET_CURRENT_LINE()),
+      vim.api.nvim_get_current_line(),
+      "\n",
+      line_diagnostics,
+    }
+    vim.fn.setreg("+", table.concat(content_to_copy, "\n"))
+    Snacks.notifier.notify(
+      "Current line + diagnostics copied to clipboard",
+      "info",
+      { title = "Current Buffer" }
+    )
+  end, { desc = "[d]iagnostics + [l]ine to clipboard, include file and line number" })
 end
 
 local setup_lsp_keymaps = function()
@@ -130,6 +192,9 @@ local lsp_setup = function()
     lua_ls = {
       settings = {
         Lua = {
+          diagnostics = {
+            globals = { "Snacks" },
+          },
           workspace = {
             checkThirdParty = false,
             library = vim.api.nvim_get_runtime_file("", true),

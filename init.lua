@@ -22,7 +22,8 @@ vim.g.maplocalleader = " "
 
 -- https://github.com/folke/lazy.nvim?tab=readme-ov-file#-installation
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+local uv = vim.uv or vim.loop
+if not uv.fs_stat(lazypath) then
   vim.fn.system({
     "git",
     "clone",
@@ -51,6 +52,7 @@ require("lazy").setup({
   require("plugins.treesitter.config"),
   require("plugins.quagmire.trouble"),
   require("plugins.quagmire.quicker"),
+  require("plugins.session"),
 })
 -------------------------------------------------------------------------------
 

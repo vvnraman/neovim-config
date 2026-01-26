@@ -51,35 +51,6 @@ local M = {
     config = true,
   },
   {
-    -- https://github.com/MeanderingProgrammer/render-markdown.nvim
-    "MeanderingProgrammer/render-markdown.nvim",
-    event = "VeryLazy",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-    config = function()
-      local rm = require("render-markdown")
-      rm.setup({
-        completions = {
-          lsp = {
-            enabled = true,
-          },
-        },
-        anti_conceal = {
-          above = 1,
-          below = 1,
-        },
-        link = {
-          enabled = false,
-        },
-      })
-      vim.keymap.set(
-        "n",
-        "<leader>rt",
-        rm.toggle,
-        { desc = "[r]ender markdown [t]oggle", noremap = true }
-      )
-    end,
-  },
-  {
     -- https://github.com/RRethy/vim-illuminate
     "RRethy/vim-illuminate",
     event = "VeryLazy",
@@ -148,27 +119,32 @@ local M = {
     "nvim-lualine/lualine.nvim", -- status line
     event = "VeryLazy",
     dependencies = { "nvim-tree/nvim-web-devicons" },
-    config = function()
-      require("lualine").setup({})
-    end,
+    opts = {},
   },
   {
     -- https://github.com/folke/snacks.nvim
     "folke/snacks.nvim",
     priority = 1000,
     lazy = false,
-    opts = {
-      input = {
-        enabled = true,
-        win = {
-          relative = "cursor",
+    config = function()
+      ---@module "snacks"
+      ---@type snacks.Config
+      local opts = {
+        input = {
+          enabled = true,
+          win = {
+            relative = "cursor",
+          },
         },
-      },
-      notifier = {
-        enabled = true,
-      },
-    },
-    init = function()
+        notifier = {
+          enabled = true,
+        },
+        picker = {
+          enabled = true,
+        },
+      }
+      require("snacks").setup(opts)
+
       vim.keymap.set("n", "<leader>nh", function()
         Snacks.notifier.show_history()
       end, { desc = "Show notification history", noremap = true })
@@ -176,6 +152,13 @@ local M = {
       vim.keymap.set("n", "<leader>ne", function()
         Snacks.notifier.show_history({ filter = vim.log.levels.ERROR })
       end, { desc = "Show error history", noremap = true })
+
+      vim.keymap.set("n", "<leader>.", function()
+        Snacks.scratch()
+      end, { desc = "Toggle Scratch buffer" })
+      vim.keymap.set("n", "<leader>S", function()
+        Snacks.scratch.select()
+      end, { desc = "Select Scratch buffer" })
     end,
   },
 }
