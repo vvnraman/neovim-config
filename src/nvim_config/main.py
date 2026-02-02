@@ -75,7 +75,7 @@ def info():
 @app.command()
 def docs():
     print(f"{A} Building docs for {PROJECT_NAME}")
-    args = ["sphinx-build", "--builder", "html", str(DOCS_DIR), str(BUILD_DIR)]
+    args = ["sphinx-build", "--builder", "html", str(DOCS_DIR), str(HTML_DIR)]
     _ = subprocess.run(args)
 
 
