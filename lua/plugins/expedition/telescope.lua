@@ -1,6 +1,44 @@
-local rg_cmd = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" }
-local fd_cmd = { "fd", "--type", "file", "--hidden", "--exclude", ".git/" }
-local fd_cmd_dir = { "fd", "--type", "directory", "--hidden", "--exclude", ".git/" }
+local rg_cmd = {
+  "rg",
+  "--files",
+  "--hidden",
+  "--glob",
+  "!**/.git/*",
+  "--glob",
+  "!.obsidian/*",
+  "--glob",
+  "!Dropbox/.dropbox.cache/*",
+  "--glob",
+  "!Dropbox/.dropbox",
+}
+local fd_cmd = {
+  "fd",
+  "--type",
+  "file",
+  "--hidden",
+  "--exclude",
+  ".git/",
+  "--exclude",
+  "obsidian/.obsidian/",
+  "--exclude",
+  "Dropbox/.dropbox.cache/",
+  "--exclude",
+  "Dropbox/.dropbox",
+}
+local fd_cmd_dir = {
+  "fd",
+  "--type",
+  "directory",
+  "--hidden",
+  "--exclude",
+  ".git/",
+  "--exclude",
+  ".obsidian/",
+  "--exclude",
+  ".dropbox.cache/",
+  "--exclude",
+  ".dropbox",
+}
 local fd_cmd_d1 = fd_cmd
 table.insert(fd_cmd_d1, "--max-depth")
 table.insert(fd_cmd_d1, "1")
@@ -83,6 +121,12 @@ local telescope_setup = function()
   table.insert(vimgrep_arguments, "--hidden")
   table.insert(vimgrep_arguments, "--glob")
   table.insert(vimgrep_arguments, "!**/.git/*")
+  table.insert(vimgrep_arguments, "--glob")
+  table.insert(vimgrep_arguments, "!.obsidian/*")
+  table.insert(vimgrep_arguments, "--glob")
+  table.insert(vimgrep_arguments, "!Dropbox/.dropbox.cache/*")
+  table.insert(vimgrep_arguments, "--glob")
+  table.insert(vimgrep_arguments, "!Dropbox/.dropbox")
 
   -- Open a floating oil window at the location of the current selection.
   local open_oil = function(prompt_bufnr)
@@ -284,31 +328,55 @@ local telescope_setup = function()
   which_key.add({ "z", group = "+Live grep config" })
 
   local favourite_edit_grep = function(key, path, prompt_part, desc_part)
+    if not vim.fn.isdirectory(vim.fn.expand(path)) then
+      return
+    end
+
     vim.keymap.set("n", "<leader>e" .. key, function()
       telescope_builtin.find_files({
-        prompt_title = "Search " .. prompt_part .. " config",
+        prompt_title = "Search " .. prompt_part .. " files",
         cwd = path,
       })
-    end, { desc = "[e]dit " .. desc_part .. " config" })
+    end, { desc = "[e]dit " .. desc_part .. " files" })
 
     vim.keymap.set("n", "<leader>z" .. key, function()
       telescope_builtin.live_grep({
-        prompt_title = "Live grep " .. prompt_part .. " config",
+        prompt_title = "Live grep " .. prompt_part .. " files",
         cwd = path,
       })
-    end, { desc = "[z]ive grep " .. desc_part .. " config" })
+    end, { desc = "[z]ive grep " .. desc_part .. " files" })
   end
 
-  -- <leader>en, <leader>zn
-  favourite_edit_grep("n", vim.fn.stdpath("config"), "Neovim", "[n]vim")
-  -- <leader>ec, <leader>zc
-  favourite_edit_grep("c", "~/.local/share/chezmoi/", "Chezmoi", "[c]hezmoi")
-  -- <leader>ef, <leader>zf
-  favourite_edit_grep("f", "~/.config/fish/", "Fish", "[f]ish")
+  -- <leader>ea, <leader>za
+  favourite_edit_grep("a", "~/.config/alacritty/", "Alacritty", "[a]lacritty")
   -- <leader>eb, <leader>zb
   favourite_edit_grep("b", "~/dot-bash/", "bash", "[b]ash")
+  -- <leader>ec, <leader>zc
+  favourite_edit_grep("c", "~/.local/share/chezmoi/", "Chezmoi", "[c]hezmoi")
+
+  -- <leader>df, <leader>zd
+  favourite_edit_grep("d", "~/Dropbox", "Dropbox", "[d]ropbox")
+
+  -- <leader>ef, <leader>zf
+  favourite_edit_grep("f", "~/.config/fish/", "Fish", "[f]ish")
+  -- <leader>eg, <leader>zg
+  favourite_edit_grep("g", "~/.config/ghostty/", "Ghostty", "[g]hostty")
+  -- <leader>eh, <leader>zh
+  favourite_edit_grep("h", "~/.config/hypr/", "Hyprland", "[h]yprland")
+  -- <leader>en, <leader>zn
+  favourite_edit_grep("n", vim.fn.stdpath("config"), "Neovim", "[n]vim")
+  -- <leader>em, <leader>zm
+  favourite_edit_grep("m", "~/code/mine/", "My code", "[m]y code")
+
+  -- <leader>eo, <leader>zo
+  favourite_edit_grep("o", "~/obsidian/", "Obsidian", "[o]bsidian")
+
   -- <leader>et, <leader>zt
   favourite_edit_grep("t", "~/dot-tmux/", "tmux", "[t]mux")
+  -- <leader>ev, <leader>zv
+  favourite_edit_grep("v", "~/.config/vvnraman/", "vvnraman config", "[v]vnraman config")
+  -- <leader>ew, <leader>zw
+  favourite_edit_grep("w", "~/.config/waybar/", "Waybar", "[w]aybar")
 end
 
 local M = {

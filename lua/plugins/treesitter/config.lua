@@ -6,34 +6,33 @@ local get_textobject_config = function()
       lookahead = true,
       keymaps = {
         -- You can use the capture groups defined in textobjects.scm
-        ["af"] = {
-          query = "@function.outer",
-          desc = "Select: function.outer",
-        },
-        ["if"] = {
-          query = "@function.inner",
-          desc = "Select: function.inner",
-        },
-        ["ac"] = {
-          query = "@class.outer",
-          desc = "Select: class.outer",
-        },
-        ["ic"] = {
-          query = "@class.inner",
-          desc = "Select: class.inner",
-        },
+        ["af"] = "@function.outer",
+        ["if"] = "@function.inner",
+        ["al"] = "@loop.outer",
+        ["il"] = "@loop.inner",
+        ["ac"] = "@conditional.outer",
+        ["ic"] = "@conditional.inner",
+        ["aa"] = "@parameter.outer",
+        ["ia"] = "@parameter.inner",
       },
+      selection_modes = {
+        ["@function.outer"] = "V",
+        ["@loop.outer"] = "V",
+        ["@conditional.outer"] = "V",
+        ["@parameter.outer"] = "v",
+      },
+      include_surrounding_whitespace = false,
     },
     swap = {
       enable = true,
       swap_next = {
-        ["<leader>a"] = {
+        ["<leader>an"] = {
           query = "@parameter.inner",
           desc = "Swap: parameter.next",
         },
       },
       swap_previous = {
-        ["<leader>A"] = {
+        ["<leader>ap"] = {
           query = "@parameter.inner",
           desc = "Swap: parameter.prev",
         },
@@ -44,21 +43,15 @@ local get_textobject_config = function()
       set_jumps = true, -- whether to set jumps in the jumplist
       goto_next_start = {
         ["]m"] = "@function.outer",
-        ["]]"] = "@class.outer",
-        ["]s"] = "@scope",
+        ["]]"] = { query = { "@loop.outer", "@conditional.outer" } },
+        ["]s"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
         ["]z"] = "@fold",
-      },
-      goto_next_end = {
-        ["]M"] = "@function.outer",
-        ["]["] = "@class.outer",
       },
       goto_previous_start = {
         ["[m"] = "@function.outer",
-        ["[["] = "@class.outer",
-      },
-      goto_previous_end = {
-        ["[M"] = "@function.outer",
-        ["[]"] = "@class.outer",
+        ["[["] = { query = { "@loop.outer", "@conditional.outer" } },
+        ["[s"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
+        ["[z"] = "@fold",
       },
     },
   }
@@ -73,50 +66,51 @@ local setup_treesitter = function()
       "cmake",
       "comment",
       "cpp",
+      "desktop",
+      "fish",
       "go",
+      "gotmpl",
       "hjson",
+      "hyprlang",
+      "html",
+      "ini",
       "json",
+      "jq",
       "lua",
       "markdown",
+      "mermaid",
       "norg",
+      "regex",
       "rst",
+      "sql",
+      "ssh_config",
+      "templ",
+      "tmux",
       "toml",
       "typescript",
+      "udev",
       "vim",
       "yaml",
       "zig",
     },
+    sync_install = false,
+    ignore_install = {},
     auto_install = false,
-    -- FIXME: - highlight is too slow in general
-    --        - to test open `~/.config/nvim/lua/options.lua` and scroll
-    --          down using `j` key, which `htop` running.
     highlight = {
       enable = true,
-      -- disable = function(
-      --   _, --[[lang]]
-      --   bufnr
-      -- )
-      --   return vim.api.nvim_buf_line_count(bufnr) > 2500
-      -- end,
     },
     incremental_selection = {
-      enable = true,
-      keymaps = {
-        init_selection = "<Enter>",
-        node_incremental = "<Enter>",
-        scope_incremental = "<C-Enter>",
-        node_decremental = "<BS>",
-      },
+      enable = false,
     },
     indent = { enable = true },
     textobjects = get_textobject_config(),
   })
 end
 
-
 local M = {
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "master",
     event = "VeryLazy",
     build = ":TSUpdate",
     dependencies = {
@@ -130,6 +124,7 @@ local M = {
   },
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
+    branch = "master",
     event = "VeryLazy",
   },
   {

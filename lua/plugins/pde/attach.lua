@@ -51,10 +51,19 @@ M.setup_plugin_buffer_mappings = function(bufnr)
 
   -----------------------------------------------------------------------------
   -- https://github.com/aznhe21/actions-preview.nvim
+  -- vim.keymap.set(
+  --   "n",
+  --   "<leader>la",
+  --   require("actions-preview").code_actions,
+  --   help("code [a]ctions")
+  -- )
+
+  -----------------------------------------------------------------------------
+  -- https://github.com/rachartier/tiny-code-action.nvim
   vim.keymap.set(
-    "n",
+    { "n", "x" },
     "<leader>la",
-    require("actions-preview").code_actions,
+    require("tiny-code-action").code_action,
     help("code [a]ctions")
   )
 end

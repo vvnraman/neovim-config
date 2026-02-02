@@ -5,6 +5,17 @@ vim.opt.belloff = "all"
 -- be silenced.
 -------------------------------------------------------------------------------
 
+vim.opt.selectmode = "key"
+--- <S-Left>, <S-Right> to start "select-mode"
+vim.opt.keymodel = "startsel,stopsel"
+--- Shifted cursor keys start a selection
+--- Unshifted cursor keys leave "select-mode"
+vim.opt.selection = "exclusive"
+--- cursor doesn't include last character
+vim.opt.showmode = true
+--- Show "select-mode" when I'm in it
+-------------------------------------------------------------------------------
+
 vim.wildmode = { "full", "longest", "lastused" }
 -- Completion mode that is used for the character specified with 'wildchar'
 -- "full"
@@ -313,3 +324,40 @@ vim.opt.inccommand = "split"
 -- |:snomagic| and user commands with the |:command-preview| flag as you
 -- type.
 -------------------------------------------------------------------------------
+
+vim.o.sessionoptions =
+  "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+-- (default "blank,buffers,curdir,folds,help,tabpages,winsize,terminal")
+-- word         save and restore ~
+-- blank        empty windows
+-- buffers      hidden and unloaded buffers, not just those in windows
+-- curdir       the current directory
+-- folds        manually created folds, opened/closed folds and local fold options
+-- globals      global variables that start with an uppercase letter and contain
+--              at least one lowercase letter.  Only String and Number types are stored.
+-- help         the help window
+-- localoptions options and mappings local to a window or buffer (not global
+--              values for local options)
+-- options      all options and mappings (also global values for local options)
+-- skiprtp      exclude 'runtimepath' and 'packpath' from the options
+-- resize       size of the Vim window: 'lines' and 'columns'
+-- sesdir       the directory in which the session file is located will become
+--              the current directory (useful with projects accessed over a network from
+--              different systems)
+-- tabpages     all tab pages; without this only the current tab page is
+--              restored, so that you can make a session for each tab page separately
+-- terminal     include terminal windows where the command can be restored
+-- winpos       position of the whole Vim window
+-- winsize      window sizes
+-- slash        |deprecated| Always enabled. Uses "/" in filenames.
+-- unix         |deprecated| Always enabled. Uses "\n" line endings.
+-------------------------------------------------------------------------------
+
+if vim.g.neovide then
+  vim.o.guifont = "MesloLGS Nerd Font Mono:h10"
+
+  vim.g.neovide_cursor_animation_length = 0
+  vim.g.neovide_cursor_short_animation_length = 0.0
+  vim.g.neovide_cursor_trail_size = 0.0
+  vim.g.neovide_cursor_vfx_mode = { "", "" }
+end
