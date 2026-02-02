@@ -1,0 +1,915 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>LspAttach &#8212; vvnraman&#39;s 1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=f2a433a1"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/lsp_attach';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Logging during lua configuration" href="log.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">vvnraman's 1.0 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../overview.html">
+    Config overview
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../project/index.html">
+    Config update as a project
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../how-to/index.html">
+    How to guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../explanation/index.html">
+    Explanation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../overview.html">
+    Config overview
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../project/index.html">
+    Config update as a project
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../how-to/index.html">
+    How to guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../explanation/index.html">
+    Explanation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="keymaps.html">Keymaps Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugins.html">Neovim plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="log.html">Logging during lua configuration</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">LspAttach</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">LspAttach</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="lspattach">
+<span id="lsp-attach"></span><h1>LspAttach<a class="headerlink" href="#lspattach" title="Link to this heading">#</a></h1>
+<section id="lspattach-event">
+<h2><code class="docutils literal notranslate"><span class="pre">LspAttach</span></code> <code class="docutils literal notranslate"><span class="pre">event</span></code><a class="headerlink" href="#lspattach-event" title="Link to this heading">#</a></h2>
+<p>When we create an <code class="docutils literal notranslate"><span class="pre">autocommand</span></code> for <code class="docutils literal notranslate"><span class="pre">LspAttach</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vim</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">nvim_create_autocmd</span><span class="p">(</span><span class="s2">&quot;LspAttach&quot;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="n">group</span> <span class="o">=</span> <span class="n">vim</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">nvim_create_augroup</span><span class="p">(</span><span class="s2">&quot;vvnraman.lsp.config&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="n">clear</span> <span class="o">=</span> <span class="n">true</span> <span class="p">}),</span>
+  <span class="n">callback</span> <span class="o">=</span> <span class="n">function</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+     <span class="o">--</span> <span class="n">some</span> <span class="n">code</span>
+  <span class="n">end</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<p>This is the event which comes in</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">INFO</span>  <span class="n">Tue</span> <span class="n">Nov</span> <span class="mi">18</span> <span class="mi">07</span><span class="p">:</span><span class="mi">06</span><span class="p">:</span><span class="mi">50</span> <span class="mi">2025</span><span class="p">]</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">vvnraman</span><span class="o">/.</span><span class="n">config</span><span class="o">/</span><span class="n">nvim</span><span class="o">/</span><span class="n">lua</span><span class="o">/</span><span class="n">plugins</span><span class="o">/</span><span class="n">lsp</span><span class="o">/</span><span class="n">lsp</span><span class="o">.</span><span class="n">lua</span><span class="p">:</span><span class="mi">43</span><span class="p">:</span> <span class="p">{</span>
+  <span class="n">buf</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">client_id</span> <span class="o">=</span> <span class="mi">1</span>
+  <span class="p">},</span>
+  <span class="n">event</span> <span class="o">=</span> <span class="s2">&quot;LspAttach&quot;</span><span class="p">,</span>
+  <span class="n">file</span> <span class="o">=</span> <span class="s2">&quot;/home/vvnraman/my/code/cppcon-2022-cpp-neovim-toy-calc/src/app/app_main.cpp&quot;</span><span class="p">,</span>
+  <span class="n">group</span> <span class="o">=</span> <span class="mi">32</span><span class="p">,</span>
+  <span class="nb">id</span> <span class="o">=</span> <span class="mi">63</span><span class="p">,</span>
+  <span class="n">match</span> <span class="o">=</span> <span class="s2">&quot;/home/vvnraman/my/code/cppcon-2022-cpp-neovim-toy-calc/src/app/app_main.cpp&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="vim-lsp-get-client-by-id-event-data-client-id">
+<h2><code class="docutils literal notranslate"><span class="pre">vim.lsp.get_client_by_id(event.data.client_id)</span></code><a class="headerlink" href="#vim-lsp-get-client-by-id-event-data-client-id" title="Link to this heading">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">INFO</span>  <span class="n">Tue</span> <span class="n">Nov</span> <span class="mi">18</span> <span class="mi">07</span><span class="p">:</span><span class="mi">06</span><span class="p">:</span><span class="mi">50</span> <span class="mi">2025</span><span class="p">]</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">vvnraman</span><span class="o">/.</span><span class="n">config</span><span class="o">/</span><span class="n">nvim</span><span class="o">/</span><span class="n">lua</span><span class="o">/</span><span class="n">plugins</span><span class="o">/</span><span class="n">lsp</span><span class="o">/</span><span class="n">lsp</span><span class="o">.</span><span class="n">lua</span><span class="p">:</span><span class="mi">46</span><span class="p">:</span> <span class="p">{</span>
+  <span class="n">_is_stopping</span> <span class="o">=</span> <span class="n">false</span><span class="p">,</span>
+  <span class="n">_log_prefix</span> <span class="o">=</span> <span class="s2">&quot;LSP[clangd]&quot;</span><span class="p">,</span>
+  <span class="n">_on_attach_cbs</span> <span class="o">=</span> <span class="p">{</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">1</span><span class="o">&gt;</span> <span class="p">},</span>
+  <span class="n">_on_exit_cbs</span> <span class="o">=</span> <span class="p">{</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">2</span><span class="o">&gt;</span> <span class="p">},</span>
+  <span class="n">_on_init_cbs</span> <span class="o">=</span> <span class="p">{</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">3</span><span class="o">&gt;</span> <span class="p">},</span>
+  <span class="n">_trace</span> <span class="o">=</span> <span class="s2">&quot;off&quot;</span><span class="p">,</span>
+  <span class="n">attached_buffers</span> <span class="o">=</span> <span class="p">{</span> <span class="n">true</span> <span class="p">},</span>
+  <span class="n">cancel_request</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">4</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="n">capabilities</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">general</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="n">positionEncodings</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="s2">&quot;utf-16&quot;</span><span class="p">,</span> <span class="s2">&quot;utf-32&quot;</span> <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="n">offsetEncoding</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">{</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="s2">&quot;utf-16&quot;</span> <span class="p">},</span>
+    <span class="n">textDocument</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="n">callHierarchy</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">dynamicRegistration</span> <span class="o">=</span> <span class="n">false</span>
+      <span class="p">},</span>
+      <span class="n">codeAction</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">codeActionLiteralSupport</span> <span class="o">=</span> <span class="p">{</span>
+          <span class="n">codeActionKind</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">valueSet</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;quickfix&quot;</span><span class="p">,</span> <span class="s2">&quot;refactor&quot;</span><span class="p">,</span> <span class="s2">&quot;refactor.extract&quot;</span><span class="p">,</span> <span class="s2">&quot;refactor.inline&quot;</span><span class="p">,</span> <span class="s2">&quot;refactor.rewrite&quot;</span><span class="p">,</span> <span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="s2">&quot;source.organizeImports&quot;</span> <span class="p">}</span>
+          <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="n">dataSupport</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+        <span class="n">dynamicRegistration</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+        <span class="n">isPreferredSupport</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+        <span class="n">resolveSupport</span> <span class="o">=</span> <span class="p">{</span>
+          <span class="n">properties</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;edit&quot;</span><span class="p">,</span> <span class="s2">&quot;command&quot;</span> <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="n">codeLens</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">dynamicRegistration</span> <span class="o">=</span> <span class="n">false</span><span class="p">,</span>
+        <span class="n">resolveSupport</span> <span class="o">=</span> <span class="p">{</span>
+          <span class="n">properties</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;command&quot;</span> <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="n">completion</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">completionItem</span> <span class="o">=</span> <span class="p">{</span>
+          <span class="n">commitCharactersSupport</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+          <span class="n">deprecatedSupport</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+          <span class="n">documentationFormat</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;markdown&quot;</span><span class="p">,</span> <span class="s2">&quot;plaintext&quot;</span> <span class="p">},</span>
+          <span class="n">insertReplaceSupport</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+          <span class="n">insertTextModeSupport</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">{</span>
+            <span class="n">valueSet</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="p">}</span>
+          <span class="p">},</span>
+          <span class="n">labelDetailsSupport</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+          <span class="n">preselectSupport</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+          <span class="n">resolveSupport</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">properties</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">3</span><span class="o">&gt;</span><span class="p">{</span> <span class="s2">&quot;documentation&quot;</span><span class="p">,</span> <span class="s2">&quot;additionalTextEdits&quot;</span><span class="p">,</span> <span class="s2">&quot;insertTextFormat&quot;</span><span class="p">,</span> <span class="s2">&quot;insertTextMode&quot;</span><span class="p">,</span> <span class="s2">&quot;command&quot;</span> <span class="p">}</span>
+          <span class="p">},</span>
+          <span class="n">snippetSupport</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+          <span class="n">tagSupport</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">valueSet</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">4</span><span class="o">&gt;</span><span class="p">{</span> <span class="mi">1</span> <span class="p">}</span>
+          <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="n">completionItemKind</span> <span class="o">=</span> <span class="p">{</span>
+          <span class="n">valueSet</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">25</span> <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="n">completionList</span> <span class="o">=</span> <span class="p">{</span>
+          <span class="n">itemDefaults</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">5</span><span class="o">&gt;</span><span class="p">{</span> <span class="s2">&quot;commitCharacters&quot;</span><span class="p">,</span> <span class="s2">&quot;editRange&quot;</span><span class="p">,</span> <span class="s2">&quot;insertTextFormat&quot;</span><span class="p">,</span> <span class="s2">&quot;insertTextMode&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span> <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="n">contextSupport</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+        <span class="n">dynamicRegistration</span> <span class="o">=</span> <span class="n">false</span><span class="p">,</span>
+        <span class="n">editsNearCursor</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+        <span class="n">insertTextMode</span> <span class="o">=</span> <span class="mi">1</span>
+      <span class="p">},</span>
+      <span class="n">declaration</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">linkSupport</span> <span class="o">=</span> <span class="n">true</span>
+      <span class="p">},</span>
+      <span class="n">definition</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">dynamicRegistration</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+        <span class="n">linkSupport</span> <span class="o">=</span> <span class="n">true</span>
+      <span class="p">},</span>
+      <span class="n">diagnostic</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">dynamicRegistration</span> <span class="o">=</span> <span class="n">false</span><span class="p">,</span>
+        <span class="n">tagSupport</span> <span class="o">=</span> <span class="p">{</span>
+          <span class="n">valueSet</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="n">documentHighlight</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">dynamicRegistration</span> <span class="o">=</span> <span class="n">false</span>
+      <span class="p">},</span>
+      <span class="n">documentSymbol</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">dynamicRegistration</span> <span class="o">=</span> <span class="n">false</span><span class="p">,</span>
+        <span class="n">hierarchicalDocumentSymbolSupport</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+        <span class="n">symbolKind</span> <span class="o">=</span> <span class="p">{</span>
+          <span class="n">valueSet</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">26</span> <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="n">foldingRange</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">dynamicRegistration</span> <span class="o">=</span> <span class="n">false</span><span class="p">,</span>
+        <span class="n">foldingRange</span> <span class="o">=</span> <span class="p">{</span>
+          <span class="n">collapsedText</span> <span class="o">=</span> <span class="n">true</span>
+        <span class="p">},</span>
+        <span class="n">foldingRangeKind</span> <span class="o">=</span> <span class="p">{</span>
+          <span class="n">valueSet</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;comment&quot;</span><span class="p">,</span> <span class="s2">&quot;imports&quot;</span><span class="p">,</span> <span class="s2">&quot;region&quot;</span> <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="n">lineFoldingOnly</span> <span class="o">=</span> <span class="n">true</span>
+      <span class="p">},</span>
+      <span class="n">formatting</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">dynamicRegistration</span> <span class="o">=</span> <span class="n">true</span>
+      <span class="p">},</span>
+      <span class="n">hover</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">contentFormat</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;markdown&quot;</span><span class="p">,</span> <span class="s2">&quot;plaintext&quot;</span> <span class="p">},</span>
+        <span class="n">dynamicRegistration</span> <span class="o">=</span> <span class="n">true</span>
+      <span class="p">},</span>
+      <span class="n">implementation</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">linkSupport</span> <span class="o">=</span> <span class="n">true</span>
+      <span class="p">},</span>
+      <span class="n">inlayHint</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">dynamicRegistration</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+        <span class="n">resolveSupport</span> <span class="o">=</span> <span class="p">{</span>
+          <span class="n">properties</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;textEdits&quot;</span><span class="p">,</span> <span class="s2">&quot;tooltip&quot;</span><span class="p">,</span> <span class="s2">&quot;location&quot;</span><span class="p">,</span> <span class="s2">&quot;command&quot;</span> <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="n">publishDiagnostics</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">dataSupport</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+        <span class="n">relatedInformation</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+        <span class="n">tagSupport</span> <span class="o">=</span> <span class="p">{</span>
+          <span class="n">valueSet</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="n">rangeFormatting</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">dynamicRegistration</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+        <span class="n">rangesSupport</span> <span class="o">=</span> <span class="n">true</span>
+      <span class="p">},</span>
+      <span class="n">references</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">dynamicRegistration</span> <span class="o">=</span> <span class="n">false</span>
+      <span class="p">},</span>
+      <span class="n">rename</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">dynamicRegistration</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+        <span class="n">prepareSupport</span> <span class="o">=</span> <span class="n">true</span>
+      <span class="p">},</span>
+      <span class="n">semanticTokens</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">augmentsSyntaxTokens</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+        <span class="n">dynamicRegistration</span> <span class="o">=</span> <span class="n">false</span><span class="p">,</span>
+        <span class="n">formats</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;relative&quot;</span> <span class="p">},</span>
+        <span class="n">multilineTokenSupport</span> <span class="o">=</span> <span class="n">false</span><span class="p">,</span>
+        <span class="n">overlappingTokenSupport</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+        <span class="n">requests</span> <span class="o">=</span> <span class="p">{</span>
+          <span class="n">full</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="n">true</span>
+          <span class="p">},</span>
+          <span class="nb">range</span> <span class="o">=</span> <span class="n">false</span>
+        <span class="p">},</span>
+        <span class="n">serverCancelSupport</span> <span class="o">=</span> <span class="n">false</span><span class="p">,</span>
+        <span class="n">tokenModifiers</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;declaration&quot;</span><span class="p">,</span> <span class="s2">&quot;definition&quot;</span><span class="p">,</span> <span class="s2">&quot;readonly&quot;</span><span class="p">,</span> <span class="s2">&quot;static&quot;</span><span class="p">,</span> <span class="s2">&quot;deprecated&quot;</span><span class="p">,</span> <span class="s2">&quot;abstract&quot;</span><span class="p">,</span> <span class="s2">&quot;async&quot;</span><span class="p">,</span> <span class="s2">&quot;modification&quot;</span><span class="p">,</span> <span class="s2">&quot;documentation&quot;</span><span class="p">,</span> <span class="s2">&quot;defaultLibrary&quot;</span> <span class="p">},</span>
+        <span class="n">tokenTypes</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;namespace&quot;</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="s2">&quot;enum&quot;</span><span class="p">,</span> <span class="s2">&quot;interface&quot;</span><span class="p">,</span> <span class="s2">&quot;struct&quot;</span><span class="p">,</span> <span class="s2">&quot;typeParameter&quot;</span><span class="p">,</span> <span class="s2">&quot;parameter&quot;</span><span class="p">,</span> <span class="s2">&quot;variable&quot;</span><span class="p">,</span> <span class="s2">&quot;property&quot;</span><span class="p">,</span> <span class="s2">&quot;enumMember&quot;</span><span class="p">,</span> <span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="s2">&quot;function&quot;</span><span class="p">,</span> <span class="s2">&quot;method&quot;</span><span class="p">,</span> <span class="s2">&quot;macro&quot;</span><span class="p">,</span> <span class="s2">&quot;keyword&quot;</span><span class="p">,</span> <span class="s2">&quot;modifier&quot;</span><span class="p">,</span> <span class="s2">&quot;comment&quot;</span><span class="p">,</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span> <span class="s2">&quot;regexp&quot;</span><span class="p">,</span> <span class="s2">&quot;operator&quot;</span><span class="p">,</span> <span class="s2">&quot;decorator&quot;</span> <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="n">signatureHelp</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">dynamicRegistration</span> <span class="o">=</span> <span class="n">false</span><span class="p">,</span>
+        <span class="n">signatureInformation</span> <span class="o">=</span> <span class="p">{</span>
+          <span class="n">activeParameterSupport</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+          <span class="n">documentationFormat</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;markdown&quot;</span><span class="p">,</span> <span class="s2">&quot;plaintext&quot;</span> <span class="p">},</span>
+          <span class="n">parameterInformation</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">labelOffsetSupport</span> <span class="o">=</span> <span class="n">true</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="n">synchronization</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">didSave</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+        <span class="n">dynamicRegistration</span> <span class="o">=</span> <span class="n">false</span><span class="p">,</span>
+        <span class="n">willSave</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+        <span class="n">willSaveWaitUntil</span> <span class="o">=</span> <span class="n">true</span>
+      <span class="p">},</span>
+      <span class="n">typeDefinition</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">linkSupport</span> <span class="o">=</span> <span class="n">true</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="n">window</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="n">showDocument</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">support</span> <span class="o">=</span> <span class="n">true</span>
+      <span class="p">},</span>
+      <span class="n">showMessage</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">messageActionItem</span> <span class="o">=</span> <span class="p">{</span>
+          <span class="n">additionalPropertiesSupport</span> <span class="o">=</span> <span class="n">true</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="n">workDoneProgress</span> <span class="o">=</span> <span class="n">true</span>
+    <span class="p">},</span>
+    <span class="n">workspace</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="n">applyEdit</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+      <span class="n">configuration</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+      <span class="n">didChangeConfiguration</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">dynamicRegistration</span> <span class="o">=</span> <span class="n">false</span>
+      <span class="p">},</span>
+      <span class="n">didChangeWatchedFiles</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">dynamicRegistration</span> <span class="o">=</span> <span class="n">false</span><span class="p">,</span>
+        <span class="n">relativePatternSupport</span> <span class="o">=</span> <span class="n">true</span>
+      <span class="p">},</span>
+      <span class="n">inlayHint</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">refreshSupport</span> <span class="o">=</span> <span class="n">true</span>
+      <span class="p">},</span>
+      <span class="n">semanticTokens</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">refreshSupport</span> <span class="o">=</span> <span class="n">true</span>
+      <span class="p">},</span>
+      <span class="n">symbol</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">dynamicRegistration</span> <span class="o">=</span> <span class="n">false</span><span class="p">,</span>
+        <span class="n">symbolKind</span> <span class="o">=</span> <span class="p">{</span>
+          <span class="n">valueSet</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">26</span> <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="n">workspaceEdit</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">resourceOperations</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;rename&quot;</span><span class="p">,</span> <span class="s2">&quot;create&quot;</span><span class="p">,</span> <span class="s2">&quot;delete&quot;</span> <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="n">workspaceFolders</span> <span class="o">=</span> <span class="n">true</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="n">commands</span> <span class="o">=</span> <span class="p">{},</span>
+  <span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">capabilities</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="n">offsetEncoding</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">table</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span>
+      <span class="n">textDocument</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">completion</span> <span class="o">=</span> <span class="p">{</span>
+          <span class="n">completionItem</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">commitCharactersSupport</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+            <span class="n">deprecatedSupport</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+            <span class="n">insertReplaceSupport</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+            <span class="n">insertTextModeSupport</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">table</span> <span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span>
+            <span class="n">labelDetailsSupport</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+            <span class="n">preselectSupport</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+            <span class="n">resolveSupport</span> <span class="o">=</span> <span class="p">{</span>
+              <span class="n">properties</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">table</span> <span class="mi">3</span><span class="o">&gt;</span>
+            <span class="p">},</span>
+            <span class="n">snippetSupport</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+            <span class="n">tagSupport</span> <span class="o">=</span> <span class="p">{</span>
+              <span class="n">valueSet</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">table</span> <span class="mi">4</span><span class="o">&gt;</span>
+            <span class="p">}</span>
+          <span class="p">},</span>
+          <span class="n">completionList</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">itemDefaults</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">table</span> <span class="mi">5</span><span class="o">&gt;</span>
+          <span class="p">},</span>
+          <span class="n">contextSupport</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+          <span class="n">dynamicRegistration</span> <span class="o">=</span> <span class="n">false</span><span class="p">,</span>
+          <span class="n">editsNearCursor</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+          <span class="n">insertTextMode</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;clangd&quot;</span> <span class="p">},</span>
+    <span class="n">filetypes</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;cpp&quot;</span><span class="p">,</span> <span class="s2">&quot;objc&quot;</span><span class="p">,</span> <span class="s2">&quot;objcpp&quot;</span><span class="p">,</span> <span class="s2">&quot;cuda&quot;</span> <span class="p">},</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;clangd&quot;</span><span class="p">,</span>
+    <span class="n">on_attach</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">on_init</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">3</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">root_dir</span> <span class="o">=</span> <span class="s2">&quot;/home/vvnraman/my/code/cppcon-2022-cpp-neovim-toy-calc&quot;</span><span class="p">,</span>
+    <span class="n">root_markers</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;compile_commands.json&quot;</span> <span class="p">},</span>
+    <span class="n">single_file_support</span> <span class="o">=</span> <span class="n">false</span>
+  <span class="p">},</span>
+  <span class="n">dynamic_capabilities</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">capabilities</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">6</span><span class="o">&gt;</span><span class="p">{},</span>
+    <span class="n">client_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">get</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">5</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">register</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">6</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">supports</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">7</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">supports_registration</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">8</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">unregister</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">9</span><span class="o">&gt;</span>
+  <span class="p">},</span>
+  <span class="n">flags</span> <span class="o">=</span> <span class="p">{},</span>
+  <span class="n">get_language_id</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">10</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="n">handlers</span> <span class="o">=</span> <span class="p">{},</span>
+  <span class="nb">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="n">initialized</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+  <span class="n">is_stopped</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">11</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="n">messages</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="p">{},</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;clangd&quot;</span><span class="p">,</span>
+    <span class="n">progress</span> <span class="o">=</span> <span class="p">{},</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="p">{}</span>
+  <span class="p">},</span>
+  <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;clangd&quot;</span><span class="p">,</span>
+  <span class="n">notify</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">12</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="n">offset_encoding</span> <span class="o">=</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">,</span>
+  <span class="n">on_attach</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">13</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="n">progress</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">_idx_read</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">_idx_write</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">_items</span> <span class="o">=</span> <span class="p">{},</span>
+    <span class="n">_size</span> <span class="o">=</span> <span class="mi">51</span><span class="p">,</span>
+    <span class="n">pending</span> <span class="o">=</span> <span class="p">{},</span>
+    <span class="o">&lt;</span><span class="n">metatable</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="n">__call</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">14</span><span class="o">&gt;</span><span class="p">,</span>
+      <span class="n">__index</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">clear</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">15</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="n">peek</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">16</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="n">pop</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">17</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="n">push</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">18</span><span class="o">&gt;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="n">registrations</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">table</span> <span class="mi">6</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="n">request</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">19</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="n">request_sync</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">20</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="n">requests</span> <span class="o">=</span> <span class="p">{},</span>
+  <span class="n">root_dir</span> <span class="o">=</span> <span class="s2">&quot;/home/vvnraman/my/code/cppcon-2022-cpp-neovim-toy-calc&quot;</span><span class="p">,</span>
+  <span class="n">rpc</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">is_closing</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">21</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">notify</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">22</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">request</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">23</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">terminate</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">24</span><span class="o">&gt;</span>
+  <span class="p">},</span>
+  <span class="n">server_capabilities</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">astProvider</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+    <span class="n">callHierarchyProvider</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+    <span class="n">clangdInlayHintsProvider</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+    <span class="n">codeActionProvider</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="n">codeActionKinds</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;quickfix&quot;</span><span class="p">,</span> <span class="s2">&quot;refactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span> <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="n">compilationDatabase</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="n">automaticReload</span> <span class="o">=</span> <span class="n">true</span>
+    <span class="p">},</span>
+    <span class="n">completionProvider</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="n">resolveProvider</span> <span class="o">=</span> <span class="n">false</span><span class="p">,</span>
+      <span class="n">triggerCharacters</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span> <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="n">declarationProvider</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+    <span class="n">definitionProvider</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+    <span class="n">documentFormattingProvider</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+    <span class="n">documentHighlightProvider</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+    <span class="n">documentLinkProvider</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="n">resolveProvider</span> <span class="o">=</span> <span class="n">false</span>
+    <span class="p">},</span>
+    <span class="n">documentOnTypeFormattingProvider</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="n">firstTriggerCharacter</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+      <span class="n">moreTriggerCharacter</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="p">},</span>
+    <span class="n">documentRangeFormattingProvider</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+    <span class="n">documentSymbolProvider</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+    <span class="n">executeCommandProvider</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="n">commands</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;clangd.applyFix&quot;</span><span class="p">,</span> <span class="s2">&quot;clangd.applyRename&quot;</span><span class="p">,</span> <span class="s2">&quot;clangd.applyTweak&quot;</span> <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="n">foldingRangeProvider</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+    <span class="n">hoverProvider</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+    <span class="n">implementationProvider</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+    <span class="n">inactiveRegionsProvider</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+    <span class="n">inlayHintProvider</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+    <span class="n">memoryUsageProvider</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+    <span class="n">referencesProvider</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+    <span class="n">renameProvider</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="n">prepareProvider</span> <span class="o">=</span> <span class="n">true</span>
+    <span class="p">},</span>
+    <span class="n">selectionRangeProvider</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+    <span class="n">semanticTokensProvider</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="n">full</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="n">true</span>
+      <span class="p">},</span>
+      <span class="n">legend</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">tokenModifiers</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;declaration&quot;</span><span class="p">,</span> <span class="s2">&quot;definition&quot;</span><span class="p">,</span> <span class="s2">&quot;deprecated&quot;</span><span class="p">,</span> <span class="s2">&quot;deduced&quot;</span><span class="p">,</span> <span class="s2">&quot;readonly&quot;</span><span class="p">,</span> <span class="s2">&quot;static&quot;</span><span class="p">,</span> <span class="s2">&quot;abstract&quot;</span><span class="p">,</span> <span class="s2">&quot;virtual&quot;</span><span class="p">,</span> <span class="s2">&quot;dependentName&quot;</span><span class="p">,</span> <span class="s2">&quot;defaultLibrary&quot;</span><span class="p">,</span> <span class="s2">&quot;usedAsMutableReference&quot;</span><span class="p">,</span> <span class="s2">&quot;usedAsMutablePointer&quot;</span><span class="p">,</span> <span class="s2">&quot;constructorOrDestructor&quot;</span><span class="p">,</span> <span class="s2">&quot;userDefined&quot;</span><span class="p">,</span> <span class="s2">&quot;functionScope&quot;</span><span class="p">,</span> <span class="s2">&quot;classScope&quot;</span><span class="p">,</span> <span class="s2">&quot;fileScope&quot;</span><span class="p">,</span> <span class="s2">&quot;globalScope&quot;</span> <span class="p">},</span>
+        <span class="n">tokenTypes</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;variable&quot;</span><span class="p">,</span> <span class="s2">&quot;variable&quot;</span><span class="p">,</span> <span class="s2">&quot;parameter&quot;</span><span class="p">,</span> <span class="s2">&quot;function&quot;</span><span class="p">,</span> <span class="s2">&quot;method&quot;</span><span class="p">,</span> <span class="s2">&quot;function&quot;</span><span class="p">,</span> <span class="s2">&quot;property&quot;</span><span class="p">,</span> <span class="s2">&quot;variable&quot;</span><span class="p">,</span> <span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="s2">&quot;interface&quot;</span><span class="p">,</span> <span class="s2">&quot;enum&quot;</span><span class="p">,</span> <span class="s2">&quot;enumMember&quot;</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;unknown&quot;</span><span class="p">,</span> <span class="s2">&quot;namespace&quot;</span><span class="p">,</span> <span class="s2">&quot;typeParameter&quot;</span><span class="p">,</span> <span class="s2">&quot;concept&quot;</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;macro&quot;</span><span class="p">,</span> <span class="s2">&quot;modifier&quot;</span><span class="p">,</span> <span class="s2">&quot;operator&quot;</span><span class="p">,</span> <span class="s2">&quot;bracket&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="s2">&quot;comment&quot;</span> <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="nb">range</span> <span class="o">=</span> <span class="n">false</span>
+    <span class="p">},</span>
+    <span class="n">signatureHelpProvider</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="n">triggerCharacters</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;(&quot;</span><span class="p">,</span> <span class="s2">&quot;)&quot;</span><span class="p">,</span> <span class="s2">&quot;{&quot;</span><span class="p">,</span> <span class="s2">&quot;}&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span> <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="n">standardTypeHierarchyProvider</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+    <span class="n">textDocumentSync</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="n">change</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+      <span class="n">openClose</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+      <span class="n">save</span> <span class="o">=</span> <span class="n">true</span>
+    <span class="p">},</span>
+    <span class="n">typeDefinitionProvider</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+    <span class="n">typeHierarchyProvider</span> <span class="o">=</span> <span class="n">true</span><span class="p">,</span>
+    <span class="n">workspaceSymbolProvider</span> <span class="o">=</span> <span class="n">true</span>
+  <span class="p">},</span>
+  <span class="n">server_info</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;clangd&quot;</span><span class="p">,</span>
+    <span class="n">version</span> <span class="o">=</span> <span class="s2">&quot;clangd version 20.1.0 (https://github.com/llvm/llvm-project 24a30daaa559829ad079f2ff7f73eb4e18095f88) linux+grpc x86_64-unknown-linux-gnu&quot;</span>
+  <span class="p">},</span>
+  <span class="n">settings</span> <span class="o">=</span> <span class="p">{},</span>
+  <span class="n">stop</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">25</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="n">supports_method</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">26</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="n">workspace_folders</span> <span class="o">=</span> <span class="p">{</span> <span class="p">{</span>
+      <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;/home/vvnraman/my/code/cppcon-2022-cpp-neovim-toy-calc&quot;</span><span class="p">,</span>
+      <span class="n">uri</span> <span class="o">=</span> <span class="s2">&quot;file:///home/vvnraman/my/code/cppcon-2022-cpp-neovim-toy-calc&quot;</span>
+    <span class="p">}</span> <span class="p">},</span>
+  <span class="o">&lt;</span><span class="n">metatable</span><span class="o">&gt;</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">7</span><span class="o">&gt;</span><span class="p">{</span>
+    <span class="n">__index</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">table</span> <span class="mi">7</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">_add_workspace_folder</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">27</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">_get_language_id</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">28</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">_get_registration</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">29</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">_get_registration_options</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">30</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">_notification</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">31</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">_on_error</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">32</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">_on_exit</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">33</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">_process_request</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">34</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">_register</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">35</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">_register_dynamic</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">36</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">_remove_workspace_folder</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">37</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">_resolve_handler</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">38</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">_run_callbacks</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">39</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">_server_request</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">40</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">_supports_registration</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">41</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">_text_document_did_open_handler</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">42</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">_unregister</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">43</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">_unregister_dynamic</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">44</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">cancel_request</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">45</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">create</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">46</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">exec_cmd</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">47</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">initialize</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">48</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">is_stopped</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">49</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">notify</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">50</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">on_attach</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">51</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">request</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">52</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">request_sync</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">53</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">stop</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">54</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">supports_method</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">55</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">write_error</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">function</span> <span class="mi">56</span><span class="o">&gt;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="log.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Logging during lua configuration</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lspattach-event"><code class="docutils literal notranslate"><span class="pre">LspAttach</span></code> <code class="docutils literal notranslate"><span class="pre">event</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vim-lsp-get-client-by-id-event-data-client-id"><code class="docutils literal notranslate"><span class="pre">vim.lsp.get_client_by_id(event.data.client_id)</span></code></a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/lsp_attach.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Prateek Raman.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
