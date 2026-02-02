@@ -8,7 +8,7 @@ import typer
 
 PROJECT_NAME = "nvim-config"
 GITHUB_URL = "vvnraman/neovim-config"
-REMOTE_NAME = "upstream"
+REMOTE_NAME = "public"
 
 # Not cross-platform
 GIT = "/usr/bin/git"
