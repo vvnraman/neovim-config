@@ -1,13 +1,7 @@
 local lazy_cmp_config = function()
   local cmp = require("cmp")
-  local luasnip = require("luasnip")
   local lspkind = require("lspkind")
   cmp.setup({
-    snippet = {
-      expand = function(args)
-        luasnip.lsp_expand(args.body)
-      end,
-    },
     mapping = {
       ["<C-n>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
       ["<Down>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
@@ -26,7 +20,6 @@ local lazy_cmp_config = function()
       { name = "nvim_lsp" },
       { name = "nvim_lua" },
       { name = "vim_lsp" },
-      { name = "luasnip" },
     }, {
       { name = "path" },
       { name = "buffer", keyword_length = 4 },
@@ -39,7 +32,6 @@ local lazy_cmp_config = function()
         menu = {
           nvim_lsp = "[LSP]",
           nvim_lua = "[NVLUA]",
-          luasnip = "[SNIP]",
           path = "[Path]",
           buffer = "[BUF]",
         },
@@ -96,12 +88,6 @@ local M = {
       },
       {
         "hrsh7th/cmp-emoji",
-      },
-      {
-        "saadparwaiz1/cmp_luasnip",
-      },
-      {
-        "L3MON4D3/LuaSnip",
       },
       {
         "onsails/lspkind-nvim",

@@ -9,3 +9,4 @@ How to guides
    install-neovim
    isolated-install
    iterate-on-config
+   test-in-docker

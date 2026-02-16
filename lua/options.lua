@@ -71,6 +71,10 @@ vim.opt.virtualedit = "block"
 --  - E5113 - modifiable is off, while loading after lazy.nvim
 -------------------------------------------------------------------------------
 
+if vim.env.NVIM_CLIPBOARD == "osc52" then
+  vim.g.clipboard = "osc52"
+end
+
 vim.o.clipboard = "unnamedplus"
 -- Still not too sure about this one. I have to test how this works with my QMK
 -- config on the ZSA keyboards

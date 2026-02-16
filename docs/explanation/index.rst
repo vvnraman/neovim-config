@@ -8,3 +8,6 @@ Explanation
 
    scripting
    lsp_setup
+   config-profiles
+   docker-setup
+   yank-enhanced

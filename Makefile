@@ -24,3 +24,15 @@ clean:
 live: ## Generate live docs
 live:
 	uv run $(PROJECT) live
+
+.PHONY: docker-shell-arch
+docker-shell-arch: ## Start Arch Docker shell
+	./docker/run-workflow.sh arch,standard
+
+.PHONY: docker-shell-ubuntu
+docker-shell-ubuntu: ## Start Ubuntu Docker shell (standard profile)
+	./docker/run-workflow.sh ubuntu,standard
+
+.PHONY: docker-shell-ubuntu-minimal
+docker-shell-ubuntu-minimal: ## Start Ubuntu Docker shell (minimal profile)
+	./docker/run-workflow.sh ubuntu,minimal
