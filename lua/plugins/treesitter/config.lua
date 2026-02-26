@@ -58,42 +58,13 @@ local get_textobject_config = function()
 end
 
 local setup_treesitter = function()
+  local is_headless = #vim.api.nvim_list_uis() == 0
+  local smoke_sync_install = vim.env.NVIM_TREESITTER_SYNC_INSTALL == "1"
+  local profile_config = require("vvn.profile_config")
   local ts_config = require("nvim-treesitter.configs")
   ts_config.setup({
-    ensure_installed = {
-      "bash",
-      "c",
-      "cmake",
-      "comment",
-      "cpp",
-      "desktop",
-      "fish",
-      "go",
-      "gotmpl",
-      "hjson",
-      "hyprlang",
-      "html",
-      "ini",
-      "json",
-      "jq",
-      "lua",
-      "markdown",
-      "mermaid",
-      "norg",
-      "regex",
-      "rst",
-      "sql",
-      "ssh_config",
-      "templ",
-      "tmux",
-      "toml",
-      "typescript",
-      "udev",
-      "vim",
-      "yaml",
-      "zig",
-    },
-    sync_install = false,
+    ensure_installed = profile_config.get_treesitter_ensure_installed(),
+    sync_install = is_headless and smoke_sync_install,
     ignore_install = {},
     auto_install = false,
     highlight = {
@@ -119,6 +90,13 @@ local M = {
       "JoosepAlviste/nvim-ts-context-commentstring",
     },
     config = function()
+      -- In headless runs (for example, Docker smoke tests), run setup immediately
+      -- so parser install/compile failures surface immediately.
+      if #vim.api.nvim_list_uis() == 0 then
+        setup_treesitter()
+        return
+      end
+
       vim.defer_fn(setup_treesitter, 0)
     end,
   },

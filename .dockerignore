@@ -1,0 +1,7 @@
+.git
+.github
+.venv
+__pycache__
+*.pyc
+docs/_build
+lazy-lock.json

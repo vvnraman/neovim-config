@@ -51,9 +51,15 @@ local setup_sensible_mappings = function()
   -- When scrolling using CTRL D/U, put the screen in center
   vim.keymap.set("n", "<C-u>", "<C-u>zz", NOREMAP_SILENT("Scroll half-up with centered screen"))
   vim.keymap.set("n", "<C-d>", "<C-d>zz", NOREMAP_SILENT("Scroll half-up with centered screen"))
+end
 
-  vim.keymap.set("n", "\\i", function()
-    Snacks.notifier.notify(vim.api.nvim_buf_get_name(0), "info", { title = "Current Buffer" })
+local setup_info_mappings = function()
+  vim.keymap.set("n", "\\if", function()
+    local path = GET_CURRENT_FILE_PATH()
+    if not path then
+      return
+    end
+    Snacks.notifier.notify(path, "info", { title = "Current buffer path" })
   end, NOREMAP("Show current buffer path"))
 end
 
@@ -130,6 +136,7 @@ end
 
 unmap_unimpaired_mappings()
 setup_sensible_mappings()
+setup_info_mappings()
 setup_window_mappings()
 setup_tab_mapping()
 setup_lua_dev_mappings()

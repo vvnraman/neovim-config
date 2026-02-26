@@ -1,11 +1,17 @@
 local auto_session_config = function()
+  local vvn_util = require("vvn.util")
+
+  ---@param message string
+  ---@param level? string
+  local notify = function(message, level)
+    Snacks.notifier.notify(message, level or "info", { title = "AutoSession" })
+  end
+
   -- Only create session automatically for git repos and my tool config dirs
   local auto_create = function()
-    local cmd = "git rev-parse --is-inside-work-tree"
-    if vim.fn.system(cmd) == "true\n" then
+    if vvn_util.is_inside_git_worktree() then
       return true
     end
-
     local tool_config_dirs = {
       "~/.config/nvim",
       "~/.config/fish",
@@ -42,22 +48,22 @@ local auto_session_config = function()
     purge_after_minutes = 10080, -- 7 days x 24 hours x 60 minutes
     root_dir = vim.fn.stdpath("data") .. "/saved_auto_sessions/",
     show_auto_restore_notif = false,
+    session_lens = {
+      load_on_setup = false,
+    },
     post_restore_cmds = {
-      function(session_name)
-        Snacks.notifier.notify(
-          "Restored session '" .. session_name .. "'",
-          "info",
-          { title = "Session Restored" }
-        )
+      function()
+        local session_name = require("auto-session.lib").current_session_name(true) or "unknown"
+        notify("Restored session '" .. session_name .. "'")
       end,
     },
     no_restore_cmds = {
       function()
-        Snacks.notifier.notify(
-          "No session restored. Run ':AutoSession save' to enable Autosave if not in a git dir or config dir.",
-          "info",
-          { title = "Session Restored" }
-        )
+        if vvn_util.is_inside_git_worktree() then
+          notify("No session available, one will be created automatically.")
+        else
+          notify("No session restored. Press '\\ss' to create one and enable autosave.")
+        end
       end,
     },
   }
@@ -66,11 +72,13 @@ local auto_session_config = function()
   autos.setup(opts)
   vim.keymap.set(
     "n",
-    "\\sa",
-    "<Cmd>AutoSession toggle<Cr>",
+    "\\st",
+    -- "<Cmd>Autosession toggle<Cr>", -- future
+    "<Cmd>SessionToggleAutoSave<Cr>",
     { desc = "Toggle session autosave" }
   )
-  vim.keymap.set("n", "\\ss", "<Cmd>AutoSession search<Cr>", { desc = "Search sessions" })
+  vim.keymap.set("n", "\\ss", "<Cmd>SessionSave<Cr>", { desc = "Save current session." })
+  vim.keymap.set("n", "\\sh", "<Cmd>AutoSession search<Cr>", { desc = "Search sessions" })
 end
 
 local M = {

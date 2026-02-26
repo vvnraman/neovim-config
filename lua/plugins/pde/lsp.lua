@@ -1,26 +1,3 @@
-local get_current_line_diagnostics = function()
-  local bufnr = 0
-  ---@type vim.Diagnostic[]
-  local diagnostics = vim.diagnostic.get(bufnr, { lnum = GET_CURRENT_LINE() })
-
-  if #diagnostics == 0 then
-    return nil
-  end
-
-  ---@type string[]
-  local messages = {}
-
-  for _, d in ipairs(diagnostics) do
-    local msg = d.message
-    if d.source then
-      msg = string.format("[%s] %s", d.source, msg)
-    end
-    table.insert(messages, msg)
-  end
-
-  return table.concat(messages, "\n")
-end
-
 local setup_diagnostic_config = function()
   vim.diagnostic.config({
     underline = true,
@@ -49,50 +26,6 @@ local setup_diagnostic_config = function()
   end, { desc = "Prev [d]iagnostic" })
 
   vim.keymap.set("n", "\\d", vim.diagnostic.open_float, { desc = "[d]iagnostics under cursor" })
-
-  local no_diagnostics_notify = function(line_diagnostics)
-    if not line_diagnostics or line_diagnostics == "" then
-      Snacks.notifier.notify(
-        "No diagnostics for current line",
-        "info",
-        { title = "Current Buffer" }
-      )
-      return true
-    end
-    return false
-  end
-
-  vim.keymap.set("n", "<leader>dd", function()
-    local line_diagnostics = get_current_line_diagnostics()
-    if no_diagnostics_notify(line_diagnostics) then
-      return
-    end
-    vim.fn.setreg("+", line_diagnostics)
-    Snacks.notifier.notify(
-      "Line diagnostics copied to clipboard",
-      "info",
-      { title = "Current Buffer" }
-    )
-  end, { desc = "[d]ump [d]iagnostics to clipboard" })
-
-  vim.keymap.set("n", "<leader>dl", function()
-    local line_diagnostics = get_current_line_diagnostics()
-    if no_diagnostics_notify(line_diagnostics) then
-      return
-    end
-    local content_to_copy = {
-      GET_CURRENT_FILE_PATH() .. ":" .. tostring(GET_CURRENT_LINE()),
-      vim.api.nvim_get_current_line(),
-      "\n",
-      line_diagnostics,
-    }
-    vim.fn.setreg("+", table.concat(content_to_copy, "\n"))
-    Snacks.notifier.notify(
-      "Current line + diagnostics copied to clipboard",
-      "info",
-      { title = "Current Buffer" }
-    )
-  end, { desc = "[d]iagnostics + [l]ine to clipboard, include file and line number" })
 end
 
 local setup_lsp_keymaps = function()
@@ -157,24 +90,9 @@ local setup_lsp_keymaps = function()
   })
 end
 
-local lsp_setup = function()
-  --[[
-  The sequence of operations in this method is important as per mason docs
-  - https://github.com/williamboman/mason.nvim
-  - https://github.com/williamboman/mason-lspconfig.nvim
-  --]]
-
-  require("mason").setup({
-    ui = {
-      icons = {
-        server_installed = "✓",
-        server_pending = "➜",
-        server_uninstalled = "✗",
-      },
-    },
-  })
-
-  local servers = {
+---@return table<string, table>
+local get_server_configs = function()
+  return {
     clangd = {
       root_markers = {
         -- Intentionally only attach when I have a project CMake configured.
@@ -224,48 +142,61 @@ local lsp_setup = function()
     vimls = {},
     yamlls = {},
   }
+end
 
+---@param servers table<string, table>
+local update_server_configs = function(servers)
   local capabilities = require("plugins.pde.attach").capabilities
-
   for name, conf in pairs(servers) do
     local config = conf or {}
     config.capabilities =
       vim.tbl_deep_extend("force", {}, capabilities, config.capabilities or {})
     vim.lsp.config(name, config)
   end
+end
+
+---@param server_names string[]
+---@param servers table<string, table>
+local enable_servers = function(server_names, servers)
+  for _, name in ipairs(server_names) do
+    if servers[name] then
+      vim.lsp.enable(name)
+    else
+      vim.notify("Skipping unknown LSP server in profile: " .. name, vim.log.levels.WARN)
+    end
+  end
+end
+
+---@param package_names string[]
+local install_mason_packages = function(package_names)
+  if #package_names == 0 then
+    return
+  end
+
+  local registry = require("mason-registry")
+  registry.refresh()
+
+  for _, package_name in ipairs(package_names) do
+    local ok, pkg = pcall(registry.get_package, package_name)
+    if ok and not pkg:is_installed() then
+      pkg:install()
+    end
+  end
+end
+
+local lsp_setup = function()
+  local profile_config = require("vvn.profile_config")
+
+  local server_configs = get_server_configs()
+  update_server_configs(server_configs)
+  enable_servers(profile_config.get_enabled_lsp_servers(), server_configs)
+
+  if profile_config.enable_mason_installs() then
+    install_mason_packages(profile_config.get_mason_packages())
+  end
 
   setup_lsp_keymaps()
   setup_diagnostic_config()
-
-  -----------------------------------------------------------------------------
-  --- LSP SETUP IS COMPLETE AT THIS POINT.
-  ---
-  --- The rest of the setup below is to configure and install LSP servers and
-  --- other tools.
-  -----------------------------------------------------------------------------
-
-  require("mason-lspconfig").setup({
-    -- to avoid lint warning even though this is already the default
-    -- as per their docs. This to driven by `mason-tool-installer`.
-    ensure_installed = {},
-    automatic_enable = true,
-  })
-
-  --- TODO: Have the tool installation be gated by environment variables.
-  ---       In some cases, we'll not install any tools because they are already
-  ---       available on the system, and we only need to call
-  ---       `vim.lsp.enable()` for those servers.
-  -- Install all language servers and other tools
-  local ensure_installed = vim.tbl_keys(servers)
-  vim.list_extend(ensure_installed, {
-    "stylua",
-    "shfmt",
-    "shellcheck",
-  })
-
-  require("mason-tool-installer").setup({
-    ensure_installed = ensure_installed,
-  })
 
   require("which-key").add({
     "<leader>l",
@@ -274,6 +205,27 @@ local lsp_setup = function()
 end
 
 local M = {
+  {
+    -- https://github.com/mason-org/mason.nvim
+    "mason-org/mason.nvim",
+    cmd = {
+      "Mason",
+      "MasonInstall",
+      "MasonInstallAll",
+      "MasonUninstall",
+      "MasonUninstallAll",
+      "MasonUpdate",
+    },
+    opts = {
+      ui = {
+        icons = {
+          server_installed = "✓",
+          server_pending = "➜",
+          server_uninstalled = "✗",
+        },
+      },
+    },
+  },
   {
     -- https://github.com/folke/lazydev.nvim
     "folke/lazydev.nvim",
@@ -295,14 +247,6 @@ local M = {
       {
         -- https://github.com/mason-org/mason.nvim
         "mason-org/mason.nvim",
-      },
-      {
-        -- https://github.com/mason-org/mason-lspconfig.nvim
-        "mason-org/mason-lspconfig.nvim",
-      },
-      {
-        -- https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim
-        "WhoIsSethDaniel/mason-tool-installer.nvim",
       },
       {
         -- https://github.com/folke/lazydev.nvim

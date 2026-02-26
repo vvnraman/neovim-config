@@ -1,0 +1,8 @@
+[arch]
+packages = [
+  "fd",
+  "ripgrep",
+]
+
+[ubuntu]
+packages = []

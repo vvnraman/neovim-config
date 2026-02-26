@@ -5,6 +5,10 @@ Config update as a project
 .. toctree::
    :maxdepth: 1
 
+   2026_misc_changelog
+   2026_yank_enhanced
+   2026_docker_test_harness
+   2026_config_profiles
    2025_use_native_lsp_setup
    2025_misc_changelog
    2023_migrate_packer_to_lazy
