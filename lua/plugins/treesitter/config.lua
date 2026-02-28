@@ -23,21 +23,6 @@ local get_textobject_config = function()
       },
       include_surrounding_whitespace = false,
     },
-    swap = {
-      enable = true,
-      swap_next = {
-        ["<leader>an"] = {
-          query = "@parameter.inner",
-          desc = "Swap: parameter.next",
-        },
-      },
-      swap_previous = {
-        ["<leader>ap"] = {
-          query = "@parameter.inner",
-          desc = "Swap: parameter.prev",
-        },
-      },
-    },
     move = {
       enable = true,
       set_jumps = true, -- whether to set jumps in the jumplist

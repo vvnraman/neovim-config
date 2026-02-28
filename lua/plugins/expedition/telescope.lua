@@ -372,6 +372,8 @@ local telescope_setup = function()
   favourite_edit_grep("g", "~/.config/ghostty/", "Ghostty", "[g]hostty")
   -- <leader>eh, <leader>zh
   favourite_edit_grep("h", "~/.config/hypr/", "Hyprland", "[h]yprland")
+  -- <leader>el, <leader>zl
+  favourite_edit_grep("l", "~/.config/lazygit/", "LayzGit", "[l]azygit")
   -- <leader>en, <leader>zn
   favourite_edit_grep("n", vim.fn.stdpath("config"), "Neovim", "[n]vim")
   -- <leader>em, <leader>zm

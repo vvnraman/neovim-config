@@ -357,6 +357,9 @@ vim.o.sessionoptions =
 -- unix         |deprecated| Always enabled. Uses "\n" line endings.
 -------------------------------------------------------------------------------
 
+vim.opt.autoread = true
+-------------------------------------------------------------------------------
+
 if vim.g.neovide then
   vim.o.guifont = "MesloLGS Nerd Font Mono:h10"
 

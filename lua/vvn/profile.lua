@@ -22,12 +22,12 @@ end
 
 ---@return string
 M.get_name = function()
-  local from_nvim_profile = normalize_profile(vim.env.NVIM_PROFILE)
+  local from_nvim_profile = normalize_profile(vim.env.VVN_NVIM_PROFILE)
   if from_nvim_profile then
     return from_nvim_profile
   end
 
-  local from_dotfiles_profile = normalize_profile(vim.env.DOTFILES_PROFILE)
+  local from_dotfiles_profile = normalize_profile(vim.env.VVN_DOTFILES_PROFILE)
   if from_dotfiles_profile then
     return from_dotfiles_profile
   end

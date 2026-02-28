@@ -82,7 +82,9 @@ def docs():
 @app.command()
 def live():
     print(f"{A} Building livedocs for {PROJECT_NAME}")
-    args = ["sphinx-autobuild", "--port", "0", str(DOCS_DIR), str(HTML_DIR)]
+    args = ["sphinx-autobuild", "--port", "0",
+            "--open-browser",
+            str(DOCS_DIR), str(HTML_DIR)]
     _ = subprocess.run(args)
 
 

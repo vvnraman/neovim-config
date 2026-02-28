@@ -71,73 +71,120 @@ keymaps.lua
      - Scroll half-up with centered screen
      - keymaps.lua:53
    * - n
-     - \\i
+     - \\if
      - Show current buffer path
-     - keymaps.lua:55
+     - keymaps.lua:57
    * - n
      - \<C-Up\>
      - Resize window ⬆️ by 4
-     - keymaps.lua:62
+     - keymaps.lua:68
    * - n
      - \<C-Down\>
      - Resize window ⬇️ by 4
-     - keymaps.lua:63
+     - keymaps.lua:69
    * - n
      - \<C-Left\>
      - Resize window ⬅️ by 4
-     - keymaps.lua:64
+     - keymaps.lua:70
    * - n
      - \<C-Right\>
      - Resize window ➡️ by 4
-     - keymaps.lua:70
+     - keymaps.lua:76
    * - n
      - \<Tab\>
      - Next window in tab
-     - keymaps.lua:80
+     - keymaps.lua:86
    * - n
      - \<S-Tab\>
      - Previous window in tab
-     - keymaps.lua:81
+     - keymaps.lua:87
    * - n
      - ]t
      - → Next Tab
-     - keymaps.lua:83
+     - keymaps.lua:89
    * - n
      - [t
      - ← Prev Tab
-     - keymaps.lua:84
+     - keymaps.lua:90
    * - n
      - \<leader\>th
      - ↝ Move Tab Left
-     - keymaps.lua:86
+     - keymaps.lua:92
    * - n
      - \<leader\>tl
      - ↜ Move Tab Right
-     - keymaps.lua:87
+     - keymaps.lua:93
    * - n
      - \<leader\>\<leader\>n
      - Config: reload current lua file
-     - keymaps.lua:95
+     - keymaps.lua:101
    * - n
      - \<leader\>nr
      - Config: reload current line
-     - keymaps.lua:101
+     - keymaps.lua:107
    * - v
      - \<leader\>nr
      - Config: reload current line
-     - keymaps.lua:102
+     - keymaps.lua:108
    * - n
      - \<leader\>es
      - Open starship config
-     - keymaps.lua:107
+     - keymaps.lua:113
    * - n
      - \<leader\>cs
      - [c]olor [s]hades
-     - keymaps.lua:117
+     - keymaps.lua:123
    * - n
      - \<leader\>ch
      - [c]olor [h]ues
-     - keymaps.lua:123
+     - keymaps.lua:129
+
+plugins/ai/opencode.lua
+-----------------------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Mode
+     - Key
+     - Description
+     - Source
+   * - n, x
+     - \<leader\>ai
+     - [a]i ask about @this
+     - plugins/ai/opencode.lua:28
+   * - n, x
+     - \<leader\>aa
+     - [a]i [a]ppend @this with a new line
+     - plugins/ai/opencode.lua:32
+   * - n
+     - \<leader\>as
+     - [a]i [s]ubmit prompt
+     - plugins/ai/opencode.lua:36
+   * - n
+     - \<leader\>ac
+     - [a]i [c]lear prompt
+     - plugins/ai/opencode.lua:40
+   * - n
+     - \<leader\>al
+     - [a]i [s]elect action
+     - plugins/ai/opencode.lua:44
+   * - n, x
+     - \<leader\>ae
+     - [a]i [e]xplain @this
+     - plugins/ai/opencode.lua:48
+   * - n
+     - \<leader\>af
+     - [a]i [f]ix diagnostics
+     - plugins/ai/opencode.lua:57
+   * - n, x
+     - go
+     - opencode add range
+     - plugins/ai/opencode.lua:62
+   * - n
+     - goo
+     - opencode add line
+     - plugins/ai/opencode.lua:67
 
 plugins/expedition/cardio.lua
 -----------------------------
@@ -214,83 +261,83 @@ plugins/expedition/telescope.lua
    * - n
      - \<leader\>/
      - [/] Fuzzy search current buffer
-     - plugins/expedition/telescope.lua:197
+     - plugins/expedition/telescope.lua:205
    * - n
      - \<leader\>cl
      - Chose [c]o[l]ourschemes
-     - plugins/expedition/telescope.lua:206
+     - plugins/expedition/telescope.lua:214
    * - n
      - \<leader\>ss
      - Re[s]ume telescope
-     - plugins/expedition/telescope.lua:210
+     - plugins/expedition/telescope.lua:218
    * - n
      - \<leader\>b
      - Search [b]uffer's directory
-     - plugins/expedition/telescope.lua:220
+     - plugins/expedition/telescope.lua:228
    * - n
      - \<leader\>sb
      - Search [b]uffer's directory recursively
-     - plugins/expedition/telescope.lua:228
+     - plugins/expedition/telescope.lua:236
    * - n
      - \<leader\>sf
      - [s]earch [f]iles in project (cwd/git)
-     - plugins/expedition/telescope.lua:238
+     - plugins/expedition/telescope.lua:246
    * - n
      - \<leader\>se
      - [s]earch files in [e]xplorer (cwd/git)
-     - plugins/expedition/telescope.lua:246
+     - plugins/expedition/telescope.lua:254
    * - n
      - \<leader\>sp
      - [s]earch [p]roject files, (also [s][f])
-     - plugins/expedition/telescope.lua:255
+     - plugins/expedition/telescope.lua:263
    * - n
      - \<leader\>sl
      - [s]earch [l]ive in project
-     - plugins/expedition/telescope.lua:261
+     - plugins/expedition/telescope.lua:269
    * - n
      - \<leader\>sr
      - Enhanced [s]search with [r]ipgrep flags
-     - plugins/expedition/telescope.lua:269
+     - plugins/expedition/telescope.lua:277
    * - n
      - \\b
      - [s]earch [b]uffers
-     - plugins/expedition/telescope.lua:277
+     - plugins/expedition/telescope.lua:285
    * - n
      - \<leader\>so
      - [s]earch [o]ld files
-     - plugins/expedition/telescope.lua:279
+     - plugins/expedition/telescope.lua:287
    * - n
      - \<leader\>sc
      - [s]earch [c]ommands in history
-     - plugins/expedition/telescope.lua:286
+     - plugins/expedition/telescope.lua:294
    * - n
      - \<leader\>st
      - [s]earch his[t]ory
-     - plugins/expedition/telescope.lua:290
+     - plugins/expedition/telescope.lua:298
    * - n
      - \<leader\>sh
      - [s]earch [h]elp tags
-     - plugins/expedition/telescope.lua:294
+     - plugins/expedition/telescope.lua:302
    * - n
      - \<leader\>sy
      - [s]earch s[y]mbols
-     - plugins/expedition/telescope.lua:301
+     - plugins/expedition/telescope.lua:309
    * - n
      - \\m
      - search [m]arks
-     - plugins/expedition/telescope.lua:305
+     - plugins/expedition/telescope.lua:313
    * - n
      - \\r
      - search [r]egisters
-     - plugins/expedition/telescope.lua:309
+     - plugins/expedition/telescope.lua:317
    * - n
      - \\k
      - search [k]eymaps
-     - plugins/expedition/telescope.lua:313
+     - plugins/expedition/telescope.lua:321
    * - n
      - ?
      - [no description]
-     - plugins/expedition/telescope.lua:335
+     - plugins/expedition/telescope.lua:344
 
 plugins/git.lua
 ---------------
@@ -474,23 +521,15 @@ plugins/pde/lsp.lua
    * - n
      - ]d
      - Next [d]iagnostic
-     - plugins/pde/lsp.lua:43
+     - plugins/pde/lsp.lua:20
    * - n
      - [d
      - Prev [d]iagnostic
-     - plugins/pde/lsp.lua:47
+     - plugins/pde/lsp.lua:24
    * - n
      - \\d
      - [d]iagnostics under cursor
-     - plugins/pde/lsp.lua:51
-   * - n
-     - \<leader\>dd
-     - [d]ump [d]iagnostics to clipboard
-     - plugins/pde/lsp.lua:65
-   * - n
-     - \<leader\>dl
-     - [d]iagnostics + [l]ine to clipboard, include file and line number
-     - plugins/pde/lsp.lua:78
+     - plugins/pde/lsp.lua:28
 
 plugins/pde/nifty.lua
 ---------------------
@@ -572,22 +611,6 @@ plugins/persona/physique.lua
      - \<leader\>cd
      - [c]olorizer [d]etach
      - plugins/persona/physique.lua:101
-   * - n
-     - \<leader\>nh
-     - Show notification history
-     - plugins/persona/physique.lua:148
-   * - n
-     - \<leader\>ne
-     - Show error history
-     - plugins/persona/physique.lua:152
-   * - n
-     - \<leader\>.
-     - Toggle Scratch buffer
-     - plugins/persona/physique.lua:156
-   * - n
-     - \<leader\>S
-     - Select Scratch buffer
-     - plugins/persona/physique.lua:159
 
 plugins/quagmire/quicker.lua
 ----------------------------
@@ -619,13 +642,44 @@ plugins/session.lua
      - Description
      - Source
    * - n
-     - \\sa
-     - Toggle session autosave
-     - plugins/session.lua:67
+     - \\st
+     - [no description]
+     - plugins/session.lua:73
    * - n
      - \\ss
+     - Save current session.
+     - plugins/session.lua:80
+   * - n
+     - \\sh
      - Search sessions
-     - plugins/session.lua:73
+     - plugins/session.lua:81
+
+plugins/snacks.lua
+------------------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Mode
+     - Key
+     - Description
+     - Source
+   * - n
+     - \<leader\>nh
+     - Show notification history
+     - plugins/snacks.lua:38
+   * - n
+     - \<leader\>ne
+     - Show error history
+     - plugins/snacks.lua:42
+   * - n
+     - \<leader\>.
+     - Toggle Scratch buffer
+     - plugins/snacks.lua:46
+   * - n
+     - \<leader\>S
+     - Select Scratch buffer
+     - plugins/snacks.lua:49
 
 plugins/treesitter/config.lua
 -----------------------------
@@ -640,4 +694,43 @@ plugins/treesitter/config.lua
    * - n
      - [c
      - Go to context
-     - plugins/treesitter/config.lua:136
+     - plugins/treesitter/config.lua:99
+
+vvn/yank.lua
+------------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Mode
+     - Key
+     - Description
+     - Source
+   * - n
+     - \<leader\>yf
+     - Yank current file path
+     - vvn/yank.lua:498
+   * - n
+     - \<leader\>yr
+     - Yank current file's cwd relative path
+     - vvn/yank.lua:504
+   * - n, x
+     - \<leader\>yy
+     - [y]ank current file and line(s)
+     - vvn/yank.lua:510
+   * - n, x
+     - \<leader\>ya
+     - [y]ank [a]ppend current file and line(s)
+     - vvn/yank.lua:516
+   * - n
+     - \<leader\>dd
+     - [d]ump [d]iagnostics to clipboard
+     - vvn/yank.lua:522
+   * - n
+     - \<leader\>yd
+     - [y]ank file, line and [d]iagnostics
+     - vvn/yank.lua:528
+   * - n
+     - \<leader\>ys
+     - [y]ank file and line [s]imple
+     - vvn/yank.lua:534

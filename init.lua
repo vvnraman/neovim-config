@@ -36,7 +36,8 @@ end
 vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   spec = {
-    { import = "plugins.dev" },
+    { import = "plugins.dev" }, -- first
+    { import = "plugins.snacks" }, -- second
     { import = "plugins.pde.cmp" },
     { import = "plugins.pde.lsp" },
     { import = "plugins.pde.nifty" },
@@ -56,6 +57,7 @@ require("lazy").setup({
     { import = "plugins.os-config" },
     { import = "plugins.user-config" },
     { import = "plugins.session" },
+    { import = "plugins.ai" },
   },
   defaults = {
     version = "*",

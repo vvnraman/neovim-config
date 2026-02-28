@@ -281,6 +281,25 @@ local M = {
       },
     },
   },
+  {
+    -- https://github.com/ray-x/go.nvim
+    "ray-x/go.nvim",
+    dependencies = {
+      "ray-x/guihua.lua",
+    },
+    event = { "CmdlineEnter" },
+    ft = { "go", "gomod" },
+    config = function()
+      require("go").setup({
+        lsp_keymaps = false,
+        lsp_inlay_hints = {
+          -- bug with plugin as it enables it for all files.
+          -- See https://github.com/ray-x/go.nvim/issues/579
+          enable = false,
+        },
+      })
+    end,
+  },
 }
 
 return M
