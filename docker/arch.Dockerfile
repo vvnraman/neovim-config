@@ -1,29 +1,42 @@
-FROM archlinux:latest
+FROM archlinux:latest AS base
+
+RUN <<EOF
+set -eux
+pacman-key --init
+pacman-key --populate archlinux
+pacman --sync --refresh --noconfirm archlinux-keyring
+pacman --sync --refresh --sysupgrade --noconfirm
+pacman --sync --needed --noconfirm \
+  bash \
+  ca-certificates \
+  curl \
+  gcc \
+  git
+pacman --sync --clean --clean --noconfirm
+EOF
+
+FROM base AS runtime
 
 ARG TARGET_OS=arch
 ARG NVIM_VERSION=v0.11.6
+ARG FD_VERSION=v10.2.0
+ARG RIPGREP_VERSION=14.1.1
+# AppImage needs extract-and-run mode in containers without FUSE support.
+ENV APPIMAGE_EXTRACT_AND_RUN=1
 
-RUN pacman --sync --refresh --sysupgrade --noconfirm \
-  && pacman --sync --needed --noconfirm \
-    bash \
-    ca-certificates \
-    curl \
-    gcc \
-    git \
-  && curl -sSLf "https://github.com/TomWright/dasel/releases/latest/download/dasel_linux_amd64" -o /usr/local/bin/dasel \
-  && chmod +x /usr/local/bin/dasel \
-  && pacman --sync --clean --clean --noconfirm
-
-COPY docker/packages.toml /tmp/packages.toml
-COPY docker/install-packages.sh /opt/nvim-harness/install-packages.sh
+COPY docker/install-cli-tools.sh /opt/nvim-harness/install-cli-tools.sh
 COPY docker/install-neovim.sh /opt/nvim-harness/install-neovim.sh
 
-RUN chmod +x /opt/nvim-harness/install-packages.sh \
-  && chmod +x /opt/nvim-harness/install-neovim.sh \
-  && /opt/nvim-harness/install-neovim.sh "${NVIM_VERSION}" \
-  && /opt/nvim-harness/install-packages.sh "${TARGET_OS}" /tmp/packages.toml \
-  && rm -f /tmp/packages.toml \
-  && pacman --sync --clean --clean --noconfirm
+RUN <<EOF
+set -eux
+chmod +x /opt/nvim-harness/install-cli-tools.sh
+chmod +x /opt/nvim-harness/install-neovim.sh
+/opt/nvim-harness/install-neovim.sh "${NVIM_VERSION}"
+/opt/nvim-harness/install-cli-tools.sh "${TARGET_OS}" \
+  --tool "fd:${FD_VERSION}" \
+  --tool "ripgrep:${RIPGREP_VERSION}"
+pacman --sync --clean --clean --noconfirm
+EOF
 
 COPY docker/smoke.sh /opt/nvim-harness/smoke.sh
 COPY docker/shell.sh /opt/nvim-harness/shell.sh

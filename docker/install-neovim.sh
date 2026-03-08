@@ -2,53 +2,102 @@
 
 set -euo pipefail
 
-nvim_version="${1:-v0.11.6}"
-machine_arch="$(uname -m)"
-
-case "${machine_arch}" in
-  x86_64|amd64)
-    nvim_arch="x86_64"
-    ;;
-  aarch64|arm64)
-    nvim_arch="arm64"
-    ;;
-  *)
-    echo "unsupported architecture: ${machine_arch}" >&2
-    exit 1
-    ;;
-esac
-
-appimage_name="nvim-linux-${nvim_arch}.appimage"
-download_url="https://github.com/neovim/neovim/releases/download/${nvim_version}/${appimage_name}"
-download_path="/tmp/${appimage_name}"
-install_dir="/opt/nvim-${nvim_version}-${nvim_arch}"
-
-release_api_url="https://api.github.com/repos/neovim/neovim/releases/tags/${nvim_version}"
-
-curl -fsSL "${download_url}" -o "${download_path}"
-expected_hash="$({
-  curl -fsSL "${release_api_url}" \
-    | grep -F -A40 "\"name\": \"${appimage_name}\"" \
-    | grep -m1 -oE '"digest": "sha256:[0-9a-f]+"' \
-    | cut -d ':' -f 3 \
-    | tr -d '"'
-} || true)"
-if [ -z "${expected_hash}" ]; then
-  echo "missing checksum for ${appimage_name}" >&2
+fail() {
+  echo "$1" >&2
   exit 1
-fi
+}
 
-echo "${expected_hash}  ${download_path}" | sha256sum --check --status
-chmod +x "${download_path}"
+resolve_nvim_arch() {
+  local machine_arch="$1"
 
-rm -rf "${install_dir}" /tmp/squashfs-root
+  case "${machine_arch}" in
+    x86_64|amd64)
+      printf '%s' "x86_64"
+      ;;
+    aarch64|arm64)
+      printf '%s' "arm64"
+      ;;
+    *)
+      fail "unsupported architecture: ${machine_arch}"
+      ;;
+  esac
+}
 
-(
-  cd /tmp
-  "${download_path}" --appimage-extract >/dev/null
-)
+resolve_latest_version() {
+  local latest_tag
+  latest_tag="$({
+    curl -fsSL "https://api.github.com/repos/neovim/neovim/releases/latest" \
+      | grep -m1 -oE '"tag_name":\s*"[^"]+"' \
+      | cut -d '"' -f 4
+  } || true)"
 
-mv /tmp/squashfs-root "${install_dir}"
-ln -sfn "${install_dir}/AppRun" /usr/local/bin/nvim
+  if [ -z "${latest_tag}" ]; then
+    fail "failed to resolve latest neovim release"
+  fi
 
-rm -f "${download_path}"
+  printf '%s' "${latest_tag}"
+}
+
+resolve_requested_version() {
+  local requested_version="$1"
+
+  if [ "${requested_version}" = "latest" ]; then
+    resolve_latest_version
+    return
+  fi
+
+  if [[ "${requested_version}" == v* ]]; then
+    printf '%s' "${requested_version}"
+    return
+  fi
+
+  printf 'v%s' "${requested_version}"
+}
+
+download_neovim_appimage() {
+  local nvim_version="$1"
+  local nvim_arch="$2"
+  local download_path="$3"
+  local appimage_name="nvim-linux-${nvim_arch}.appimage"
+  local download_url="https://github.com/neovim/neovim/releases/download/${nvim_version}/${appimage_name}"
+
+  curl -fsSL "${download_url}" -o "${download_path}"
+}
+
+verify_checksum_if_provided() {
+  local checksum="$1"
+  local download_path="$2"
+
+  if [ -z "${checksum}" ]; then
+    return
+  fi
+
+  echo "${checksum}  ${download_path}" | sha256sum --check --status
+}
+
+install_appimage_binary() {
+  local download_path="$1"
+  chmod +x "${download_path}"
+  install -m 0755 "${download_path}" /usr/local/bin/nvim
+}
+
+main() {
+  local requested_version="${1:-v0.11.6}"
+  local checksum="${2:-}"
+  local machine_arch
+  local nvim_arch
+  local nvim_version
+  local download_path
+
+  machine_arch="$(uname -m)"
+  nvim_arch="$(resolve_nvim_arch "${machine_arch}")"
+  nvim_version="$(resolve_requested_version "${requested_version}")"
+  download_path="/tmp/nvim-linux-${nvim_arch}.appimage"
+
+  download_neovim_appimage "${nvim_version}" "${nvim_arch}" "${download_path}"
+  verify_checksum_if_provided "${checksum}" "${download_path}"
+  install_appimage_binary "${download_path}"
+  rm -f "${download_path}"
+}
+
+main "$@"

@@ -8,19 +8,23 @@ config in a reproducible environment.
 At a high level, the flow is:
 
 1. Build an image from an OS-specific ``Dockerfile``.
-2. Install baseline runtime tools directly in the image and install Neovim from
-   the upstream AppImage release.
+2. Build a ``base`` stage for OS packages, then a ``runtime`` stage for harness
+   scripts and Neovim/tool installation.
+
+3. Install Neovim from the upstream AppImage release via
+   ``docker/install-neovim.sh``.
 
    - AppImage lets us pin an exact Neovim version independent of the version
      available from the OS package manager.
-3. Install CLI search tools:
 
-   - Arch uses OS packages from ``docker/packages.toml`` via
-     ``docker/install-packages.sh``.
+4. Install CLI search tools via ``docker/install-cli-tools.sh``:
+
+   - Arch installs ``fd`` and ``ripgrep`` with ``pacman``.
    - Ubuntu installs ``fd`` and ``ripgrep`` from upstream GitHub release
-     archives via ``docker/install-cli-tools.sh``.
+     archives.
 
-All upstream binary downloads are checksum-verified in the installer scripts.
+Neovim checksum verification is optional in the installer script. It runs only
+when a checksum value is passed as argument 2.
 
 Version defaults for Neovim/``fd``/``ripgrep`` are centralized in
 ``docker/docker-compose.yaml`` build args and can be overridden through
@@ -36,25 +40,40 @@ The harness points Neovim at our actual checkout (not a copied config), so
 image runs and interactive sessions validate the same files we are editing.
 
 
-Package Profiles and CLI Tools
-==============================
+CLI Tool Installation
+=====================
 
-``docker/packages.toml`` stores OS-keyed package lists.
-
-``docker/install-packages.sh`` reads that file and installs only the packages
-for the selected profile.
-
-``docker/install-cli-tools.sh`` installs ``fd`` and ``ripgrep`` from GitHub
-release archives for Ubuntu, while Arch stays on package-manager
-versions.
+``docker/install-cli-tools.sh`` is the single entrypoint for ``fd`` and
+``ripgrep`` installation.
 
 How it works:
 
-- Accepts ``target_os`` as argument 1 and an optional TOML path as argument 2
-  (default: ``/tmp/packages.toml``).
-- Uses dasel_ to read ``<target_os>.packages`` from TOML.
-- Uses the OS package manager to install the selected packages only when the
-  profile has entries.
+- Accepts ``target_os`` as argument 1 (``arch`` or ``ubuntu``).
+- Accepts repeatable ``--tool 'tool-name:tool-version'`` flags.
+- Supported tools are ``fd`` and ``ripgrep``.
+- ``tool-version`` can be a pinned version or ``latest``.
+- If no ``--tool`` flags are passed, defaults are used for both tools.
+- On Arch, tools are installed with ``pacman``.
+- On Ubuntu, tools are downloaded from GitHub release archives.
+
+
+Neovim Installation
+===================
+
+``docker/install-neovim.sh`` installs Neovim from the upstream AppImage release.
+
+How it works:
+
+- Accepts version as argument 1 (default: ``v0.11.6``).
+- Accepts optional checksum as argument 2.
+- ``latest`` is supported as a special version and is resolved from the GitHub
+  releases API.
+- If checksum argument 2 is provided, the downloaded file is validated with
+  ``sha256sum``.
+- The AppImage is installed directly as executable ``/usr/local/bin/nvim``
+  without pre-extracting the image during build.
+- Docker images set ``APPIMAGE_EXTRACT_AND_RUN=1`` so AppImage execution works
+  in container environments without FUSE.
 
 Runtime Orchestration (``docker-compose.yaml``)
 ================================================
@@ -144,5 +163,3 @@ Typical workflow:
 - Subsequent starts should be much faster once those assets are installed.
 
 For command usage, see :doc:`../how-to/test-in-docker`.
-
-.. _dasel: https://github.com/TomWright/dasel
