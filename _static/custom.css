@@ -1,0 +1,38 @@
+.sphinx-tabs {
+  border: 1px solid var(--pst-color-border, var(--bs-border-color, #d0d7de));
+  border-radius: 0.4rem;
+  margin-top: 0.5rem;
+  overflow: hidden;
+}
+
+.sphinx-tabs > [role="tablist"] {
+  background: var(--pst-color-surface, var(--bs-tertiary-bg, #f6f8fa));
+  border-bottom: 1px solid var(--pst-color-border, var(--bs-border-color, #d0d7de));
+  padding: 0.25rem 0.4rem 0;
+}
+
+.sphinx-tabs-tab {
+  background: transparent;
+  border: 1px solid transparent;
+  border-bottom: 0;
+  border-radius: 0.35rem 0.35rem 0 0;
+  color: var(--pst-color-text-base, inherit);
+  margin-right: 0.25rem;
+  padding: 0.35rem 0.65rem;
+}
+
+.sphinx-tabs-tab[aria-selected="true"] {
+  background: var(--pst-color-background, var(--bs-body-bg, #ffffff));
+  border-color: var(--pst-color-border, var(--bs-border-color, #d0d7de));
+  color: var(--pst-color-text-base, inherit);
+}
+
+.sphinx-tabs-panel {
+  background: var(--pst-color-background, var(--bs-body-bg, #ffffff));
+  margin: 0;
+  padding: 0.6rem;
+}
+
+.sphinx-tabs-panel .literal-block-wrapper {
+  margin: 0;
+}
