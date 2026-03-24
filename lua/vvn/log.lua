@@ -1,4 +1,4 @@
 return require("plenary.log").new({
-  plugin = "vvn.precious",
+  plugin = "vvn.log",
   level = "info",
 })

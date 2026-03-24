@@ -216,15 +216,18 @@ local M = {
       "MasonUninstallAll",
       "MasonUpdate",
     },
-    opts = {
-      ui = {
-        icons = {
-          server_installed = "✓",
-          server_pending = "➜",
-          server_uninstalled = "✗",
+    opts = function()
+      return {
+        install_root_dir = require("vvn.profile_config").get_mason_install_root_dir(),
+        ui = {
+          icons = {
+            server_installed = "✓",
+            server_pending = "➜",
+            server_uninstalled = "✗",
+          },
         },
-      },
-    },
+      }
+    end,
   },
   {
     -- https://github.com/folke/lazydev.nvim

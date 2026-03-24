@@ -56,7 +56,15 @@ local setup_keymap_docs_command = function()
   end, { desc = "Generate keymap documentation (docs/reference/keymaps.rst)" })
 end
 
+local setup_vvn_log_command = function()
+  vim.api.nvim_create_user_command("VvnLog", function()
+    local log_file = vim.fs.joinpath(vim.fn.stdpath("cache"), "vvn.log")
+    vim.cmd("tabedit " .. vim.fn.fnameescape(log_file))
+  end, { desc = "Open vvn log file in new tab" })
+end
+
 setup_highlight_on_yank()
 highlight_active_buffer_cursor_line()
 setup_sudo_write()
 setup_keymap_docs_command()
+setup_vvn_log_command()

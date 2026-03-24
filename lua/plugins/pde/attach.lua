@@ -10,10 +10,6 @@ M.setup_native_buffer_mappings = function(bufnr)
 
   vim.keymap.set("n", "<leader>lh", vim.lsp.buf.hover, help("[h]over docs"))
   vim.keymap.set("n", "<leader>lk", vim.lsp.buf.signature_help, help("[k] - signature help"))
-  vim.keymap.set("n", "<leader>ld", vim.lsp.buf.definition, help("[d]efinition"))
-  vim.keymap.set("n", "<leader>lD", vim.lsp.buf.declaration, help("[D]eclaration"))
-  vim.keymap.set("n", "<leader>lt", vim.lsp.buf.type_definition, help("[t]ype definition"))
-  vim.keymap.set("n", "<leader>li", vim.lsp.buf.implementation, help("[i]mplementation"))
   vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, help("[r]ename identifier"))
 
   vim.keymap.set("n", "<leader>ll", function()
@@ -35,28 +31,46 @@ M.setup_plugin_buffer_mappings = function(bufnr)
   end
 
   -----------------------------------------------------------------------------
-  -- https://github.com/nvim-telescope/telescope.nvim
-  local telescope_builtin = require("telescope.builtin")
+  -- https://github.com/folke/snacks.nvim/blob/main/docs/picker.md
+
+  vim.keymap.set("n", "<leader>ld", Snacks.picker.lsp_definitions, help("[d]efinition"))
+
+  vim.keymap.set("n", "<leader>lD", Snacks.picker.lsp_declarations, help("[D]eclaration"))
+
+  vim.keymap.set(
+    "n",
+    "<leader>lt",
+    Snacks.picker.lsp_type_definitions,
+    help("[t]ype definition")
+  )
+
+  vim.keymap.set("n", "<leader>li", Snacks.picker.lsp_implementations, help("[i]mplementation"))
+
   vim.keymap.set("n", "<leader>lf", function()
-    telescope_builtin.lsp_references(require("telescope.themes").get_ivy({
-      winblend = 20,
-    }))
+    Snacks.picker.lsp_references({
+      layout = { preset = "ivy" },
+    })
   end, help("re[f]erences"))
 
-  vim.keymap.set("n", "<leader>sd", function()
-    telescope_builtin.lsp_document_symbols(require("telescope.themes").get_ivy({
-      winblend = 20,
-    }))
-  end, { desc = "lsp: [s]ymbols in [d]ocument", buffer = bufnr })
+  vim.keymap.set("n", "<leader>ls", function()
+    Snacks.picker.lsp_symbols({
+      layout = { preset = "ivy" },
+    })
+  end, help("[s]ymbols"))
 
   -----------------------------------------------------------------------------
-  -- https://github.com/aznhe21/actions-preview.nvim
-  -- vim.keymap.set(
-  --   "n",
-  --   "<leader>la",
-  --   require("actions-preview").code_actions,
-  --   help("code [a]ctions")
-  -- )
+  -- local telescope_builtin = require("telescope.builtin")
+  -- vim.keymap.set("n", "<leader>lf", function()
+  --   telescope_builtin.lsp_references(require("telescope.themes").get_ivy({
+  --     winblend = 20,
+  --   }))
+  -- end, help("re[f]erences"))
+
+  -- vim.keymap.set("n", "<leader>sd", function()
+  --   telescope_builtin.lsp_document_symbols(require("telescope.themes").get_ivy({
+  --     winblend = 20,
+  --   }))
+  -- end, { desc = "lsp: [s]ymbols in [d]ocument", buffer = bufnr })
 
   -----------------------------------------------------------------------------
   -- https://github.com/rachartier/tiny-code-action.nvim
