@@ -137,7 +137,7 @@ local get_profile_config = function(context)
     resolved_profile = "standard"
   end
 
-  log.info(string.format("Using profile '%s' for context '%s'", resolved_profile, context))
+  -- log.info(string.format("Using profile '%s' for context '%s'", resolved_profile, context))
   return CONFIG_BY_PROFILE[resolved_profile]
 end
 
@@ -178,11 +178,11 @@ M.get_mason_install_root_dir = function()
     local env_root = vim.env.VVN_NVIM_MASON_INSTALL_ROOT
     local global_root = env_root or "~/.local/share/nvim/mason-global/"
     install_root = vim.fs.normalize(vim.fn.expand(global_root))
+    -- log.info(string.format("Using global mason install root '%s'", install_root))
   else
     install_root = vim.fs.joinpath(vim.fn.stdpath("data"), "mason")
   end
 
-  log.info(string.format("Using mason install root '%s'", install_root))
   return install_root
 end
 
