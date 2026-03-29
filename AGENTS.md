@@ -167,6 +167,8 @@ Source-of-truth and structure:
 ### 7.2 Project changelog file conventions (`docs/reference/project/changelog/`)
 - Use dated filename format: `YYYY-MM-mmm-<slug>.rst` (example: `2026-02-feb-refactor-telescope-module.rst`).
 - In `changelog.rst`, visible labels must use month-key style (`YYYY-MM-mmm - ...`), not full day dates.
+- In `docs/reference/project/changelog.rst`, keep sections in reverse chronological order: newest year first, then older years.
+- Within each year section in `docs/reference/project/changelog.rst`, insert new entries at the top so newer month-key entries appear before older ones.
 - In each dated changelog page:
   - Title remains `YYYY-MM mmm - <summary>`.
   - First subsection heading must be `YYYY-MM-DD - Day`.

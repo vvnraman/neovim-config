@@ -11,7 +11,42 @@ end
 
 local oil_lazy_config = function()
   local oil = require("oil")
+  local oil_actions = require("oil.actions")
+  local oil_config = require("oil.config")
+  local oil_layout = require("oil.layout")
+  local oil_util = require("oil.util")
   local detail = false
+
+  local BASE_FLOAT_WIDTH = 0.50
+  local BASE_FLOAT_HEIGHT = 0.60
+  local PREVIEW_FLOAT_WIDTH = 0.90
+
+  ---@param width number
+  ---@param height number
+  local resize_oil_float = function(width, height)
+    local current_win = vim.api.nvim_get_current_win()
+    local prev_width = oil_config.float.max_width
+    local prev_height = oil_config.float.max_height
+
+    oil_config.float.max_width = width
+    oil_config.float.max_height = height
+    local win_opts = oil_layout.get_fullscreen_win_opts()
+    oil_config.float.max_width = prev_width
+    oil_config.float.max_height = prev_height
+
+    if vim.api.nvim_win_is_valid(current_win) then
+      vim.api.nvim_win_set_config(current_win, win_opts)
+    end
+  end
+
+  local toggle_preview_with_resize = function()
+    if oil_util.is_floating_win() and not oil_util.get_preview_win() then
+      resize_oil_float(PREVIEW_FLOAT_WIDTH, BASE_FLOAT_HEIGHT)
+    end
+
+    oil_actions.preview.callback()
+  end
+
   oil.setup({
     default_file_explorer = false,
     -- some of these keymaps are the default, listing them here as documentation.
@@ -19,7 +54,7 @@ local oil_lazy_config = function()
       ["<C-v>"] = { "actions.select", opts = { vertical = true } },
       ["<C-h>"] = { "actions.select", opts = { horizontal = true } },
       ["<C-t>"] = { "actions.select", opts = { tab = true } },
-      ["<C-p>"] = { "actions.preview", mode = "n" },
+      ["<C-p>"] = { callback = toggle_preview_with_resize, mode = "n" },
       ["<Esc>"] = { "actions.close", mode = "n" },
       ["<C-l>"] = { "actions.refresh" },
       ["g."] = { "actions.toggle_hidden", mode = "n" },
@@ -42,15 +77,16 @@ local oil_lazy_config = function()
       show_hidden = true,
     },
     float = {
-      max_width = 88,
-      max_height = 50,
+      max_width = BASE_FLOAT_WIDTH,
+      max_height = BASE_FLOAT_HEIGHT,
+      preview_split = "right",
       win_options = {
         winblend = 20,
       },
     },
-    preview = {
+    preview_win = {
       win_options = {
-        winblend = 20,
+        winblend = 10,
       },
     },
   })

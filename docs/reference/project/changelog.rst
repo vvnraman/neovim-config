@@ -5,8 +5,9 @@ Changelog
 2026
 ====
 
-- :ref:`2026-03-mar - refactor shared vvn helper modules <changelog-2026-03-mar-vvn-util-modules>`
+- :ref:`2026-03-mar - refine file-nav and lsp pickers <changelog-2026-03-mar-file-nav-pickers>`
 - :ref:`2026-03-mar - move overlay imports under vvn <changelog-2026-03-mar-vvn-overlay-imports>`
+- :ref:`2026-03-mar - refactor shared vvn helper modules <changelog-2026-03-mar-vvn-util-modules>`
 - :ref:`2026-03-mar - add opencode plugin <changelog-2026-03-mar-opencode-plugin>`
 - :ref:`2026-02-feb - add yank enhanced module <changelog-2026-02-feb-yank-enhanced-module>`
 - :ref:`2026-02-feb - add docker test harness <changelog-2026-02-feb-docker-test-harness>`
@@ -30,6 +31,7 @@ Changelog
    2026-03-mar-opencode
    2026-03-mar-vvn-overlay-imports
    2026-03-mar-vvn-util-modules
+   2026-03-mar-file-nav-pickers
    2026_yank_enhanced
    2026_docker_test_harness
    2026_config_profiles

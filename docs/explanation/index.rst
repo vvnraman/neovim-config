@@ -7,7 +7,8 @@ Explanation
    :caption: Contents:
 
    scripting
-   lsp_setup
+   lsp-setup
+   telescope-setup
    config-profiles
    docker-setup
    yank-enhanced

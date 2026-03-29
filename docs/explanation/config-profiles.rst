@@ -27,13 +27,13 @@ We resolve the active profile with this precedence:
 
 If a profile value is invalid, we ignore it and continue to the next source.
 
-This give us 3 customization points, plus os/user overlays.
+This gives us three customization points, plus OS/user overlays.
 
 1. Treesitter parser lists
 2. Enabled LSP server names
 3. Mason package install policy
 
-It also lets us add to the plugin specs specific to current OS and user.
+It also supports plugin specs that are specific to the current OS and user.
 
 OS and user specific overlays
 -----------------------------
@@ -54,6 +54,16 @@ returns one merged plugin spec list to lazy.nvim.
 
 This keeps lazy plugin imports profile-aware while preserving the existing
 ``NVIM_APPNAME`` worktree behavior.
+
+
+Telescope filter integration
+----------------------------
+
+``lua/vvn/profile_config.lua`` resolves base telescope filters and merges
+user overrides from ``vvn.user-config.telescope_filters``.
+
+``lua/plugins/expedition/telescope.lua`` consumes that merged result to build
+``rg`` and ``fd`` arguments.
 
 Profile behavior model
 ======================
@@ -93,7 +103,7 @@ Install flow is gated by both profile policy and
 This is important for ``minimal`` because we can validate startup and baseline
 editing behavior without Neovim trying to install servers.
 
-We removed:
+The profile setup does not use:
 
 - ``mason-lspconfig.nvim``
 - ``mason-tool-installer.nvim``
@@ -135,3 +145,4 @@ Relevant changelog
 ------------------
 
 - :ref:`changelog-2026-03-mar-vvn-overlay-imports`
+- :ref:`changelog-2026-03-mar-file-nav-pickers`

@@ -8,9 +8,14 @@ local profile = require("vvn.profile")
 ---@field allow_mason_installs boolean
 ---@field ensure_mason_packages string[]
 
+---@class VvnTelescopeFilters
+---@field rg_globs string[]
+---@field fd_excludes string[]
+
 ---@class VvnProfileConfig
 ---@field treesitter VvnProfileTreesitterConfig
 ---@field lsp VvnProfileLspConfig
+---@field telescope_filters VvnTelescopeFilters
 ---@field plugin_specs table[]
 
 local M = {}
@@ -53,6 +58,14 @@ local CONFIG_BY_PROFILE = {
       },
       allow_mason_installs = false,
       ensure_mason_packages = {},
+    },
+    telescope_filters = {
+      rg_globs = {
+        "!**/.git/*",
+      },
+      fd_excludes = {
+        ".git/",
+      },
     },
     plugin_specs = {},
   },
@@ -126,6 +139,14 @@ local CONFIG_BY_PROFILE = {
         "shellcheck",
       },
     },
+    telescope_filters = {
+      rg_globs = {
+        "!**/.git/*",
+      },
+      fd_excludes = {
+        ".git/",
+      },
+    },
     plugin_specs = {},
   },
 }
@@ -170,6 +191,54 @@ end
 ---@return string[]
 M.get_mason_packages = function()
   return vim.deepcopy(get_profile_config("mason_packages").lsp.ensure_mason_packages)
+end
+
+---@param base string[]
+---@param extra string[]
+---@return string[]
+local merge_unique = function(base, extra)
+  ---@type table<string, boolean>
+  local seen = {}
+  ---@type string[]
+  local merged = {}
+
+  for _, item in ipairs(base) do
+    if not seen[item] then
+      seen[item] = true
+      table.insert(merged, item)
+    end
+  end
+
+  for _, item in ipairs(extra) do
+    if not seen[item] then
+      seen[item] = true
+      table.insert(merged, item)
+    end
+  end
+
+  return merged
+end
+
+---@return VvnTelescopeFilters
+M.get_telescope_filters = function()
+  local base = vim.deepcopy(get_profile_config("telescope_filters").telescope_filters)
+
+  local ok, user_filters = pcall(require, "vvn.user-config.telescope_filters")
+  if not ok or type(user_filters) ~= "table" then
+    return base
+  end
+
+  ---@type string[]
+  local user_rg_globs = type(user_filters.rg_globs) == "table" and user_filters.rg_globs or {}
+  ---@type string[]
+  local user_fd_excludes = type(user_filters.fd_excludes) == "table"
+      and user_filters.fd_excludes
+    or {}
+
+  return {
+    rg_globs = merge_unique(base.rg_globs, user_rg_globs),
+    fd_excludes = merge_unique(base.fd_excludes, user_fd_excludes),
+  }
 end
 
 ---@param values table[]

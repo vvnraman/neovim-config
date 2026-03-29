@@ -34,20 +34,6 @@ local setup_lsp_keymaps = function()
     callback = function(event)
       ---@diagnostic disable-next-line: unused-local
       local log = require("vvn.log")
-      --[[
-      log.info(vim.inspect(event))
-      {
-        buf = 1,
-        data = {
-          client_id = 1
-        },
-        event = "LspAttach",
-        file = "path/to/code",
-        group = 32,
-        id = 63,
-        match = "path/to/code"
-      }
-      --]]
 
       local bufnr = event.buf
       require("plugins.pde.attach").setup_native_buffer_mappings(bufnr)
@@ -69,16 +55,6 @@ local setup_lsp_keymaps = function()
         if client.name and name == client.name then
           client_exists = true
         end
-
-        -- Log the payload when the server connect, once.
-        -- log.info("Logging payload for " .. name)
-        -- local client_logged_dict = vim.g.vvn_client_logged_dict
-        -- client_logged_dict = client_logged_dict or {}
-        -- if not client_logged_dict[name] then
-        --   log.info(vim.inspect(client))
-        --   client_logged_dict[name] = false
-        --   vim.g.vvn_client_logged_dict = client_logged_dict
-        -- end
 
         return client_exists
       end

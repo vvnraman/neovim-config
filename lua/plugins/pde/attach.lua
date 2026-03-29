@@ -30,32 +30,50 @@ M.setup_plugin_buffer_mappings = function(bufnr)
     return { desc = "[l]sp: " .. desc, buffer = bufnr }
   end
 
+  ---@return table
+  local lsp_ivy_picker_opts = function()
+    -- Keep the input and result list airy, but make the preview less
+    -- transparent so code/details are easier to read.
+    return {
+      layout = {
+        preset = "ivy",
+        layout = {
+          width = 0.95,
+        },
+      },
+      win = {
+        input = { wo = { winblend = 30 } },
+        list = { wo = { winblend = 30 } },
+        preview = { wo = { winblend = 10 } },
+      },
+    }
+  end
+
   -----------------------------------------------------------------------------
   -- https://github.com/folke/snacks.nvim/blob/main/docs/picker.md
 
-  vim.keymap.set("n", "<leader>ld", Snacks.picker.lsp_definitions, help("[d]efinition"))
+  vim.keymap.set("n", "<leader>ld", function()
+    Snacks.picker.lsp_definitions(lsp_ivy_picker_opts())
+  end, help("[d]efinition"))
 
-  vim.keymap.set("n", "<leader>lD", Snacks.picker.lsp_declarations, help("[D]eclaration"))
+  vim.keymap.set("n", "<leader>lD", function()
+    Snacks.picker.lsp_declarations(lsp_ivy_picker_opts())
+  end, help("[D]eclaration"))
 
-  vim.keymap.set(
-    "n",
-    "<leader>lt",
-    Snacks.picker.lsp_type_definitions,
-    help("[t]ype definition")
-  )
+  vim.keymap.set("n", "<leader>lt", function()
+    Snacks.picker.lsp_type_definitions(lsp_ivy_picker_opts())
+  end, help("[t]ype definition"))
 
-  vim.keymap.set("n", "<leader>li", Snacks.picker.lsp_implementations, help("[i]mplementation"))
+  vim.keymap.set("n", "<leader>li", function()
+    Snacks.picker.lsp_implementations(lsp_ivy_picker_opts())
+  end, help("[i]mplementation"))
 
   vim.keymap.set("n", "<leader>lf", function()
-    Snacks.picker.lsp_references({
-      layout = { preset = "ivy" },
-    })
+    Snacks.picker.lsp_references(lsp_ivy_picker_opts())
   end, help("re[f]erences"))
 
   vim.keymap.set("n", "<leader>ls", function()
-    Snacks.picker.lsp_symbols({
-      layout = { preset = "ivy" },
-    })
+    Snacks.picker.lsp_symbols(lsp_ivy_picker_opts())
   end, help("[s]ymbols"))
 
   -----------------------------------------------------------------------------

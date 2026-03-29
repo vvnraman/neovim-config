@@ -30,8 +30,8 @@ local M = {
                 ["<A-a>"] = { "opencode_send", mode = { "n", "i" } },
               },
             },
-            list = { { wo = { winblend = 20 } } },
-            preview = { { wo = { winblend = 20 } } },
+            list = { wo = { winblend = 20 } },
+            preview = { wo = { winblend = 10 } },
           },
         },
       }
