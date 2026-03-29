@@ -1,6 +1,6 @@
-##########################
-Config update as a project
-##########################
+#######
+Project
+#######
 
 .. toctree::
    :maxdepth: 1

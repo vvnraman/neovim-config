@@ -1,5 +1,4 @@
 local profile = require("vvn.profile")
-local log = require("vvn.log")
 
 ---@class VvnProfileTreesitterConfig
 ---@field ensure_installed string[]
@@ -12,6 +11,7 @@ local log = require("vvn.log")
 ---@class VvnProfileConfig
 ---@field treesitter VvnProfileTreesitterConfig
 ---@field lsp VvnProfileLspConfig
+---@field plugin_specs table[]
 
 local M = {}
 
@@ -54,6 +54,7 @@ local CONFIG_BY_PROFILE = {
       allow_mason_installs = false,
       ensure_mason_packages = {},
     },
+    plugin_specs = {},
   },
   standard = {
     treesitter = {
@@ -125,11 +126,13 @@ local CONFIG_BY_PROFILE = {
         "shellcheck",
       },
     },
+    plugin_specs = {},
   },
 }
 
 ---@param context string
 ---@return VvnProfileConfig
+---@diagnostic disable-next-line: unused-local
 local get_profile_config = function(context)
   local current = profile.get_name()
   local resolved_profile = current
@@ -167,6 +170,37 @@ end
 ---@return string[]
 M.get_mason_packages = function()
   return vim.deepcopy(get_profile_config("mason_packages").lsp.ensure_mason_packages)
+end
+
+---@param values table[]
+---@return table[]
+local merge_specs = function(values)
+  ---@type table[]
+  local merged = {}
+  for _, value in ipairs(values) do
+    table.insert(merged, value)
+  end
+  return merged
+end
+
+---@return table[]
+M.get_plugin_specs = function()
+  local base = vim.deepcopy(get_profile_config("plugin_specs").plugin_specs)
+
+  local ok_os, os_specs = pcall(require, "vvn.os-config.plugin_specs")
+  if not ok_os or type(os_specs) ~= "table" then
+    os_specs = {}
+  end
+
+  local ok_user, user_specs = pcall(require, "vvn.user-config.plugin_specs")
+  if not ok_user or type(user_specs) ~= "table" then
+    user_specs = {}
+  end
+
+  local merged = merge_specs(base)
+  vim.list_extend(merged, merge_specs(os_specs))
+  vim.list_extend(merged, merge_specs(user_specs))
+  return merged
 end
 
 ---@return string

@@ -7,16 +7,15 @@ config_home="${XDG_CONFIG_HOME:-$HOME/.config}"
 config_home="$(realpath "$config_home")"
 
 case "$script_dir" in
-  "$config_home"/*)
-    nvim_appname="${script_dir#"$config_home"/}"
-    ;;
-  *)
-    echo "error: script directory '$script_dir' is not under '$config_home'" >&2
-    exit 1
-    ;;
+"$config_home"/*)
+  nvim_appname="${script_dir#"$config_home"/}"
+  ;;
+*)
+  echo "error: script directory '$script_dir' is not under '$config_home'" >&2
+  exit 1
+  ;;
 esac
 
 env \
   NVIM_APPNAME="$nvim_appname" \
-  VVN_NVIM_MASON_GLOBAL_INSTALL=1 \
   /usr/bin/nvim "$@"

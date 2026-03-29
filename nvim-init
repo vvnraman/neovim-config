@@ -6,19 +6,47 @@ script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 config_home="${XDG_CONFIG_HOME:-$HOME/.config}"
 config_home="$(realpath "$config_home")"
 
+reset_data=false
+for arg in "$@"; do
+  if [[ "$arg" == "--reset" ]]; then
+    reset_data=true
+  else
+    echo "error: unknown argument '$arg'" >&2
+    echo "usage: $0 [--reset]" >&2
+    exit 2
+  fi
+done
+
 case "$script_dir" in
-  "$config_home"/*)
-    nvim_appname="${script_dir#"$config_home"/}"
-    ;;
-  *)
-    echo "error: script directory '$script_dir' is not under '$config_home'" >&2
-    exit 1
-    ;;
+"$config_home"/*)
+  nvim_appname="${script_dir#"$config_home"/}"
+  ;;
+*)
+  echo "error: script directory '$script_dir' is not under '$config_home'" >&2
+  exit 1
+  ;;
 esac
+
+if [[ "$reset_data" == true ]]; then
+  data_home="${XDG_DATA_HOME:-$HOME/.local/share}"
+  state_home="${XDG_STATE_HOME:-$HOME/.local/state}"
+  data_dir="${data_home:?}/${nvim_appname:?}"
+  state_dir="${state_home:?}/${nvim_appname:?}"
+
+  if [[ ! -d "$data_dir" ]]; then
+    echo "error: NVIM data directory not found: '$data_dir'" >&2
+    exit 1
+  fi
+  if [[ ! -d "$state_dir" ]]; then
+    echo "error: NVIM state directory not found: '$state_dir'" >&2
+    exit 1
+  fi
+
+  rm -rf -- "$data_dir" "$state_dir"
+fi
 
 env \
   NVIM_APPNAME="$nvim_appname" \
-  VVN_NVIM_MASON_GLOBAL_INSTALL=1 \
   NVIM_PROFILE=standard \
   NVIM_TREESITTER_SYNC_INSTALL=1 \
   /usr/bin/nvim --headless "+Lazy! restore" "+Lazy! load nvim-treesitter" +qall

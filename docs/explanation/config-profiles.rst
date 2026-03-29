@@ -27,16 +27,38 @@ We resolve the active profile with this precedence:
 
 If a profile value is invalid, we ignore it and continue to the next source.
 
+This give us 3 customization points, plus os/user overlays.
+
+1. Treesitter parser lists
+2. Enabled LSP server names
+3. Mason package install policy
+
+It also lets us add to the plugin specs specific to current OS and user.
+
+OS and user specific overlays
+-----------------------------
+
+.. code-block::
+
+   init.lua
+   └─ lazy.nvim spec
+      └─ import "plugins.override"
+         └─ which calls vvn.profile_config.get_plugin_specs()
+            ├─ loads vvn.os-config.plugin_specs
+            └─ loads vvn.user-config.plugin_specs
+
+``init.lua`` imports ``plugins.override`` for overlay plugin specs.
+
+``plugins.override`` calls ``vvn.profile_config.get_plugin_specs()`` and
+returns one merged plugin spec list to lazy.nvim.
+
+This keeps lazy plugin imports profile-aware while preserving the existing
+``NVIM_APPNAME`` worktree behavior.
+
 Profile behavior model
 ======================
 
 Profile specific behavior is centralized in ``lua/vvn/profile_config.lua``.
-
-Right now we control:
-
-- Treesitter parser lists
-- Enabled LSP server names
-- Mason package install policy
 
 Because this is centralized, we can change profile behavior without spreading
 logic across many plugin files.
@@ -63,7 +85,7 @@ Profile-aware Treesitter behavior is implemented in
 Mason behavior
 --------------
 
-We still use ``mason.nvim``, but install behavior is now explicit.
+We still use ``mason.nvim``, and install behavior is explicit.
 
 Install flow is gated by both profile policy and
 ``NVIM_MASON_AUTO_INSTALL=1``.
@@ -75,6 +97,20 @@ We removed:
 
 - ``mason-lspconfig.nvim``
 - ``mason-tool-installer.nvim``
+
+Plugin specs
+------------
+
+Profile-aware plugin spec behavior is implemented in
+``lua/vvn/profile_config.lua``.
+
+Overlay plugin specs resolve through:
+
+- ``vvn.os-config.plugin_specs``
+- ``vvn.user-config.plugin_specs``
+
+``get_plugin_specs()`` merges base profile specs with OS and user overlays and
+returns one list to ``plugins.override``.
 
 Future change checklist
 =======================
@@ -94,3 +130,8 @@ add things there only when they are essential to baseline editing.
 
 This gives us a stable place to evolve the config without losing clarity about
 what each profile is supposed to do.
+
+Relevant changelog
+------------------
+
+- :ref:`changelog-2026-03-mar-vvn-overlay-imports`

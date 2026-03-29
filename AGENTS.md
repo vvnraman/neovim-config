@@ -181,6 +181,7 @@ Write explanation pages as operational runbooks for maintainers.
 
 Required style:
 - Prefer procedural wording: use verbs like `loads`, `sources`, `includes`, `resolves`.
+- Use present tense to describe existing behavior; avoid changelog phrasing like `now imports` or `was changed` in explanation pages.
 - Focus on runtime behavior and include order, not abstract architecture claims.
 - Remove non-essential narrative (generic benefits, long rationale, repeated path explanations).
 - Keep sections compact and scannable; avoid paragraph-heavy descriptions when a list is clearer.
