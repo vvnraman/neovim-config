@@ -1,3 +1,5 @@
+.. _changelog-2026-03-mar-opencode-plugin:
+
 *******************************
 2026-03 March - OpenCode plugin
 *******************************
@@ -55,4 +57,3 @@ Future work
 - I have a ``:VvnYank`` to allow for batch selecting items. I should tie it to review all changes using ``"<leader>ar"``.
 
 - Add ``gl`` and ``gll`` to immediately send ``:VvnYank`` selection to OpenCode.
-

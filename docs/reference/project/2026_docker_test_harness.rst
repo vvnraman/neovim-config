@@ -1,3 +1,5 @@
+.. _changelog-2026-02-feb-docker-test-harness:
+
 ************************
 2026 Docker test harness
 ************************
@@ -13,8 +15,8 @@ and test if everything will still work as intended.
 
 See also:
 
-- :doc:`../explanation/docker-setup`
-- :doc:`../how-to/test-in-docker`
+- :ref:`docker-setup`
+- :ref:`test-in-docker`
 
 Behavioral model
 ----------------

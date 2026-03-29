@@ -1,3 +1,5 @@
+.. _changelog-2023-12-dec-migrate-packer-to-lazy:
+
 ********************************
 2023 Migrate from packer to lazy
 ********************************

@@ -1,8 +1,10 @@
+.. _test-in-docker:
+
 **************
 Test in Docker
 **************
 
-See :doc:`../explanation/docker-setup`.
+See :ref:`docker-setup`.
 
 Interactive workflow
 ====================

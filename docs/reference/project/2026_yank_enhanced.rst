@@ -1,3 +1,5 @@
+.. _changelog-2026-02-feb-yank-enhanced-module:
+
 ******************
 2026 Yank enhanced
 ******************
@@ -21,4 +23,4 @@ Overview
   into the new yank module.
 
 Detailed behavior, keymaps, and command usage are documented at
-:doc:`Yank Enhanced </explanation/yank-enhanced>`.
+:ref:`yank-enhanced`.

@@ -6,6 +6,7 @@ Reference
    :maxdepth: 1
    :caption: Reference:
 
+   project/index
    keymaps
    plugins
    log

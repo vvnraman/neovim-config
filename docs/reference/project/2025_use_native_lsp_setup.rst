@@ -1,3 +1,5 @@
+.. _changelog-2025-11-nov-use-native-lsp-setup:
+
 *************************
 2025 Use native lsp setup
 *************************

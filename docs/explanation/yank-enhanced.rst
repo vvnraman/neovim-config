@@ -1,3 +1,5 @@
+.. _yank-enhanced:
+
 *************
 Yank Enhanced
 *************

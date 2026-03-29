@@ -7,7 +7,6 @@ Neovim config
    :caption: Contents:
 
    overview
-   project/index
    how-to/index
    explanation/index
    reference/index
@@ -21,6 +20,5 @@ See :doc:`overview` to get started.
 
 See :ref:`iterate-on-config` on how I safely make changes to the config and
 ensure I have a working setup at all times.
-
 
 

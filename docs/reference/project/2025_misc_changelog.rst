@@ -1,3 +1,5 @@
+.. _changelog-2025-03-mar-miscellaneous-updates:
+
 **************************
 2025 Miscellaneous changes
 **************************

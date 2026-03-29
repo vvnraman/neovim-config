@@ -1,3 +1,5 @@
+.. _changelog-2026-02-feb-miscellaneous-updates:
+
 **************************
 2026 Miscellaneous changes
 **************************

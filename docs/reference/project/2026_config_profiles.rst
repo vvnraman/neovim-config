@@ -1,3 +1,5 @@
+.. _changelog-2026-02-feb-runtime-config-profiles:
+
 ********************
 2026 Config profiles
 ********************
@@ -15,7 +17,7 @@ assume a higher-level orchestration layer has already made those tools
 available out of band.
 
 For profile-oriented validation runs in Docker, see
-:doc:`../how-to/test-in-docker`.
+:ref:`test-in-docker`.
 
 Detailed profile resolution, integration behavior, and future update checklist
-are documented at :doc:`../explanation/config-profiles`.
+are documented at :ref:`config-profiles`.

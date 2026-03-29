@@ -1,3 +1,5 @@
+.. _docker-setup:
+
 *******************
 Docker Test Harness
 *******************
