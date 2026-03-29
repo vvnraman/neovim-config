@@ -5,7 +5,11 @@ Yank Enhanced
 *************
 
 The yank-enhanced flow is implemented in ``lua/vvn/yank.lua`` and uses shared
-helpers from ``lua/vvn/util.lua``.
+helpers from ``lua/vvn/util.lua`` and ``lua/vvn/pathutil.lua``.
+
+The runtime now sources line and path values through helper modules instead of
+global helper functions. This keeps call sites explicit and makes reuse across
+keymaps, telescope actions, and session logic more consistent.
 
 Keymaps
 =======
@@ -152,6 +156,11 @@ Assume we are in ``src/math/vector.cpp`` and the filetype is ``cpp``.
         if (n <= std::numeric_limits<double>::epsilon()) {
           return std::nullopt;
         }
-        return Vec3{v.x / n, v.y / n, v.z / n};
+       return Vec3{v.x / n, v.y / n, v.z / n};
       }
       ```
+
+Relevant changelog
+==================
+
+- :ref:`changelog-2026-03-mar-vvn-util-modules`

@@ -17,6 +17,7 @@
 ---@type VvnYankModule
 local M = {}
 local util = require("vvn.util")
+local pathutil = require("vvn.pathutil")
 
 local USER_COMMAND_NAME = "VvnYank"
 local NOTIFY_TITLE = "VvnYank"
@@ -243,7 +244,7 @@ end
 local get_current_line_diagnostics = function()
   local bufnr = 0
   ---@type vim.Diagnostic[]
-  local diagnostics = vim.diagnostic.get(bufnr, { lnum = GET_CURRENT_LINE() })
+  local diagnostics = vim.diagnostic.get(bufnr, { lnum = util.get_current_line() })
 
   if #diagnostics == 0 then
     return nil
@@ -290,7 +291,7 @@ end
 ---@param path_transformer fun(path: string): string
 ---@param message string
 local yank_current_path = function(append, path_transformer, message)
-  local path = GET_CURRENT_FILE_PATH()
+  local path = pathutil.get_current_file_path()
   if not path then
     return
   end

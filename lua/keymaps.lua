@@ -1,6 +1,8 @@
 -- Only generic keymaps are set here. Most of the other ones are set alongside
 -- the corresponding plugin setup.
 
+local pathutil = require("vvn.pathutil")
+
 local unmap_unimpaired_mappings = function()
   -- From `:help news`, which would become `:help news-0.11` later
   -- • Mappings inspired by Tim Pope's vim-unimpaired:
@@ -55,7 +57,7 @@ end
 
 local setup_info_mappings = function()
   vim.keymap.set("n", "\\if", function()
-    local path = GET_CURRENT_FILE_PATH()
+    local path = pathutil.get_current_file_path()
     if not path then
       return
     end

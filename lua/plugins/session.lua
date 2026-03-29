@@ -1,5 +1,5 @@
 local auto_session_config = function()
-  local vvn_util = require("vvn.util")
+  local gitutil = require("vvn.gitutil")
 
   ---@param message string
   ---@param level? string
@@ -9,7 +9,7 @@ local auto_session_config = function()
 
   -- Only create session automatically for git repos and my tool config dirs
   local auto_create = function()
-    if vvn_util.is_inside_git_worktree() then
+    if gitutil.is_inside_git_worktree() then
       return true
     end
     local tool_config_dirs = {
@@ -59,7 +59,7 @@ local auto_session_config = function()
     },
     no_restore_cmds = {
       function()
-        if vvn_util.is_inside_git_worktree() then
+        if gitutil.is_inside_git_worktree() then
           notify("No session available, one will be created automatically.")
         else
           notify("No session restored. Press '\\ss' to create one and enable autosave.")

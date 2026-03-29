@@ -1,13 +1,5 @@
 local M = {}
-
----@return boolean
-M.is_inside_git_worktree = function()
-  local cmd = "git rev-parse --is-inside-work-tree"
-  if vim.fn.system(cmd) == "true\n" then
-    return true
-  end
-  return false
-end
+local pathutil = require("vvn.pathutil")
 
 ---@param content string
 ---@param append boolean
@@ -28,9 +20,15 @@ end
 
 ---@return string
 M.get_relative_path = function()
-  local path = GET_CURRENT_FILE_PATH()
+  local path = pathutil.get_current_file_path()
   local relative_path = path and vim.fn.fnamemodify(path, ":.") or "[No Name]"
   return relative_path
+end
+
+---@return integer
+---Returns the current cursor line as a 0-based line number.
+M.get_current_line = function()
+  return vim.fn.line(".") - 1
 end
 
 ---@return boolean
