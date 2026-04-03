@@ -45,10 +45,10 @@ local M = {
         Snacks.notifier.show_history({ filter = vim.log.levels.ERROR })
       end, { desc = "Show error history", noremap = true })
 
-      vim.keymap.set("n", "<leader>.", function()
+      vim.keymap.set("n", "<leader>nn", function()
         Snacks.scratch()
       end, { desc = "Toggle Scratch buffer" })
-      vim.keymap.set("n", "<leader>S", function()
+      vim.keymap.set("n", "<leader>ns", function()
         Snacks.scratch.select()
       end, { desc = "Select Scratch buffer" })
     end,

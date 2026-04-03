@@ -3,19 +3,11 @@
 set -euo pipefail
 
 script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
-config_home="${XDG_CONFIG_HOME:-$HOME/.config}"
-config_home="$(realpath "$config_home")"
+source "$script_dir/nvim.env"
 
-case "$script_dir" in
-"$config_home"/*)
-  nvim_appname="${script_dir#"$config_home"/}"
-  ;;
-*)
-  echo "error: script directory '$script_dir' is not under '$config_home'" >&2
-  exit 1
-  ;;
-esac
+vvn_export_nvim_env "$script_dir"
 
 env \
-  NVIM_APPNAME="$nvim_appname" \
+  NVIM_APPNAME="$NVIM_APPNAME" \
+  NVIM_PROFILE="$NVIM_PROFILE" \
   /usr/bin/nvim "$@"

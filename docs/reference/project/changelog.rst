@@ -5,6 +5,7 @@ Changelog
 2026
 ====
 
+- :ref:`2026-04-apr - add shared lazy root guard <changelog-2026-04-apr-shared-lazy-root>`
 - :ref:`2026-03-mar - refine file-nav and lsp pickers <changelog-2026-03-mar-file-nav-pickers>`
 - :ref:`2026-03-mar - move overlay imports under vvn <changelog-2026-03-mar-vvn-overlay-imports>`
 - :ref:`2026-03-mar - refactor shared vvn helper modules <changelog-2026-03-mar-vvn-util-modules>`
@@ -28,6 +29,7 @@ Changelog
 .. toctree::
    :hidden:
 
+   2026-04-apr-shared-lazy-root
    2026-03-mar-opencode
    2026-03-mar-vvn-overlay-imports
    2026-03-mar-vvn-util-modules

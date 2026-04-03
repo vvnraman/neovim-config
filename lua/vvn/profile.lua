@@ -49,4 +49,29 @@ M.is_standard = function()
   return M.get_name() == "standard"
 end
 
+---@return string
+M.get_default_lazy_install_root_dir = function()
+  return vim.fs.joinpath(vim.fn.stdpath("data"), "lazy")
+end
+
+---@return string
+M.get_lazy_install_root_dir = function()
+  local env_root = vim.env.VVN_NVIM_LAZY_INSTALL_ROOT
+  if not env_root or vim.trim(env_root) == "" then
+    return M.get_default_lazy_install_root_dir()
+  end
+
+  return vim.fs.normalize(vim.fn.expand(env_root))
+end
+
+---@return boolean
+M.is_shared_lazy_install_root_enabled = function()
+  return M.get_lazy_install_root_dir() ~= M.get_default_lazy_install_root_dir()
+end
+
+---@return boolean
+M.is_shared_lazy_update_allowed = function()
+  return vim.env.VVN_NVIM_ALLOW_SHARED_LAZY_UPDATE == "1"
+end
+
 return M

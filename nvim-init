@@ -3,8 +3,7 @@
 set -euo pipefail
 
 script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
-config_home="${XDG_CONFIG_HOME:-$HOME/.config}"
-config_home="$(realpath "$config_home")"
+source "$script_dir/nvim.env"
 
 reset_data=false
 for arg in "$@"; do
@@ -17,15 +16,11 @@ for arg in "$@"; do
   fi
 done
 
-case "$script_dir" in
-"$config_home"/*)
-  nvim_appname="${script_dir#"$config_home"/}"
-  ;;
-*)
-  echo "error: script directory '$script_dir' is not under '$config_home'" >&2
-  exit 1
-  ;;
-esac
+vvn_export_nvim_env "$script_dir"
+nvim_appname="$NVIM_APPNAME"
+
+: "${NVIM_TREESITTER_SYNC_INSTALL:=1}"
+export NVIM_TREESITTER_SYNC_INSTALL
 
 if [[ "$reset_data" == true ]]; then
   data_home="${XDG_DATA_HOME:-$HOME/.local/share}"
@@ -46,7 +41,7 @@ if [[ "$reset_data" == true ]]; then
 fi
 
 env \
-  NVIM_APPNAME="$nvim_appname" \
-  NVIM_PROFILE=standard \
-  NVIM_TREESITTER_SYNC_INSTALL=1 \
+  NVIM_APPNAME="$NVIM_APPNAME" \
+  NVIM_PROFILE="$NVIM_PROFILE" \
+  NVIM_TREESITTER_SYNC_INSTALL="$NVIM_TREESITTER_SYNC_INSTALL" \
   /usr/bin/nvim --headless "+Lazy! restore" "+Lazy! load nvim-treesitter" +qall

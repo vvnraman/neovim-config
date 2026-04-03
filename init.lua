@@ -12,6 +12,7 @@ directory as lua modules as we're doing below.
 -------------------------------------------------------------------------------
 
 require("globals")
+local profile = require("vvn.profile")
 -------------------------------------------------------------------------------
 
 --  Leader must be set before plugins are required (otherwise wrong leader will
@@ -21,7 +22,8 @@ vim.g.maplocalleader = " "
 -------------------------------------------------------------------------------
 
 -- https://github.com/folke/lazy.nvim?tab=readme-ov-file#-installation
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+local lazy_root = profile.get_lazy_install_root_dir()
+local lazypath = vim.fs.joinpath(lazy_root, "lazy.nvim")
 local uv = vim.uv or vim.loop
 if not uv.fs_stat(lazypath) then
   vim.fn.system({
@@ -35,6 +37,7 @@ if not uv.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
+  root = lazy_root,
   spec = {
     { import = "plugins.dev" }, -- first
     { import = "plugins.snacks" }, -- second

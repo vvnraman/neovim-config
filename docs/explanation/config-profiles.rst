@@ -35,6 +35,39 @@ This gives us three customization points, plus OS/user overlays.
 
 It also supports plugin specs that are specific to the current OS and user.
 
+Shared lazy plugin root
+=======================
+
+``lua/vvn/profile.lua`` also resolves the lazy plugin install root.
+
+- Default: ``stdpath("data") .. "/lazy"``
+- Override: ``VVN_NVIM_LAZY_INSTALL_ROOT``
+
+This is useful when multiple worktrees share one plugin checkout set during
+config development.
+
+When the override is active, ``init.lua`` uses that directory for:
+
+- the lazy.nvim bootstrap clone
+- the lazy plugin install root passed to ``require("lazy").setup()``
+
+Lockfile drift guard
+--------------------
+
+Sharing plugin clones does not share ``lazy-lock.json``.
+
+Each Neovim config still keeps its own lockfile under ``stdpath("config")``.
+This means ``:Lazy update`` or ``:Lazy sync`` in one config can update the
+shared plugin checkout set while also writing a different local lockfile.
+
+To prevent accidental drift, ``lua/autocommands.lua`` blocks ``LazyUpdatePre``
+and ``LazySyncPre`` when ``VVN_NVIM_LAZY_INSTALL_ROOT`` points at a non-default
+plugin root and ``VVN_NVIM_ALLOW_SHARED_LAZY_UPDATE`` is not ``1``.
+
+When ``VVN_NVIM_ALLOW_SHARED_LAZY_UPDATE=1`` is set, the update proceeds and
+Neovim still warns that the shared plugin checkout set can drift from other
+configs.
+
 OS and user specific overlays
 -----------------------------
 
@@ -144,5 +177,6 @@ what each profile is supposed to do.
 Relevant changelog
 ------------------
 
+- :ref:`changelog-2026-04-apr-shared-lazy-root`
 - :ref:`changelog-2026-03-mar-vvn-overlay-imports`
 - :ref:`changelog-2026-03-mar-file-nav-pickers`
