@@ -4,59 +4,45 @@
 Docker Test Harness
 *******************
 
-There is a Docker harness under ``docker/`` to validate and debug the Neovim
-config in a reproducible environment.
+This page explains how the Docker harness builds pinned Neovim environments,
+mounts the current worktree, and runs smoke or interactive validation against
+that same checkout.
 
-At a high level, the flow is:
+High-level flow
+===============
 
-1. Build an image from an OS-specific ``Dockerfile``.
-2. Build a ``base`` stage for OS packages, then a ``runtime`` stage for harness
-   scripts and Neovim/tool installation.
-
-3. Install Neovim from the upstream AppImage release via
-   ``docker/install-neovim.sh``.
-
-   - AppImage lets us pin an exact Neovim version independent of the version
-     available from the OS package manager.
-
-4. Install CLI search tools via ``docker/install-cli-tools.sh``:
-
-   - Arch installs ``fd`` and ``ripgrep`` with ``pacman``.
-   - Ubuntu installs ``fd`` and ``ripgrep`` from upstream GitHub release
-     archives.
-
-Neovim checksum verification is optional in the installer script. It runs only
-when a checksum value is passed as argument 2.
-
-Version defaults for Neovim/``fd``/``ripgrep`` are centralized in
-``docker/docker-compose.yaml`` build args and can be overridden through
-environment variables.
-4. Run either:
-
-   - a headless smoke check (``arch-smoke``, ``ubuntu-smoke``, or
-     ``ubuntu-smoke-minimal``), or
-   - an interactive shell session (``arch-shell``, ``ubuntu-shell``, or
-     ``ubuntu-shell-minimal``).
-
-The harness points Neovim at our actual checkout (not a copied config), so
-image runs and interactive sessions validate the same files we are editing.
+1. ``docker/run-workflow.sh`` resolves one or more ``os,profile`` targets.
+2. Docker Compose builds the matching Arch or Ubuntu image with pinned build
+   args from ``docker/docker-compose.yaml``.
+3. The runtime image installs Neovim ``v0.12.1`` plus ``fd``, ``ripgrep``, and
+   ``tree-sitter-cli``.
+4. The selected service mounts the repo at the same absolute path inside the
+   container.
+5. ``docker/nvim-env.sh`` derives ``XDG_CONFIG_HOME`` and ``NVIM_APPNAME`` from
+   that mounted path before running Neovim or launching Bash.
 
 
 CLI Tool Installation
 =====================
 
-``docker/install-cli-tools.sh`` is the single entrypoint for ``fd`` and
-``ripgrep`` installation.
+``docker/install-cli-tools.sh`` is the single entrypoint for CLI tool
+installation.
 
 How it works:
 
 - Accepts ``target_os`` as argument 1 (``arch`` or ``ubuntu``).
 - Accepts repeatable ``--tool 'tool-name:tool-version'`` flags.
-- Supported tools are ``fd`` and ``ripgrep``.
+- Supported tools are ``fd``, ``ripgrep``, and ``tree-sitter-cli``.
 - ``tool-version`` can be a pinned version or ``latest``.
-- If no ``--tool`` flags are passed, defaults are used for both tools.
-- On Arch, tools are installed with ``pacman``.
-- On Ubuntu, tools are downloaded from GitHub release archives.
+- If no ``--tool`` flags are passed, defaults are used for ``fd`` and
+  ``ripgrep``.
+- The Dockerfiles pass ``tree-sitter-cli`` explicitly so Neovim 0.12 Treesitter
+  parser installs work in both images.
+- On Arch, ``fd`` and ``ripgrep`` are installed with ``pacman``.
+- On Ubuntu, ``fd`` and ``ripgrep`` are downloaded from upstream GitHub release
+  archives.
+- ``tree-sitter-cli`` is installed from the upstream release artifact on both
+  images.
 
 
 Neovim Installation
@@ -66,7 +52,7 @@ Neovim Installation
 
 How it works:
 
-- Accepts version as argument 1 (default: ``v0.11.6``).
+- Accepts version as argument 1 (default: ``v0.12.1``).
 - Accepts optional checksum as argument 2.
 - ``latest`` is supported as a special version and is resolved from the GitHub
   releases API.
@@ -111,7 +97,7 @@ When we run ``./docker/run-workflow.sh --workflow smoke-test arch,standard``:
 - Host and container use the same absolute workspace path.
 
 For smoke tests, the script accepts multiple ``os,profile`` targets and runs the
-corresponding services in parallel via one compose command.
+corresponding services together through one compose invocation.
 
 These two settings intentionally share the same path on host and container.
 That keeps ``$PWD`` stable and avoids path-mapping edge cases.
@@ -144,7 +130,18 @@ Key fields:
 - ``command: ["/opt/nvim-harness/smoke.sh", "<target_os>", "<nvim_profile>"]``
   runs the smoke script for the selected OS and Neovim profile.
 - ``environment.CC: gcc`` keeps parser/tool compilation available during checks.
-- ``TERM``/``COLORTERM`` set a stable terminal baseline for Neovim runtime.
+- ``TERM``/``COLORTERM`` stay fixed so smoke runs use a stable terminal baseline.
+
+The smoke script runs two stages for every target:
+
+- ``install`` sets ``NVIM_TREESITTER_SYNC_INSTALL=1`` and runs
+  ``nvim --headless "+Lazy! restore" +qall`` so first-run plugin and parser
+  bootstrap failures stay visible.
+- ``launch`` unsets the sync install override and runs
+  ``nvim --headless "+doautocmd CmdlineEnter" "+sleep 100m" +qall`` so delayed
+  startup errors still fail the workflow.
+- Each stage scans the captured log for config, compile, and startup failures
+  before reporting success.
 
 This service is designed to fail fast in CI-like local checks.
 
@@ -164,4 +161,26 @@ Typical workflow:
   languages.
 - Subsequent starts should be much faster once those assets are installed.
 
+Interactive mode accepts exactly one ``os,profile`` target per run.
+
+Interactive shell services preserve the host terminal context instead of forcing
+the smoke-test defaults.
+
+- ``TERM`` and ``COLORTERM`` follow the host terminal so Neovim keeps the same
+  color capabilities inside the container.
+- ``TMUX``, ``TERM_PROGRAM``, ``KITTY_WINDOW_ID``, ``WEZTERM_PANE``, ``ZELLIJ``,
+  and ``SSH_TTY`` pass through to preserve terminal-specific behavior.
+- Outside tmux, ``NVIM_CLIPBOARD=osc52`` stays enabled for shell services so
+  clipboard copy operations can travel back through the host terminal.
+- Inside tmux, the interactive harness mounts the live tmux socket directory,
+  passes ``TMUX_PANE``, and switches Neovim to a tmux-backed clipboard bridge.
+  That path uses tmux buffer commands for copy and paste instead of relying on
+  OSC52 passthrough.
+
 For command usage, see :doc:`../how-to/test-in-docker`.
+
+Relevant changelogs
+===================
+
+- :ref:`changelog-2026-04-apr-prepare-neovim-0-12-migration`
+- :ref:`changelog-2026-02-feb-docker-test-harness`

@@ -6,7 +6,7 @@ declare -A REQUESTED_TOOLS=()
 declare -A RESOLVED_TOOL_VERSIONS=()
 
 usage() {
-  echo "usage: $0 <arch|ubuntu> [--tool <fd:version|ripgrep:version>]..." >&2
+  echo "usage: $0 <arch|ubuntu> [--tool <fd:version|ripgrep:version|tree-sitter-cli:version>]..." >&2
 }
 
 fail() {
@@ -38,7 +38,7 @@ parse_tool_spec() {
   fi
 
   case "${tool_name}" in
-    fd|ripgrep)
+    fd|ripgrep|tree-sitter-cli)
       ;;
     *)
       usage
@@ -126,7 +126,7 @@ resolve_requested_versions() {
   local tool_name
   local requested_version
 
-  for tool_name in fd ripgrep; do
+  for tool_name in fd ripgrep tree-sitter-cli; do
     if ! has_tool "${tool_name}"; then
       continue
     fi
@@ -139,8 +139,42 @@ resolve_requested_versions() {
       ripgrep)
         RESOLVED_TOOL_VERSIONS[ripgrep]="$(resolve_ripgrep_version "${requested_version}")"
         ;;
+      tree-sitter-cli)
+        RESOLVED_TOOL_VERSIONS[tree-sitter-cli]="$(resolve_tree_sitter_cli_version "${requested_version}")"
+        ;;
     esac
   done
+}
+
+resolve_tree_sitter_cli_version() {
+  local requested_version="$1"
+
+  if [ "${requested_version}" = "latest" ]; then
+    requested_version="$(resolve_latest_tag "tree-sitter/tree-sitter")"
+  fi
+
+  if [[ "${requested_version}" == v* ]]; then
+    printf '%s' "${requested_version}"
+    return
+  fi
+
+  printf 'v%s' "${requested_version}"
+}
+
+resolve_tree_sitter_arch() {
+  local machine_arch="$1"
+
+  case "${machine_arch}" in
+    x86_64|amd64)
+      printf '%s' "x64"
+      ;;
+    aarch64|arm64)
+      printf '%s' "arm64"
+      ;;
+    *)
+      fail "unsupported tree-sitter architecture: ${machine_arch}"
+      ;;
+  esac
 }
 
 install_fd_ubuntu() {
@@ -176,6 +210,20 @@ install_tarball_binary() {
   rm -rf "/tmp/${archive_name}" "${extract_dir}"
 }
 
+install_tree_sitter_cli_binary() {
+  local ts_release_version="$1"
+  local ts_arch="$2"
+  local ts_archive="tree-sitter-linux-${ts_arch}.gz"
+  local ts_url="https://github.com/tree-sitter/tree-sitter/releases/download/${ts_release_version}/${ts_archive}"
+  local ts_download_path="/tmp/${ts_archive}"
+  local ts_binary_path="/tmp/tree-sitter"
+
+  curl -fsSL "${ts_url}" -o "${ts_download_path}"
+  gzip -dc "${ts_download_path}" > "${ts_binary_path}"
+  install -m 0755 "${ts_binary_path}" "/usr/local/bin/tree-sitter"
+  rm -f "${ts_download_path}" "${ts_binary_path}"
+}
+
 install_arch_packages() {
   local -a packages=()
 
@@ -194,6 +242,7 @@ install_arch_packages() {
 
 install_ubuntu_tools() {
   local tool_arch="$1"
+  local ts_arch="$2"
 
   if has_tool fd; then
     install_fd_ubuntu "${RESOLVED_TOOL_VERSIONS[fd]}" "${tool_arch}"
@@ -201,6 +250,10 @@ install_ubuntu_tools() {
 
   if has_tool ripgrep; then
     install_ripgrep_ubuntu "${RESOLVED_TOOL_VERSIONS[ripgrep]}" "${tool_arch}"
+  fi
+
+  if has_tool tree-sitter-cli; then
+    install_tree_sitter_cli_binary "${RESOLVED_TOOL_VERSIONS[tree-sitter-cli]}" "${ts_arch}"
   fi
 }
 
@@ -213,20 +266,25 @@ main() {
   local target_os="$1"
   local machine_arch
   local tool_arch
+  local tree_sitter_arch
   shift
 
   parse_args "$@"
 
   machine_arch="$(uname -m)"
   tool_arch="$(resolve_tool_arch "${machine_arch}")"
+  tree_sitter_arch="$(resolve_tree_sitter_arch "${machine_arch}")"
+  resolve_requested_versions
 
   case "${target_os}" in
     arch)
       install_arch_packages
+      if has_tool tree-sitter-cli; then
+        install_tree_sitter_cli_binary "${RESOLVED_TOOL_VERSIONS[tree-sitter-cli]}" "${tree_sitter_arch}"
+      fi
       ;;
     ubuntu)
-      resolve_requested_versions
-      install_ubuntu_tools "${tool_arch}"
+      install_ubuntu_tools "${tool_arch}" "${tree_sitter_arch}"
       ;;
     *)
       fail "unsupported os profile: ${target_os}"

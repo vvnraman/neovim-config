@@ -9,6 +9,7 @@ Explanation
    scripting
    lsp-setup
    telescope-setup
+   treesitter-setup
    config-profiles
    docker-setup
    yank-enhanced

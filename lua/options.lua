@@ -71,7 +71,116 @@ vim.opt.virtualedit = "block"
 --  - E5113 - modifiable is off, while loading after lazy.nvim
 -------------------------------------------------------------------------------
 
-if vim.env.NVIM_CLIPBOARD == "osc52" then
+---@param argv string[]
+---@param input string?
+---@return vim.SystemCompleted?
+local run_system = function(argv, input)
+  local ok, system = pcall(vim.system, argv, { text = true, stdin = input })
+  if not ok then
+    return nil
+  end
+
+  return system:wait()
+end
+
+---@return string?
+local get_tmux_client_tty = function()
+  local tmux_pane = vim.env.TMUX_PANE
+  if not tmux_pane or tmux_pane == "" then
+    return nil
+  end
+
+  local result =
+    run_system({ "tmux", "display-message", "-p", "-t", tmux_pane, "#{client_tty}" })
+  if not result or result.code ~= 0 then
+    return nil
+  end
+
+  local client_tty = vim.trim(result.stdout or "")
+  if client_tty == "" then
+    return nil
+  end
+
+  return client_tty
+end
+
+---@param text string
+---@return string[]
+local split_clipboard_lines = function(text)
+  if text == "" then
+    return { "" }
+  end
+
+  return vim.split(text:gsub("\n$", ""), "\n", { plain = true })
+end
+
+---@return table
+local build_tmux_clipboard = function()
+  local osc52 = require("vim.ui.clipboard.osc52")
+
+  ---@param reg string
+  ---@return fun(lines: string[], regtype: string)
+  local copy = function(reg)
+    local fallback = osc52.copy(reg)
+
+    return function(lines, _)
+      local client_tty = get_tmux_client_tty()
+      if not client_tty then
+        fallback(lines)
+        return
+      end
+
+      local result = run_system(
+        { "tmux", "load-buffer", "-w", "-t", client_tty, "-" },
+        table.concat(lines, "\n")
+      )
+      if not result or result.code ~= 0 then
+        fallback(lines)
+      end
+    end
+  end
+
+  ---@param reg string
+  ---@return fun(): string[]|integer
+  local paste = function(reg)
+    local fallback = osc52.paste(reg)
+
+    return function()
+      local client_tty = get_tmux_client_tty()
+      if client_tty then
+        run_system({ "tmux", "refresh-client", "-l", "-t", client_tty })
+        local result = run_system({ "tmux", "save-buffer", "-" })
+        if result and result.code == 0 then
+          return { split_clipboard_lines(result.stdout or ""), "v" }
+        end
+      end
+
+      local lines = fallback()
+      if type(lines) ~= "table" then
+        return lines
+      end
+
+      return { lines, "v" }
+    end
+  end
+
+  return {
+    name = "tmux-clipboard",
+    copy = {
+      ["+"] = copy("+"),
+      ["*"] = copy("*"),
+    },
+    paste = {
+      ["+"] = paste("+"),
+      ["*"] = paste("*"),
+    },
+    cache_enabled = 0,
+  }
+end
+
+if vim.env.NVIM_CLIPBOARD == "tmux" then
+  vim.g.clipboard = build_tmux_clipboard()
+elseif vim.env.NVIM_CLIPBOARD == "osc52" then
   vim.g.clipboard = "osc52"
 end
 

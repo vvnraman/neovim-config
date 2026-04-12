@@ -143,107 +143,15 @@ Scope: `src/nvim_config/` and docs tooling code.
 
 ## 7) Documentation expectations
 
-This project is comprehensively documented. Documentation updates are part of normal code changes, not an afterthought.
+This project is comprehensively documented. Documentation updates are part of
+normal code changes, not an afterthought.
 
-Source-of-truth and structure:
-- Docs source lives under `docs/` as `.rst`.
-- Keep toctree structure coherent across:
-  - `docs/how-to/`
-  - `docs/explanation/`
-  - `docs/reference/`
-- Do not hand-edit generated output under `docs/_build/`.
-- Under `reference`, keep `project/` maintained with a clear overview in `project/index.rst`, plus `changelog.rst` and `plan.rst`.
-- Keep project changelog entries concise (3-5 word summaries) and linked to dated files.
-- Do not hand-edit files under `docs/_build/`.
+Follow `docs/reference/meta.rst` as the source of truth for documentation
+structure, changelog conventions, explanation/how-to/reference writing style,
+and literalinclude/layout rules.
 
-### 7.1 How-to and reference writing preferences
-- Prefer task-first runbook style: show runnable commands first, then short context.
-- Keep pages concise and scannable: short sections, direct headings, minimal prose.
-- Include operational guardrails explicitly (dry-run vs destructive behavior, branch/worktree preconditions).
-- Include practical defaults and real-world usage notes when they affect command choice.
-- For CLI reference pages, prefer generated command output snapshots under `docs/generated/` and include them with `literalinclude`.
-- Exclude non-essential narrative (long rationale, abstract architecture, generic commentary) from how-to/reference pages.
-
-### 7.2 Project changelog file conventions (`docs/reference/project/changelog/`)
-- Use dated filename format: `YYYY-MM-mmm-<slug>.rst` (example: `2026-02-feb-refactor-telescope-module.rst`).
-- In `changelog.rst`, visible labels must use month-key style (`YYYY-MM-mmm - ...`), not full day dates.
-- In `docs/reference/project/changelog.rst`, keep sections in reverse chronological order: newest year first, then older years.
-- Within each year section in `docs/reference/project/changelog.rst`, insert new entries at the top so newer month-key entries appear before older ones.
-- In each dated changelog page:
-  - Title remains `YYYY-MM mmm - <summary>`.
-  - First subsection heading must be `YYYY-MM-DD - Day`.
-  - Immediately after that heading, add exactly one plain sentence line (no `Summary:` prefix).
-  - Use section heading `Change summary` (never `What changed in this commit`).
-  - Use `:ref:` links to connect changelog entries to explanation pages and explanation pages back to changelog entries.
-- Changelog entries are historical artifacts: when removing large code/docs sections, do not delete or rewrite historical changelog summaries.
-- If a changelog `:ref:` target is removed, keep the historical mention and replace only the broken `:ref:` item with plain text under `Related docs` (use a `code-block:: text` list of removed doc paths).
-
-### 7.3 Explanation docs: mandatory writing style (`docs/explanation/`)
-Write explanation pages as operational runbooks for maintainers.
-
-Required style:
-- Prefer procedural wording: use verbs like `loads`, `sources`, `includes`, `resolves`.
-- Use present tense to describe existing behavior; avoid changelog phrasing like `now imports` or `was changed` in explanation pages.
-- Focus on runtime behavior and include order, not abstract architecture claims.
-- Remove non-essential narrative (generic benefits, long rationale, repeated path explanations).
-- Keep sections compact and scannable; avoid paragraph-heavy descriptions when a list is clearer.
-- Keep list formatting consistent: add one blank line between numbered lists and bullet lists.
-- Use short, explicit bullets. Expand dense phrases into simple statements.
-- Avoid loaded wording that assumes deep code familiarity; prefer plain day-to-day computer engineering language over codebase-specific abstractions when explaining behavior.
-- Replace vague technical shorthand with concrete behavior. State what the code skips, loads, compares, or writes, and why that step exists.
-- When introducing a code-specific term, either define it in the same section or rephrase it in plain language.
-
-Do not:
-- Repeat full relative paths in bullets when the path is already shown in a file tree.
-- Add broad statements that cannot be verified from config files.
-- Keep sections that don't help a maintainer trace behavior.
-
-### 7.4 Explanation docs: required structure pattern
-For module pages (filenav, treesitter, pde/lsp, etc), use this order unless a tool-specific exception is requested:
-1. One concise intro stating intent and scope.
-2. `High-level structure` with a compact tree block.
-3. Short bullets using to describe the high level flow.
-4. Logical flow section(s):
-   - Entry point fort he module
-   - Explicit top down order from independent methods to dependent methods.
-5. `Relevant changelogs` with links to project entries.
-
-### 7.5 Literal include requirements
-When documenting source/include edges, use `literalinclude` snippets from actual config files.
-
-Each such snippet must include:
-- `:lineno-match:`
-- `:emphasize-lines:` highlighting the include/source/resolve line(s)
-- `:caption:` with basename only (no full path)
-
-Additional rules:
-- Keep snippet ranges tight; include only lines needed to demonstrate the behavior.
-- Ensure emphasized line numbers match the displayed snippet range.
-- Don't include more than 2-3 emphasized blocks.
-- Rebuild docs after edits and resolve warnings before finishing.
-
-### 7.6 Explanation docs: layout generation and section conventions
-Preserve the current explanation-page layout workflow for tool pages.
-
-Tree layout section rules:
-- Use heading `Directory layout`/`Overall structure`/`Logical flow` as appropriate
-- Keep this section layout-only; do not add explanatory prose under the heading.
-- Wrap the layout include in a `sphinx-design` dropdown.
-- Dropdown label must be exactly `Show layout`.
-- Use generated layout files from `docs/generated/` if we have them.
-- For generated layout includes, use `:caption:` with the relative config directory path.
-- Render generated layout includes with `:language: sh`.
-
-Sphinx-generated layout implementation rules:
-- Implement layout generation in Sphinx hooks within `docs/conf.py`.
-- Generate snapshots into `docs/generated/`.
-- Command preference order must be:
-  1. `lsd --almost-all --tree`
-  2. `tree`
-  3. `ls -al <config-dir>/*`
-- Resolve available tool choice once per build when possible.
-- Write generated files only when content changes to prevent live-reload loops.
-- Keep generated layout artifact extension as `.txt`.
+Always update the relevant docs when behavior changes, and never hand-edit
+generated output under `docs/_build/`.
 
 ## 8) File and change hygiene
 

@@ -4,37 +4,45 @@
 Install Neovim
 **************
 
-Install Neovim AppImage on Linux
+Test a new AppImage in this repo
 ================================
 
-This is the preferred release artifact for me on linux. I've been using it for
-5+ years without any issues on Ubuntu, Red Hat 7 and 8, CentOs.
+Use this when you want to validate a new Neovim release in the current
+worktree before replacing ``/usr/bin/nvim``.
 
-Assuming github release link
-https://github.com/neovim/neovim/releases/download/v0.11.5/nvim-linux-x86_64.appimage
+.. code-block:: sh
 
-* Download appimage from github
+   cd ~/.config/neovim-config.git/v0.12
+   curl --fail --location \
+     --output nvim-appimage \
+     https://github.com/neovim/neovim/releases/download/v0.12.1/nvim-linux-x86_64.appimage
+   chmod +x nvim-appimage
+   ./nvim --version
+   ./nvim-init
+   ./nvim --headless "+checkhealth" +qa
 
-  .. code-block:: sh
+The repo-local ``./nvim`` and ``./nvim-init`` wrappers prefer
+``./nvim-appimage`` when it exists and otherwise fall back to ``/usr/bin/nvim``.
 
-     export nvim_version="stable"
-     # or nvim_version="v0.11.5"
-     # download
-     mkdir -p ~/downloads/nvim/"${nvim_version}"
-     cd ~/downloads/nvim/"${nvim_version}"/
-     curl --fail --location --remote-name https://github.com/neovim/neovim/releases/download/"${nvim_version}"/nvim-linux-x86_64.appimage
-  
-* Verify checksum
+Use ``./nvim-init --reset`` only when you want to remove the app-local data and
+state directories for that worktree before rebuilding them.
 
-  .. code-block:: sh
+Keep a standalone AppImage binary
+=================================
 
-     sha256sum nvim-linux-x86_64.appimage
-     # compare the sha256 checksum by copying it and CTRL+F on the release page.
-  
-* Install using symlinks
+Use this when you want an explicit Neovim binary outside the repo wrappers.
 
-  .. code-block:: sh
+.. code-block:: sh
 
-     chmod +x nvim-linux-x86_64.appimage
-     sudo cp nvim-linux-x86_64.appimage "/usr/bin/nvim-${nvim_version}"
-     sudo ln -s /usr/bin/nvim "/usr/bin/nvim-${nvim_version}"
+   export nvim_version="v0.12.1"
+   mkdir -p ~/downloads/nvim/"${nvim_version}"
+   cd ~/downloads/nvim/"${nvim_version}"
+   curl --fail --location \
+     --output nvim-linux-x86_64.appimage \
+     "https://github.com/neovim/neovim/releases/download/${nvim_version}/nvim-linux-x86_64.appimage"
+   sha256sum nvim-linux-x86_64.appimage
+   chmod +x nvim-linux-x86_64.appimage
+   install -m 0755 nvim-linux-x86_64.appimage ~/.local/bin/nvim-v0.12.1
+
+This keeps the binary versioned and explicit. Use :ref:`isolated-install` when
+you want to pair that binary with a separate ``NVIM_APPNAME`` config.

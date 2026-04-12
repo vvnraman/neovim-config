@@ -1,24 +1,36 @@
 x-build-args: &build-args
-  NVIM_VERSION: ${NVIM_VERSION:-v0.11.6}
+  NVIM_VERSION: ${NVIM_VERSION:-v0.12.1}
   FD_VERSION: ${FD_VERSION:-v10.2.0}
   RIPGREP_VERSION: ${RIPGREP_VERSION:-14.1.1}
+  TREE_SITTER_CLI_VERSION: ${TREE_SITTER_CLI_VERSION:-v0.26.1}
 
-x-common-env: &common-env
+x-smoke-env: &smoke-env
   CC: gcc
   COLORTERM: truecolor
   TERM: xterm-256color
 
+x-shell-env: &shell-env
+  CC: gcc
+  COLORTERM: ${COLORTERM:-truecolor}
+  TERM: ${TERM:-xterm-256color}
+  TERM_PROGRAM: ${TERM_PROGRAM:-}
+  TMUX: ${TMUX:-}
+  KITTY_WINDOW_ID: ${KITTY_WINDOW_ID:-}
+  WEZTERM_PANE: ${WEZTERM_PANE:-}
+  ZELLIJ: ${ZELLIJ:-}
+  SSH_TTY: ${SSH_TTY:-}
+
 x-service-base: &service-base
   working_dir: ${NVIM_CONFIG_DIR:?set NVIM_CONFIG_DIR}
   environment:
-    <<: *common-env
+    <<: *smoke-env
   volumes:
     - ${NVIM_CONFIG_DIR:?set NVIM_CONFIG_DIR}:${NVIM_CONFIG_DIR:?set NVIM_CONFIG_DIR}
 
 x-shell-base: &shell-base
   <<: *service-base
   environment:
-    <<: *common-env
+    <<: *shell-env
     NVIM_CLIPBOARD: osc52
   tty: true
   stdin_open: true
@@ -47,8 +59,8 @@ services:
   ubuntu-smoke:
     <<: *service-base
     environment:
-      <<: *common-env
-      NVIM_PROFILE: standard
+      <<: *smoke-env
+      VVN_NVIM_PROFILE: standard
     build:
       context: ..
       dockerfile: docker/ubuntu.Dockerfile
@@ -60,8 +72,8 @@ services:
   ubuntu-smoke-minimal:
     <<: *service-base
     environment:
-      <<: *common-env
-      NVIM_PROFILE: minimal
+      <<: *smoke-env
+      VVN_NVIM_PROFILE: minimal
     build:
       context: ..
       dockerfile: docker/ubuntu.Dockerfile
@@ -73,9 +85,8 @@ services:
   ubuntu-shell:
     <<: *shell-base
     environment:
-      <<: *common-env
-      NVIM_CLIPBOARD: osc52
-      NVIM_PROFILE: standard
+      <<: *shell-env
+      VVN_NVIM_PROFILE: standard
     build:
       context: ..
       dockerfile: docker/ubuntu.Dockerfile
@@ -87,9 +98,8 @@ services:
   ubuntu-shell-minimal:
     <<: *shell-base
     environment:
-      <<: *common-env
-      NVIM_CLIPBOARD: osc52
-      NVIM_PROFILE: minimal
+      <<: *shell-env
+      VVN_NVIM_PROFILE: minimal
     build:
       context: ..
       dockerfile: docker/ubuntu.Dockerfile

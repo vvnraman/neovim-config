@@ -6,17 +6,27 @@ Project
    :maxdepth: 1
 
    changelog
+   plan
+
+******
+Vision
+******
+
+- Keep the Neovim config usable as a daily editor while larger changes are
+  validated in separate worktrees and Docker images.
+- Keep runtime behavior, verification workflows, and project history documented
+  as the config evolves.
 
 ************
 Current work
 ************
 
-Migrate to native lsp setup
+Prepare Neovim 0.12 rollout
 ===========================
 
-- Migrate to ``0.11.5`` lsp setup.
-
-- Fix anything other plugin issues.
+- Keep host usage on the stable binary until Docker smoke tests and docs stay
+  clean for Arch and Ubuntu.
+- Track the current migration checklist in :ref:`project-plan`.
 
 ----
 
@@ -24,29 +34,7 @@ Migrate to native lsp setup
 Next
 ****
 
-* Future plugins to explore
-
-  * https://github.com/DNLHC/glance.nvim
-
-  * https://github.com/stevearc/aerial.nvim
-
-  * https://github.com/stevearc/resession.nvim
-
-  * https://github.com/s1n7ax/nvim-window-picker
-
-- Document Moonlander/Voyager config and how it works with Neovim
-
-- Automatically document keymaps on the readme (separate file is okay)
-
-  - Find out how LazyVim does it.
-
-- Add some scenarios with tmux later
-
-----
-
-
-*******
-Fantasy
-*******
-
-TBD
+- Continue host-side validation with a repo-local ``nvim-appimage`` before the
+  distro-provided ``/usr/bin/nvim`` changes.
+- Keep the Docker harness catching both first-run bootstrap failures and delayed
+  startup/runtime failures.

@@ -60,21 +60,24 @@ refactor.
 
      .. group-tab:: Bash
 
-        .. code-block:: bash
-           :caption: ~/.bashrc
+         .. code-block:: bash
+            :caption: ~/.bashrc
 
-           function mvim {
-             NVIM_APPNAME="neovim-config.git/master" /usr/bin/nvim "$@"
-           }
+            function mvim {
+              ~/.config/neovim-config.git/master/nvim "$@"
+            }
 
      .. group-tab:: Fish
 
-        .. code-block:: fish
-           :caption: ~/.config/fish/config.fish
+         .. code-block:: fish
+            :caption: ~/.config/fish/config.fish
 
-           function mvim
-             NVIM_APPNAME="neovim-config.git/master" /usr/bin/nvim $argv
-           end
+            function mvim
+              ~/.config/neovim-config.git/master/nvim $argv
+            end
+
+  Using the worktree-local wrapper keeps ``NVIM_APPNAME`` tied to that worktree
+  and automatically picks up a local ``nvim-appimage`` if present.
 
 * Create a new worktree for the refactor branch and leave ``~/.config/nvim``
   (``dev``) untouched

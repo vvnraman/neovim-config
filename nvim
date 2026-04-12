@@ -7,7 +7,12 @@ source "$script_dir/nvim.env"
 
 vvn_export_nvim_env "$script_dir"
 
+nvim_bin="/usr/bin/nvim"
+if [[ -x "$script_dir/nvim-appimage" ]]; then
+  nvim_bin="$script_dir/nvim-appimage"
+fi
+
 env \
   NVIM_APPNAME="$NVIM_APPNAME" \
-  NVIM_PROFILE="$NVIM_PROFILE" \
-  /usr/bin/nvim "$@"
+  VVN_NVIM_PROFILE="$VVN_NVIM_PROFILE" \
+  "$nvim_bin" "$@"

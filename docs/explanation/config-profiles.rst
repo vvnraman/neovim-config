@@ -20,12 +20,15 @@ Profile resolution lives in ``lua/vvn/profile.lua``.
 
 We resolve the active profile with this precedence:
 
-1. ``NVIM_PROFILE``
-2. ``DOTFILES_PROFILE``
+1. ``VVN_NVIM_PROFILE``
+2. ``VVN_DOTFILES_PROFILE``
 3. ``CODESPACES=true`` implies ``minimal``
 4. fallback ``standard``
 
 If a profile value is invalid, we ignore it and continue to the next source.
+
+Only ``VVN_NVIM_PROFILE`` and ``VVN_DOTFILES_PROFILE`` participate in explicit
+profile selection.
 
 This gives us three customization points, plus OS/user overlays.
 
@@ -121,9 +124,17 @@ Treesitter integration
 Profile-aware Treesitter behavior is implemented in
 ``lua/plugins/treesitter/config.lua``.
 
-- parser install list is profile driven
+- parser install list is profile driven through
+  ``get_treesitter_ensure_installed()``
+- the Neovim 0.12 flow starts Treesitter explicitly with
+  ``vim.treesitter.start()``
 - headless smoke runs can force sync install with
   ``NVIM_TREESITTER_SYNC_INSTALL=1``
+
+Docker and wrapper scripts export ``VVN_NVIM_PROFILE`` before launching
+Neovim, so headless and interactive runs resolve the same parser list.
+
+See :ref:`treesitter-setup` for the runtime order.
 
 Mason behavior
 --------------
@@ -174,9 +185,10 @@ add things there only when they are essential to baseline editing.
 This gives us a stable place to evolve the config without losing clarity about
 what each profile is supposed to do.
 
-Relevant changelog
-------------------
+Relevant changelogs
+-------------------
 
+- :ref:`changelog-2026-04-apr-prepare-neovim-0-12-migration`
 - :ref:`changelog-2026-04-apr-shared-lazy-root`
 - :ref:`changelog-2026-03-mar-vvn-overlay-imports`
 - :ref:`changelog-2026-03-mar-file-nav-pickers`

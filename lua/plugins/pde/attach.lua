@@ -8,7 +8,6 @@ M.setup_native_buffer_mappings = function(bufnr)
     return { desc = "[l]sp: " .. desc, buffer = bufnr }
   end
 
-  vim.keymap.set("n", "<leader>lh", vim.lsp.buf.hover, help("[h]over docs"))
   vim.keymap.set("n", "<leader>lk", vim.lsp.buf.signature_help, help("[k] - signature help"))
   vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, help("[r]ename identifier"))
 
@@ -60,13 +59,27 @@ M.setup_plugin_buffer_mappings = function(bufnr)
     Snacks.picker.lsp_declarations(lsp_ivy_picker_opts())
   end, help("[D]eclaration"))
 
+  vim.keymap.set("n", "<leader>lh", function()
+    Snacks.picker.lsp_config({
+      attached = bufnr,
+    })
+  end, help("[h]over docs"))
+
   vim.keymap.set("n", "<leader>lt", function()
     Snacks.picker.lsp_type_definitions(lsp_ivy_picker_opts())
   end, help("[t]ype definition"))
 
-  vim.keymap.set("n", "<leader>li", function()
+  vim.keymap.set("n", "<leader>lm", function()
     Snacks.picker.lsp_implementations(lsp_ivy_picker_opts())
-  end, help("[i]mplementation"))
+  end, help("i[m]plementation"))
+
+  vim.keymap.set("n", "<leader>li", function()
+    Snacks.picker.lsp_incoming_calls(lsp_ivy_picker_opts())
+  end, help("[i]ncoming calls"))
+
+  vim.keymap.set("n", "<leader>lo", function()
+    Snacks.picker.lsp_outgoing_calls(lsp_ivy_picker_opts())
+  end, help("[o]utgoing calls"))
 
   vim.keymap.set("n", "<leader>lf", function()
     Snacks.picker.lsp_references(lsp_ivy_picker_opts())

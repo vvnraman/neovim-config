@@ -7,7 +7,7 @@ source "$(dirname "${BASH_SOURCE[0]}")/nvim-env.sh"
 profile_name="${1:-standard}"
 case "${profile_name}" in
   minimal|standard)
-    export NVIM_PROFILE="${profile_name}"
+    export VVN_NVIM_PROFILE="${profile_name}"
     ;;
   *)
     echo "unsupported nvim profile: ${profile_name}" >&2

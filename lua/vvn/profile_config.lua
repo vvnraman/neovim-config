@@ -90,7 +90,6 @@ local CONFIG_BY_PROFILE = {
         "lua",
         "markdown",
         "mermaid",
-        "norg",
         "regex",
         "rst",
         "sql",

@@ -19,6 +19,11 @@ done
 vvn_export_nvim_env "$script_dir"
 nvim_appname="$NVIM_APPNAME"
 
+nvim_bin="/usr/bin/nvim"
+if [[ -x "$script_dir/nvim-appimage" ]]; then
+  nvim_bin="$script_dir/nvim-appimage"
+fi
+
 : "${NVIM_TREESITTER_SYNC_INSTALL:=1}"
 export NVIM_TREESITTER_SYNC_INSTALL
 
@@ -42,6 +47,6 @@ fi
 
 env \
   NVIM_APPNAME="$NVIM_APPNAME" \
-  NVIM_PROFILE="$NVIM_PROFILE" \
+  VVN_NVIM_PROFILE="$VVN_NVIM_PROFILE" \
   NVIM_TREESITTER_SYNC_INSTALL="$NVIM_TREESITTER_SYNC_INSTALL" \
-  /usr/bin/nvim --headless "+Lazy! restore" "+Lazy! load nvim-treesitter" +qall
+  "$nvim_bin" --headless "+Lazy! restore" +qall

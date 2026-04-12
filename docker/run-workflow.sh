@@ -147,7 +147,20 @@ if [[ "$workflow" == "interactive" ]]; then
   target="${targets[0]}"
   profile="${target#*,}"
 
-  NVIM_CONFIG_DIR="${nvim_config_dir}" docker compose -f "${compose_file}" run --rm --build \
+  compose_run_args=(run --rm --build)
+  if [[ -n "${TMUX:-}" && -n "${TMUX_PANE:-}" ]]; then
+    host_tmux_socket="${TMUX%%,*}"
+    if [[ -S "${host_tmux_socket}" ]]; then
+      host_tmux_dir="$(dirname "${host_tmux_socket}")"
+      compose_run_args+=(
+        -e "TMUX_PANE=${TMUX_PANE}"
+        -e "NVIM_CLIPBOARD=tmux"
+        -v "${host_tmux_dir}:${host_tmux_dir}"
+      )
+    fi
+  fi
+
+  NVIM_CONFIG_DIR="${nvim_config_dir}" docker compose -f "${compose_file}" "${compose_run_args[@]}" \
     "${services[0]}" \
     /opt/nvim-harness/shell.sh "${profile}"
   exit 0

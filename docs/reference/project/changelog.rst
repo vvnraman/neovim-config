@@ -5,6 +5,7 @@ Changelog
 2026
 ====
 
+- :ref:`2026-04-apr - prepare neovim 0.12 migration <changelog-2026-04-apr-prepare-neovim-0-12-migration>`
 - :ref:`2026-04-apr - add shared lazy root guard <changelog-2026-04-apr-shared-lazy-root>`
 - :ref:`2026-03-mar - refine file-nav and lsp pickers <changelog-2026-03-mar-file-nav-pickers>`
 - :ref:`2026-03-mar - move overlay imports under vvn <changelog-2026-03-mar-vvn-overlay-imports>`
@@ -29,6 +30,7 @@ Changelog
 .. toctree::
    :hidden:
 
+   2026-04-apr-prepare-neovim-0-12-migration
    2026-04-apr-shared-lazy-root
    2026-03-mar-opencode
    2026-03-mar-vvn-overlay-imports

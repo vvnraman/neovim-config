@@ -4,80 +4,67 @@
 Isolated Install
 ****************
 
-This uses 2 techniques to use a neovim version with a specific config without
-conflicting with whatever our current stable setup is:
+Use this when you want one config or worktree to run without touching your
+default Neovim state.
 
-* Using symlinks to manage ``nvim`` versions.
+Use this repo's wrappers
+========================
 
-  See **Install using symlinks** step in :ref:`install-nvim` page on how we
-  install a versioned binary.
-
-* Using ``Neovim``'s built-in ``$NVIM_APPNAME`` feature to isolate
-  configurations as we iterate on our own config's, or try out new configs.
-
-``$NVIM_APPNAME``
------------------
-
-Neovim executable is present at ``/usr/bin/nvim``
-
-*  For ``bash``, assumes ``~/.local/bin/`` already exists in user's `$PATH`
-
-   Create a file ``~/.local/bin/pvim`` and mark it executable
-
-   .. code-block:: console
-
-      mkdir -p ~/.local/bin/
-      touch ~/.local/bin/pvim
-      chmod +x ~/.local/bin/pvim
-
-   Add the following contents to ``~/.local/bin/pvim``
-
-   .. code-block:: sh
-
-      #/usr/bin/env bash
-      NVIM_APPNAME=pvim /usr/bin/nvim $@
-
-
-*  For `fish`
-
-   Create a function inside `~/.config/fish/config.fish`
-
-   .. code-block:: fish
-
-      function pvim
-        NVIM_APPNAME="pvim" /usr/bin/nvim $argv
-      end
-
-The path to ``nvim`` above could also be to a versioned binary, when we
-migrating from one version to another and do not want to break our existing
-setup.
+From a worktree under ``~/.config/``, run:
 
 .. code-block:: sh
 
-   /usr/bin/nvim-v0.11.5
+   ./nvim
+   ./nvim-init
+   ./nvim-init --reset
 
-Another example using ``kickstart.nvim``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The wrappers do four things for you:
+
+- Resolve ``NVIM_APPNAME`` from the worktree path through ``nvim.env``.
+- Export ``VVN_NVIM_PROFILE`` with default ``standard``.
+- Prefer a repo-local ``nvim-appimage`` and otherwise fall back to
+  ``/usr/bin/nvim``.
+- Let ``./nvim-init --reset`` remove the app-local data and state directories
+  before ``+Lazy! restore`` rebuilds them.
+
+Use ``NVIM_APPNAME`` for another config
+=======================================
+
+For Bash, create a small wrapper script:
+
+.. code-block:: sh
+
+   #!/usr/bin/env bash
+   NVIM_APPNAME="pvim" /usr/bin/nvim "$@"
+
+For Fish, create a shell function:
+
+.. code-block:: fish
+
+   function pvim
+     NVIM_APPNAME="pvim" /usr/bin/nvim $argv
+   end
+
+The binary path can be ``/usr/bin/nvim``, a versioned AppImage such as
+``~/.local/bin/nvim-v0.12.1``, or another wrapper script.
+
+Try another config
+==================
 
 Let us say we want to try `kickstart.nvim`_ without affecting our own setup.
 
 .. _`kickstart.nvim`: https://github.com/nvim-lua/kickstart.nvim
 
-We'll only show the :program:`fish` variant, :program:`bash` can be adapted in
-a similar fashion.
-
 .. code-block:: sh
-   :caption: clone to `~/.config/kickstart.nvim`
+   :caption: clone to ~/.config/kickstart.nvim
 
    git clone https://github.com/nvim-lua/kickstart.nvim ~/.config/kickstart.nvim
 
 .. code-block:: fish
-   :caption: create `kvim` function to use it
+   :caption: create kvim
 
    function kvim
-     # Use the minimal `kickstart.nvim` distro with a specific binary version
-     NVIM_APPNAME="kickstart.nvim" /usr/bin/nvim_0.11.5 $argv
+     NVIM_APPNAME="kickstart.nvim" ~/.local/bin/nvim-v0.12.1 $argv
    end
 
-We now have both :program:`kvim` and :program:`nvim` available to use.
-
+We now have both ``kvim`` and ``nvim`` available to use.

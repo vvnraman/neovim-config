@@ -12,7 +12,9 @@ apt-get install --yes --no-install-recommends \
   g++ \
   gcc \
   git \
+  gzip \
   libc6-dev \
+  tmux \
   tar
 rm -rf /var/lib/apt/lists/*
 EOF
@@ -20,9 +22,10 @@ EOF
 FROM base AS runtime
 
 ARG TARGET_OS=ubuntu
-ARG NVIM_VERSION=v0.11.6
+ARG NVIM_VERSION=v0.12.1
 ARG FD_VERSION=v10.2.0
 ARG RIPGREP_VERSION=14.1.1
+ARG TREE_SITTER_CLI_VERSION=v0.26.1
 ENV DEBIAN_FRONTEND=noninteractive
 # AppImage needs extract-and-run mode in containers without FUSE support.
 ENV APPIMAGE_EXTRACT_AND_RUN=1
@@ -37,7 +40,8 @@ chmod +x /opt/nvim-harness/install-neovim.sh
 /opt/nvim-harness/install-neovim.sh "${NVIM_VERSION}"
 /opt/nvim-harness/install-cli-tools.sh "${TARGET_OS}" \
   --tool "fd:${FD_VERSION}" \
-  --tool "ripgrep:${RIPGREP_VERSION}"
+  --tool "ripgrep:${RIPGREP_VERSION}" \
+  --tool "tree-sitter-cli:${TREE_SITTER_CLI_VERSION}"
 EOF
 
 COPY docker/smoke.sh /opt/nvim-harness/smoke.sh

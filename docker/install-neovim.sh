@@ -82,7 +82,7 @@ install_appimage_binary() {
 }
 
 main() {
-  local requested_version="${1:-v0.11.6}"
+  local requested_version="${1:-v0.12.1}"
   local checksum="${2:-}"
   local machine_arch
   local nvim_arch
