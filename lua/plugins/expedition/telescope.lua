@@ -154,7 +154,7 @@ local build_telescope_runtime = function()
 
   trt.vimgrep_arguments = vim.list_extend(
     vim.deepcopy(trt.telescope_config.values.vimgrep_arguments),
-    vim.list_extend({ "--hidden" }, vim.deepcopy(rg_glob_exclusions))
+    vim.list_extend({ "--hidden" }, to_rg_glob_args(rg_glob_exclusions))
   )
 
   trt.telescope_ivy = with_preview_winblend(
