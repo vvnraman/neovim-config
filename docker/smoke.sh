@@ -6,88 +6,69 @@ os_name="${1:-arch}"
 profile_name="${2:-standard}"
 log_dir="/tmp/nvim-smoke"
 
-mkdir -p "${log_dir}"
+source "$(dirname "${BASH_SOURCE[0]}")/smoke-lib.sh"
 
-run_stage() {
-  local stage_name="$1"
-  local log_file="$2"
-  local error_pattern="$3"
-  shift 3
+build_base_nvim_error_pattern() {
+  local error_pattern='Error detected while processing'
+  error_pattern+='|(^|[[:space:]])E[0-9]{4}:'
+  error_pattern+='|Failed to run `config`'
+  error_pattern+='|loop or previous error loading module'
 
-  local nvim_exit=0
-  "$@" >"${log_file}" 2>&1 || nvim_exit=$?
-
-  if grep -Eq "${error_pattern}" "${log_file}"; then
-    echo "stage failed: ${stage_name}" >&2
-    cat "${log_file}"
-    exit 1
-  fi
-
-  if [ "${nvim_exit}" -ne 0 ]; then
-    echo "stage failed: ${stage_name}" >&2
-    cat "${log_file}"
-    exit "${nvim_exit}"
-  fi
-
-  echo "stage passed: ${stage_name}"
+  printf '%s\n' "${error_pattern}"
 }
 
-case "${profile_name}" in
-  minimal|standard)
-    ;;
-  *)
-    echo "unsupported nvim profile: ${profile_name}" >&2
-    exit 1
-    ;;
-esac
+build_install_error_pattern() {
+  local error_pattern
+  error_pattern="$(build_base_nvim_error_pattern)"
+  error_pattern+='|nvim-treesitter\[.*\]: Error'
+  error_pattern+='|fatal error:'
+  error_pattern+='|Error during compilation'
+  error_pattern+='|Failed to execute the following command:'
 
-source "$(dirname "${BASH_SOURCE[0]}")/nvim-env.sh"
+  printf '%s\n' "${error_pattern}"
+}
 
-case "${os_name}" in
-  arch|ubuntu)
-    export VVN_NVIM_PROFILE="${profile_name}"
+build_launch_error_pattern() {
+  local error_pattern
+  error_pattern="$(build_base_nvim_error_pattern)"
+  error_pattern+='|Error in command line:'
+  error_pattern+='|vim.schedule callback:'
 
-    install_error_pattern='Error detected while processing'
-    install_error_pattern+='|(^|[[:space:]])E[0-9]{4}:'
-    install_error_pattern+='|Failed to run `config`'
-    install_error_pattern+='|loop or previous error loading module'
-    install_error_pattern+='|nvim-treesitter\[.*\]: Error'
-    install_error_pattern+='|fatal error:'
-    install_error_pattern+='|Error during compilation'
-    install_error_pattern+='|Failed to execute the following command:'
+  printf '%s\n' "${error_pattern}"
+}
 
-    launch_error_pattern='Error detected while processing'
-    launch_error_pattern+='|(^|[[:space:]])E[0-9]{4}:'
-    launch_error_pattern+='|Error in command line:'
-    launch_error_pattern+='|Failed to run `config`'
-    launch_error_pattern+='|loop or previous error loading module'
-    launch_error_pattern+='|vim.schedule callback:'
+install_error_pattern="$(build_install_error_pattern)"
+launch_error_pattern="$(build_launch_error_pattern)"
 
-    export NVIM_TREESITTER_SYNC_INSTALL=1
-    run_stage \
-      "install" \
-      "${log_dir}/install.log" \
-      "${install_error_pattern}" \
-      nvim \
-      --headless \
-      "+Lazy! restore" \
-      +qall
+run_install_stage() {
+  export NVIM_TREESITTER_SYNC_INSTALL=1
+  run_logged_stage \
+    "install" \
+    "${log_dir}/install.log" \
+    "${install_error_pattern}" \
+    nvim \
+    --headless \
+    "+Lazy! restore" \
+    +qall
+  unset NVIM_TREESITTER_SYNC_INSTALL
+}
 
-    unset NVIM_TREESITTER_SYNC_INSTALL
-    run_stage \
-      "launch" \
-      "${log_dir}/launch.log" \
-      "${launch_error_pattern}" \
-      nvim \
-      --headless \
-      "+doautocmd CmdlineEnter" \
-      "+sleep 100m" \
-      +qall
+run_launch_stage() {
+  run_logged_stage \
+    "launch" \
+    "${log_dir}/launch.log" \
+    "${launch_error_pattern}" \
+    nvim \
+    --headless \
+    "+doautocmd CmdlineEnter" \
+    "+sleep 100m" \
+    +qall
+}
 
-    echo "smoke passed: ${os_name} (${profile_name}) [install, launch]"
-    ;;
-  *)
-    echo "unsupported os profile: ${os_name}" >&2
-    exit 1
-    ;;
-esac
+setup_smoke_env "${os_name}" "${profile_name}"
+ensure_log_dir "${log_dir}"
+
+run_install_stage
+run_launch_stage
+
+echo "smoke passed: ${os_name} (${profile_name}) [install, launch]"

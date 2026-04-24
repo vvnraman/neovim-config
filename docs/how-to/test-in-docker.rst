@@ -52,6 +52,8 @@ Operational notes
 - Interactive mode accepts exactly one ``os,profile`` target per run.
 - Shell services reuse the current worktree through ``NVIM_APPNAME``, so
   ``nvim`` reads the same files you are editing.
+- Containers run as the current host user, so files written into the mounted
+  worktree keep host ownership.
 - Host ``TERM`` and ``COLORTERM`` pass through for interactive shells.
 - When launched from tmux, the harness mounts the live tmux socket and uses a
   tmux-backed clipboard bridge.

@@ -1,15 +1,24 @@
 x-build-args: &build-args
+  HOST_GID: ${HOST_GID:?set HOST_GID}
+  HOST_UID: ${HOST_UID:?set HOST_UID}
+  HOST_USER: ${HOST_USER:?set HOST_USER}
   NVIM_VERSION: ${NVIM_VERSION:-v0.12.1}
   FD_VERSION: ${FD_VERSION:-v10.2.0}
   RIPGREP_VERSION: ${RIPGREP_VERSION:-14.1.1}
   TREE_SITTER_CLI_VERSION: ${TREE_SITTER_CLI_VERSION:-v0.26.1}
 
+x-container-user-env: &container-user-env
+  HOME: /home/${HOST_USER:?set HOST_USER}
+  USER: ${HOST_USER:?set HOST_USER}
+
 x-smoke-env: &smoke-env
+  <<: *container-user-env
   CC: gcc
   COLORTERM: truecolor
   TERM: xterm-256color
 
 x-shell-env: &shell-env
+  <<: *container-user-env
   CC: gcc
   COLORTERM: ${COLORTERM:-truecolor}
   TERM: ${TERM:-xterm-256color}
@@ -21,6 +30,7 @@ x-shell-env: &shell-env
   SSH_TTY: ${SSH_TTY:-}
 
 x-service-base: &service-base
+  user: ${HOST_USER:?set HOST_USER}
   working_dir: ${NVIM_CONFIG_DIR:?set NVIM_CONFIG_DIR}
   environment:
     <<: *smoke-env

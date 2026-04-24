@@ -120,6 +120,39 @@ local get_server_configs = function()
   }
 end
 
+---@return string[]
+local list_runtime_lsp_config_names = function()
+  ---@type table<string, boolean>
+  local names = {}
+
+  for _, path in ipairs(vim.api.nvim_get_runtime_file("lsp/*.lua", true)) do
+    local name = path:match("([^/]+)%.lua$")
+    if name then
+      names[name] = true
+    end
+  end
+
+  return vim.tbl_keys(names)
+end
+
+---@param allowed_server_names string[]
+local restrict_lsp_configs_to_allowlist = function(allowed_server_names)
+  ---@type table<string, boolean>
+  local allowed = {}
+
+  for _, name in ipairs(allowed_server_names) do
+    allowed[name] = true
+  end
+
+  for _, name in ipairs(list_runtime_lsp_config_names()) do
+    if not allowed[name] then
+      vim.lsp.config(name, {
+        filetypes = {},
+      })
+    end
+  end
+end
+
 ---@param servers table<string, table>
 local update_server_configs = function(servers)
   local capabilities = require("plugins.pde.attach").capabilities
@@ -162,10 +195,12 @@ end
 
 local lsp_setup = function()
   local profile_config = require("vvn.profile_config")
+  local enabled_servers = profile_config.get_enabled_lsp_servers()
 
   local server_configs = get_server_configs()
+  restrict_lsp_configs_to_allowlist(enabled_servers)
   update_server_configs(server_configs)
-  enable_servers(profile_config.get_enabled_lsp_servers(), server_configs)
+  enable_servers(enabled_servers, server_configs)
 
   if profile_config.enable_mason_installs() then
     install_mason_packages(profile_config.get_mason_packages())

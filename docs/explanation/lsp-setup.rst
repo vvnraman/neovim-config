@@ -83,9 +83,11 @@ buffer-local behavior in a single ``LspAttach`` callback.
 
    lua/plugins/pde/lsp.lua
    |-- lsp_setup()
+   |   |-- enabled_servers = profile_config.get_enabled_lsp_servers()
    |   |-- get_server_configs()
+   |   |-- restrict_lsp_configs_to_allowlist(enabled_servers)
    |   |-- update_server_configs(server_configs)
-   |   |-- enable_servers(profile_config.get_enabled_lsp_servers(), server_configs)
+   |   |-- enable_servers(enabled_servers, server_configs)
    |   |-- if profile_config.enable_mason_installs()
    |   |   `-- install_mason_packages(profile_config.get_mason_packages())
    |   |-- setup_lsp_keymaps()
@@ -95,6 +97,20 @@ buffer-local behavior in a single ``LspAttach`` callback.
        |-- setup_plugin_buffer_mappings(bufnr)
        |-- setup_autocmds(client, bufnr)
        `-- setup_clangd_extensions(bufnr) for clangd
+
+Before profile enablement, this config applies a strict allowlist to runtime
+LSP configs.
+
+.. literalinclude:: ../../lua/plugins/pde/lsp.lua
+   :language: lua
+   :lines: 138-154
+   :lineno-match:
+   :emphasize-lines: 1,10,12,13
+   :caption: lsp.lua
+
+This helper clears ``filetypes`` for every runtime config that is not in the
+current profile allowlist, so broad ``:lsp enable`` and ``:LspStart`` flows can
+only match servers that this config intentionally enables.
 
 LspAttach autocommand
 ---------------------

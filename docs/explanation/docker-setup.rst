@@ -12,12 +12,13 @@ High-level flow
 ===============
 
 1. ``docker/run-workflow.sh`` resolves one or more ``os,profile`` targets.
-2. Docker Compose builds the matching Arch or Ubuntu image with pinned build
-   args from ``docker/docker-compose.yaml``.
+2. Docker Compose builds the matching Arch or Ubuntu image with pinned tool
+   versions plus ``HOST_USER``, ``HOST_UID``, and ``HOST_GID`` from the current
+   host session.
 3. The runtime image installs Neovim ``v0.12.1`` plus ``fd``, ``ripgrep``, and
    ``tree-sitter-cli``.
 4. The selected service mounts the repo at the same absolute path inside the
-   container.
+   container and runs as that matching host user.
 5. ``docker/nvim-env.sh`` derives ``XDG_CONFIG_HOME`` and ``NVIM_APPNAME`` from
    that mounted path before running Neovim or launching Bash.
 
@@ -77,6 +78,7 @@ resolution are handled.
 
 - ``working_dir: ${NVIM_CONFIG_DIR:?set NVIM_CONFIG_DIR}``.
 - ``volumes: ${NVIM_CONFIG_DIR}:${NVIM_CONFIG_DIR}``.
+- ``user: ${HOST_USER:?set HOST_USER}``.
 
 ``${NVIM_CONFIG_DIR:?set NVIM_CONFIG_DIR}`` is Compose variable expansion:
 
@@ -87,17 +89,23 @@ That variable is plumbed from the top-level wrapper command:
 
 - ``docker/run-workflow.sh`` sets ``NVIM_CONFIG_DIR`` to the repository root
   when the user does not provide one.
+- ``docker/run-workflow.sh`` also resolves ``HOST_USER``, ``HOST_UID``, and
+  ``HOST_GID`` from ``id`` when the caller does not override them.
 
 When we run ``./docker/run-workflow.sh --workflow smoke-test arch,standard``:
 
 - The script resolves ``NVIM_CONFIG_DIR`` (user-provided value or repository
   root).
-- The compose command receives ``NVIM_CONFIG_DIR`` as an environment variable.
-- Compose substitutes it into ``working_dir`` and ``volumes``.
+- The compose command receives ``NVIM_CONFIG_DIR``, ``HOST_USER``,
+  ``HOST_UID``, and ``HOST_GID`` as environment variables.
+- Compose substitutes them into image build args, ``working_dir``, ``volumes``,
+  and ``user``.
 - Host and container use the same absolute workspace path.
+- Files written back into the mounted worktree stay owned by the current host
+  user instead of ``root``.
 
 For smoke tests, the script accepts multiple ``os,profile`` targets and runs the
-corresponding services together through one compose invocation.
+corresponding services sequentially through separate compose runs.
 
 These two settings intentionally share the same path on host and container.
 That keeps ``$PWD`` stable and avoids path-mapping edge cases.
@@ -132,7 +140,13 @@ Key fields:
 - ``environment.CC: gcc`` keeps parser/tool compilation available during checks.
 - ``TERM``/``COLORTERM`` stay fixed so smoke runs use a stable terminal baseline.
 
-The smoke script runs two stages for every target:
+The smoke harness splits responsibilities across two scripts:
+
+- ``docker/smoke-lib.sh`` provides shared validation, environment setup, log
+  directory creation, and log-backed stage execution.
+- ``docker/smoke.sh`` owns the baseline smoke flow for every target.
+
+The baseline smoke flow runs two stages for every target:
 
 - ``install`` sets ``NVIM_TREESITTER_SYNC_INSTALL=1`` and runs
   ``nvim --headless "+Lazy! restore" +qall`` so first-run plugin and parser
@@ -140,8 +154,9 @@ The smoke script runs two stages for every target:
 - ``launch`` unsets the sync install override and runs
   ``nvim --headless "+doautocmd CmdlineEnter" "+sleep 100m" +qall`` so delayed
   startup errors still fail the workflow.
-- Each stage scans the captured log for config, compile, and startup failures
-  before reporting success.
+
+All smoke targets currently run the same baseline Neovim install and launch
+checks for their selected OS and profile.
 
 This service is designed to fail fast in CI-like local checks.
 

@@ -25,6 +25,26 @@ Default target:
 EOF
 }
 
+smoke_test_command() {
+  local combo="$1"
+
+  case "$combo" in
+    arch,standard)
+      printf '%s\n' "/opt/nvim-harness/smoke.sh arch standard"
+      ;;
+    ubuntu,standard)
+      printf '%s\n' "/opt/nvim-harness/smoke.sh ubuntu standard"
+      ;;
+    ubuntu,minimal)
+      printf '%s\n' "/opt/nvim-harness/smoke.sh ubuntu minimal"
+      ;;
+    *)
+      echo "unsupported target for smoke-test workflow: $combo" >&2
+      exit 1
+      ;;
+  esac
+}
+
 workflow="interactive"
 declare -a targets=()
 
@@ -124,19 +144,26 @@ to_service_name() {
 }
 
 declare -a services=()
-declare -A seen=()
 
 for target in "${targets[@]}"; do
   service="$(to_service_name "$target" "$workflow")"
-  if [[ -z "${seen[$service]+x}" ]]; then
-    services+=("$service")
-    seen[$service]=1
-  fi
+  services+=("$service")
 done
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 compose_file="${repo_root}/docker/docker-compose.yaml"
 nvim_config_dir="${NVIM_CONFIG_DIR:-${repo_root}}"
+host_user="${HOST_USER:-$(id -un)}"
+host_uid="${HOST_UID:-$(id -u)}"
+host_gid="${HOST_GID:-$(id -g)}"
+
+run_compose() {
+  HOST_GID="${host_gid}" \
+    HOST_UID="${host_uid}" \
+    HOST_USER="${host_user}" \
+    NVIM_CONFIG_DIR="${nvim_config_dir}" \
+    docker compose -f "${compose_file}" "$@"
+}
 
 if [[ "$workflow" == "interactive" ]]; then
   if [[ ${#services[@]} -ne 1 ]]; then
@@ -160,11 +187,19 @@ if [[ "$workflow" == "interactive" ]]; then
     fi
   fi
 
-  NVIM_CONFIG_DIR="${nvim_config_dir}" docker compose -f "${compose_file}" "${compose_run_args[@]}" \
+  run_compose "${compose_run_args[@]}" \
     "${services[0]}" \
     /opt/nvim-harness/shell.sh "${profile}"
   exit 0
 fi
 
-NVIM_CONFIG_DIR="${nvim_config_dir}" docker compose -f "${compose_file}" up --build --abort-on-container-failure \
-  "${services[@]}"
+for idx in "${!services[@]}"; do
+  target="${targets[$idx]}"
+  service="${services[$idx]}"
+  workflow_command="$(smoke_test_command "${target}")"
+
+  run_compose run --rm --build \
+    --entrypoint /bin/bash \
+    "${service}" \
+    -lc "${workflow_command}"
+done

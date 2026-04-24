@@ -21,6 +21,9 @@ EOF
 
 FROM base AS runtime
 
+ARG HOST_USER=nvim
+ARG HOST_UID=1000
+ARG HOST_GID=1000
 ARG TARGET_OS=ubuntu
 ARG NVIM_VERSION=v0.12.1
 ARG FD_VERSION=v10.2.0
@@ -29,6 +32,7 @@ ARG TREE_SITTER_CLI_VERSION=v0.26.1
 ENV DEBIAN_FRONTEND=noninteractive
 # AppImage needs extract-and-run mode in containers without FUSE support.
 ENV APPIMAGE_EXTRACT_AND_RUN=1
+ENV HOME="/home/${HOST_USER}" USER="${HOST_USER}"
 
 COPY docker/install-cli-tools.sh /opt/nvim-harness/install-cli-tools.sh
 COPY docker/install-neovim.sh /opt/nvim-harness/install-neovim.sh
@@ -44,9 +48,25 @@ chmod +x /opt/nvim-harness/install-neovim.sh
   --tool "tree-sitter-cli:${TREE_SITTER_CLI_VERSION}"
 EOF
 
+RUN <<EOF
+set -eux
+groupadd --gid "${HOST_GID}" "${HOST_USER}"
+useradd --uid "${HOST_UID}" --gid "${HOST_GID}" --create-home --shell /bin/bash "${HOST_USER}"
+install -d -o "${HOST_UID}" -g "${HOST_GID}" \
+  "${HOME}/.cache" \
+  "${HOME}/.local" \
+  "${HOME}/.local/share" \
+  "${HOME}/.local/state"
+EOF
+
 COPY docker/smoke.sh /opt/nvim-harness/smoke.sh
+COPY docker/smoke-lib.sh /opt/nvim-harness/smoke-lib.sh
 COPY docker/shell.sh /opt/nvim-harness/shell.sh
 COPY docker/nvim-env.sh /opt/nvim-harness/nvim-env.sh
-RUN chmod +x /opt/nvim-harness/smoke.sh /opt/nvim-harness/shell.sh /opt/nvim-harness/nvim-env.sh
+RUN chmod +x \
+  /opt/nvim-harness/smoke.sh \
+  /opt/nvim-harness/smoke-lib.sh \
+  /opt/nvim-harness/shell.sh \
+  /opt/nvim-harness/nvim-env.sh
 
 ENTRYPOINT ["/bin/bash"]

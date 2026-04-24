@@ -115,6 +115,7 @@ LSP integration
 Profile-aware LSP behavior is implemented in ``lua/plugins/pde/lsp.lua``.
 
 - server configs are registered first
+- non-allowlisted runtime configs are neutralized there before profile enablement
 - enabled servers are selected from profile config
 - Mason installs are optional and profile gated
 
