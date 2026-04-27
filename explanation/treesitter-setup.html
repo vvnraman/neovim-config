@@ -1,0 +1,564 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Treesitter Setup Flow &#8212; vvnraman&#39;s 1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f16671cc" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=f2a433a1"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'explanation/treesitter-setup';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Config Profiles" href="config-profiles.html" />
+    <link rel="prev" title="Telescope Setup and Flow" href="telescope-setup.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">vvnraman's 1.0 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../overview.html">
+    Config overview
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../how-to/index.html">
+    How to guides
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Explanation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../overview.html">
+    Config overview
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../how-to/index.html">
+    How to guides
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Explanation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="scripting.html">Scripting neovim config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lsp-setup.html">Neovim lsp setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="telescope-setup.html">Telescope Setup and Flow</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Treesitter Setup Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config-profiles.html">Config Profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docker-setup.html">Docker Test Harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yank-enhanced.html">Yank Enhanced</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Explanation</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Treesitter Setup Flow</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="treesitter-setup-flow">
+<span id="treesitter-setup"></span><h1>Treesitter Setup Flow<a class="headerlink" href="#treesitter-setup-flow" title="Link to this heading">#</a></h1>
+<p>This page explains how the Treesitter setup resolves parser lists, loads the
+plugins, and installs parsers during headless bootstrap runs.</p>
+<section id="high-level-structure">
+<h2>High-level structure<a class="headerlink" href="#high-level-structure" title="Link to this heading">#</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>lua/plugins/treesitter/config.lua
+|-- get_ensure_installed()
+|-- ensure_treesitter_parsers()
+`-- setup_treesitter()
+
+lua/vvn/profile_config.lua
+`-- get_treesitter_ensure_installed()
+</pre></div>
+</div>
+</section>
+<section id="high-level-flow">
+<h2>High-level flow<a class="headerlink" href="#high-level-flow" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">vvn.profile</span></code> resolves the active profile from <code class="docutils literal notranslate"><span class="pre">VVN_NVIM_PROFILE</span></code> or
+<code class="docutils literal notranslate"><span class="pre">VVN_DOTFILES_PROFILE</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vvn.profile_config</span></code> returns the parser list for that profile.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">setup_treesitter()</span></code> sets up <code class="docutils literal notranslate"><span class="pre">nvim-treesitter</span></code>, starts Treesitter for
+loaded buffers, and enables the textobject mappings.</p></li>
+<li><p>Headless bootstrap runs can wait for parser installation with
+<code class="docutils literal notranslate"><span class="pre">NVIM_TREESITTER_SYNC_INSTALL=1</span></code>.</p></li>
+</ul>
+</section>
+<section id="plugin-load-model">
+<h2>Plugin load model<a class="headerlink" href="#plugin-load-model" title="Link to this heading">#</a></h2>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">config.lua</span><a class="headerlink" href="#id1" title="Link to this code">#</a></div>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="linenos">160</span><span class="kd">local</span><span class="w"> </span><span class="nv">M</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">161</span><span class="w">  </span><span class="p">{</span>
+<span class="linenos">162</span><span class="w">    </span><span class="s2">&quot;nvim-treesitter/nvim-treesitter&quot;</span><span class="p">,</span>
+<span class="hll"><span class="linenos">163</span><span class="w">    </span><span class="nv">branch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;main&quot;</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos">164</span><span class="w">    </span><span class="nv">lazy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+</span><span class="linenos">165</span><span class="w">    </span><span class="nv">build</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;:TSUpdate&quot;</span><span class="p">,</span>
+<span class="linenos">166</span><span class="w">    </span><span class="nv">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="hll"><span class="linenos">167</span><span class="w">      </span><span class="s2">&quot;nvim-treesitter/nvim-treesitter-textobjects&quot;</span><span class="p">,</span>
+</span><span class="linenos">168</span><span class="w">    </span><span class="p">},</span>
+<span class="hll"><span class="linenos">169</span><span class="w">    </span><span class="nv">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">setup_treesitter</span><span class="p">,</span>
+</span><span class="linenos">170</span><span class="w">  </span><span class="p">},</span>
+<span class="linenos">171</span><span class="w">  </span><span class="p">{</span>
+<span class="linenos">172</span><span class="w">    </span><span class="s2">&quot;nvim-treesitter/nvim-treesitter-textobjects&quot;</span><span class="p">,</span>
+<span class="hll"><span class="linenos">173</span><span class="w">    </span><span class="nv">branch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;main&quot;</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos">174</span><span class="w">    </span><span class="nv">lazy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+</span><span class="linenos">175</span><span class="w">  </span><span class="p">},</span>
+</pre></div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">nvim-treesitter</span></code> and <code class="docutils literal notranslate"><span class="pre">nvim-treesitter-textobjects</span></code> both load eagerly, and
+both use the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch.</p>
+</section>
+<section id="headless-parser-install-flow">
+<h2>Headless parser install flow<a class="headerlink" href="#headless-parser-install-flow" title="Link to this heading">#</a></h2>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">config.lua</span><a class="headerlink" href="#id2" title="Link to this code">#</a></div>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="linenos">133</span><span class="c1">---@param languages string[]</span>
+<span class="linenos">134</span><span class="c1">---@param sync_install boolean</span>
+<span class="linenos">135</span><span class="c1">---@return nil</span>
+<span class="hll"><span class="linenos">136</span><span class="kd">local</span><span class="w"> </span><span class="nv">ensure_treesitter_parsers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="nv">languages</span><span class="p">,</span><span class="w"> </span><span class="nv">sync_install</span><span class="p">)</span>
+</span><span class="linenos">137</span><span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="o">#</span><span class="nv">languages</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="kr">then</span>
+<span class="linenos">138</span><span class="w">    </span><span class="kr">return</span>
+<span class="linenos">139</span><span class="w">  </span><span class="kr">end</span>
+<span class="linenos">140</span>
+<span class="hll"><span class="linenos">141</span><span class="w">  </span><span class="kd">local</span><span class="w"> </span><span class="nv">installer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="p">(</span><span class="s2">&quot;nvim-treesitter&quot;</span><span class="p">).</span><span class="nf">install</span><span class="p">(</span><span class="nv">languages</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nv">summary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">})</span>
+</span><span class="linenos">142</span><span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="nv">sync_install</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="nv">installer</span><span class="w"> </span><span class="kr">then</span>
+<span class="linenos">143</span><span class="w">    </span><span class="kr">return</span>
+<span class="linenos">144</span><span class="w">  </span><span class="kr">end</span>
+<span class="linenos">145</span>
+<span class="hll"><span class="linenos">146</span><span class="w">  </span><span class="nv">installer</span><span class="p">:</span><span class="nf">wait</span><span class="p">(</span><span class="mi">300000</span><span class="p">)</span>
+</span><span class="linenos">147</span><span class="kr">end</span>
+</pre></div>
+</div>
+</div>
+<p>The install helper skips empty parser lists, requests the configured parsers,
+and waits only when the caller set <code class="docutils literal notranslate"><span class="pre">NVIM_TREESITTER_SYNC_INSTALL=1</span></code>.</p>
+</section>
+<section id="relevant-changelogs">
+<h2>Relevant changelogs<a class="headerlink" href="#relevant-changelogs" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../reference/project/2026-04-apr-prepare-neovim-0-12-migration.html#changelog-2026-04-apr-prepare-neovim-0-12-migration"><span class="std std-ref">2026-04 apr - prepare neovim 0.12 migration</span></a></p></li>
+<li><p><a class="reference internal" href="../reference/project/2026_config_profiles.html#changelog-2026-02-feb-runtime-config-profiles"><span class="std std-ref">2026 Config profiles</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="telescope-setup.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Telescope Setup and Flow</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="config-profiles.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Config Profiles</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#high-level-structure">High-level structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#high-level-flow">High-level flow</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plugin-load-model">Plugin load model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#headless-parser-install-flow">Headless parser install flow</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#relevant-changelogs">Relevant changelogs</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/explanation/treesitter-setup.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Prateek Raman.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,650 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Neovim lsp setup &#8212; vvnraman&#39;s 1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f16671cc" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=f2a433a1"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'explanation/lsp-setup';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Telescope Setup and Flow" href="telescope-setup.html" />
+    <link rel="prev" title="Scripting neovim config" href="scripting.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">vvnraman's 1.0 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../overview.html">
+    Config overview
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../how-to/index.html">
+    How to guides
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Explanation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../overview.html">
+    Config overview
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../how-to/index.html">
+    How to guides
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Explanation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="scripting.html">Scripting neovim config</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Neovim lsp setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="telescope-setup.html">Telescope Setup and Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="treesitter-setup.html">Treesitter Setup Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config-profiles.html">Config Profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docker-setup.html">Docker Test Harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yank-enhanced.html">Yank Enhanced</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Explanation</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Neovim lsp setup</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="neovim-lsp-setup">
+<h1>Neovim lsp setup<a class="headerlink" href="#neovim-lsp-setup" title="Link to this heading">#</a></h1>
+<section id="basic-workflow">
+<h2>Basic workflow<a class="headerlink" href="#basic-workflow" title="Link to this heading">#</a></h2>
+<p>LSP setup is primarily done by 2 methods, as mentioned in the <a class="reference external" href="https://neovim.io/doc/user/lsp.html#lsp-config">lsp-config</a> docs.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">vim.lsp.config(&quot;name&quot;,</span> <span class="pre">&quot;config&quot;)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vim.lsp.enable(&quot;name&quot;)</span></code></p></li>
+</ul>
+<p>where <code class="docutils literal notranslate"><span class="pre">name</span></code> is the LSP server name.</p>
+<p>When an LSP client starts, it resolves its configuration by merging the
+following sources (merge semantics) defined by <a class="reference external" href="https://neovim.io/doc/user/lua.html#vim.tbl_deep_extend()">vim.tbl.deep_extend</a>, with
+force behaviour, in order of increasing priority.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Defined in init.lua</span>
+<span class="nv">vim</span><span class="p">.</span><span class="py">lsp</span><span class="p">.</span><span class="nf">config</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nv">capabilities</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nv">textDocument</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nv">semanticTokens</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nv">multilineTokenSupport</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nv">root_markers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s1">&#39;.git&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="p">})</span>
+<span class="c1">-- Defined in &lt;rtp&gt;/lsp/clangd.lua</span>
+<span class="kr">return</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nv">cmd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s1">&#39;clangd&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nv">root_markers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s1">&#39;.clangd&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;compile_commands.json&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nv">filetypes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s1">&#39;c&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;cpp&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="p">}</span>
+<span class="c1">-- Defined in init.lua</span>
+<span class="nv">vim</span><span class="p">.</span><span class="py">lsp</span><span class="p">.</span><span class="nf">config</span><span class="p">(</span><span class="s1">&#39;clangd&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nv">filetypes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s1">&#39;c&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<p>The merged result is</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="c1">-- From the clangd configuration in &lt;rtp&gt;/lsp/clangd.lua</span>
+<span class="w">  </span><span class="nv">cmd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s1">&#39;clangd&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="c1">-- From the clangd configuration in &lt;rtp&gt;/lsp/clangd.lua</span>
+<span class="w">  </span><span class="c1">-- Overrides the &quot;*&quot; configuration in init.lua</span>
+<span class="w">  </span><span class="nv">root_markers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s1">&#39;.clangd&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;compile_commands.json&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="c1">-- From the clangd configuration in init.lua</span>
+<span class="w">  </span><span class="c1">-- Overrides the clangd configuration in &lt;rtp&gt;/lsp/clangd.lua</span>
+<span class="w">  </span><span class="nv">filetypes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s1">&#39;c&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="c1">-- From the &quot;*&quot; configuration in init.lua</span>
+<span class="w">  </span><span class="nv">capabilities</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nv">textDocument</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nv">semanticTokens</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nv">multilineTokenSupport</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="runtime-flow-in-this-config">
+<h2>Runtime flow in this config<a class="headerlink" href="#runtime-flow-in-this-config" title="Link to this heading">#</a></h2>
+<p>This repository wires LSP setup through <code class="docutils literal notranslate"><span class="pre">lua/plugins/pde/lsp.lua</span></code> and applies
+buffer-local behavior in a single <code class="docutils literal notranslate"><span class="pre">LspAttach</span></code> callback.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>lua/plugins/pde/lsp.lua
+|-- lsp_setup()
+|   |-- enabled_servers = profile_config.get_enabled_lsp_servers()
+|   |-- get_server_configs()
+|   |-- restrict_lsp_configs_to_allowlist(enabled_servers)
+|   |-- update_server_configs(server_configs)
+|   |-- enable_servers(enabled_servers, server_configs)
+|   |-- if profile_config.enable_mason_installs()
+|   |   `-- install_mason_packages(profile_config.get_mason_packages())
+|   |-- setup_lsp_keymaps()
+|   `-- setup_diagnostic_config()
+`-- LspAttach callback
+    |-- setup_native_buffer_mappings(bufnr)
+    |-- setup_plugin_buffer_mappings(bufnr)
+    |-- setup_autocmds(client, bufnr)
+    `-- setup_clangd_extensions(bufnr) for clangd
+</pre></div>
+</div>
+<p>Before profile enablement, this config applies a strict allowlist to runtime
+LSP configs.</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">lsp.lua</span><a class="headerlink" href="#id1" title="Link to this code">#</a></div>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos">138</span><span class="c1">---@param allowed_server_names string[]</span>
+</span><span class="linenos">139</span><span class="kd">local</span><span class="w"> </span><span class="nv">restrict_lsp_configs_to_allowlist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="nv">allowed_server_names</span><span class="p">)</span>
+<span class="linenos">140</span><span class="w">  </span><span class="c1">---@type table&lt;string, boolean&gt;</span>
+<span class="linenos">141</span><span class="w">  </span><span class="kd">local</span><span class="w"> </span><span class="nv">allowed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{}</span>
+<span class="linenos">142</span>
+<span class="linenos">143</span><span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="nv">_</span><span class="p">,</span><span class="w"> </span><span class="nv">name</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nb">ipairs</span><span class="p">(</span><span class="nv">allowed_server_names</span><span class="p">)</span><span class="w"> </span><span class="kr">do</span>
+<span class="linenos">144</span><span class="w">    </span><span class="nv">allowed</span><span class="p">[</span><span class="nv">name</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="linenos">145</span><span class="w">  </span><span class="kr">end</span>
+<span class="linenos">146</span>
+<span class="hll"><span class="linenos">147</span><span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="nv">_</span><span class="p">,</span><span class="w"> </span><span class="nv">name</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nb">ipairs</span><span class="p">(</span><span class="nf">list_runtime_lsp_config_names</span><span class="p">())</span><span class="w"> </span><span class="kr">do</span>
+</span><span class="linenos">148</span><span class="w">    </span><span class="kr">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="nv">allowed</span><span class="p">[</span><span class="nv">name</span><span class="p">]</span><span class="w"> </span><span class="kr">then</span>
+<span class="hll"><span class="linenos">149</span><span class="w">      </span><span class="nv">vim</span><span class="p">.</span><span class="py">lsp</span><span class="p">.</span><span class="nf">config</span><span class="p">(</span><span class="nv">name</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+</span><span class="hll"><span class="linenos">150</span><span class="w">        </span><span class="nv">filetypes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{},</span>
+</span><span class="linenos">151</span><span class="w">      </span><span class="p">})</span>
+<span class="linenos">152</span><span class="w">    </span><span class="kr">end</span>
+<span class="linenos">153</span><span class="w">  </span><span class="kr">end</span>
+<span class="linenos">154</span><span class="kr">end</span>
+</pre></div>
+</div>
+</div>
+<p>This helper clears <code class="docutils literal notranslate"><span class="pre">filetypes</span></code> for every runtime config that is not in the
+current profile allowlist, so broad <code class="docutils literal notranslate"><span class="pre">:lsp</span> <span class="pre">enable</span></code> and <code class="docutils literal notranslate"><span class="pre">:LspStart</span></code> flows can
+only match servers that this config intentionally enables.</p>
+<section id="lspattach-autocommand">
+<h3>LspAttach autocommand<a class="headerlink" href="#lspattach-autocommand" title="Link to this heading">#</a></h3>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">lsp.lua</span><a class="headerlink" href="#id2" title="Link to this code">#</a></div>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="linenos">31</span><span class="kd">local</span><span class="w"> </span><span class="nv">setup_lsp_keymaps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">()</span>
+<span class="hll"><span class="linenos">32</span><span class="w">  </span><span class="nv">vim</span><span class="p">.</span><span class="py">api</span><span class="p">.</span><span class="nf">nvim_create_autocmd</span><span class="p">(</span><span class="s2">&quot;LspAttach&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+</span><span class="linenos">33</span><span class="w">    </span><span class="nv">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">vim</span><span class="p">.</span><span class="py">api</span><span class="p">.</span><span class="nf">nvim_create_augroup</span><span class="p">(</span><span class="s2">&quot;vvnraman.lsp.config&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nv">clear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">}),</span>
+<span class="linenos">34</span><span class="w">    </span><span class="nv">callback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="nv">event</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>This registers the <code class="docutils literal notranslate"><span class="pre">LspAttach</span></code> callback entry point.</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">lsp.lua</span><a class="headerlink" href="#id3" title="Link to this code">#</a></div>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="linenos">50</span><span class="w">      </span><span class="kd">local</span><span class="w"> </span><span class="nv">client_is</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="nv">name</span><span class="p">)</span>
+<span class="linenos">51</span><span class="w">        </span><span class="kd">local</span><span class="w"> </span><span class="nv">client_exists</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+<span class="linenos">52</span><span class="w">        </span><span class="kr">if</span><span class="w"> </span><span class="nv">client</span><span class="p">.</span><span class="py">server_info</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nv">name</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nv">client</span><span class="p">.</span><span class="py">server_info</span><span class="p">.</span><span class="py">name</span><span class="w"> </span><span class="kr">then</span>
+<span class="linenos">53</span><span class="w">          </span><span class="nv">client_exists</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="linenos">54</span><span class="w">        </span><span class="kr">end</span>
+<span class="linenos">55</span><span class="w">        </span><span class="kr">if</span><span class="w"> </span><span class="nv">client</span><span class="p">.</span><span class="py">name</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nv">name</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nv">client</span><span class="p">.</span><span class="py">name</span><span class="w"> </span><span class="kr">then</span>
+<span class="linenos">56</span><span class="w">          </span><span class="nv">client_exists</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="linenos">57</span><span class="w">        </span><span class="kr">end</span>
+<span class="linenos">58</span>
+<span class="linenos">59</span><span class="w">        </span><span class="kr">return</span><span class="w"> </span><span class="nv">client_exists</span>
+<span class="linenos">60</span><span class="w">      </span><span class="kr">end</span>
+<span class="linenos">61</span>
+<span class="hll"><span class="linenos">62</span><span class="w">      </span><span class="kr">if</span><span class="w"> </span><span class="nf">client_is</span><span class="p">(</span><span class="s2">&quot;clangd&quot;</span><span class="p">)</span><span class="w"> </span><span class="kr">then</span>
+</span><span class="hll"><span class="linenos">63</span><span class="w">        </span><span class="nb">require</span><span class="p">(</span><span class="s2">&quot;plugins.pde.attach&quot;</span><span class="p">).</span><span class="nf">setup_clangd_extensions</span><span class="p">(</span><span class="nv">bufnr</span><span class="p">)</span>
+</span><span class="linenos">64</span><span class="w">      </span><span class="kr">end</span>
+</pre></div>
+</div>
+</div>
+<p>Inside the callback, the <code class="docutils literal notranslate"><span class="pre">clangd</span></code> branch applies clangd-specific extensions.</p>
+</section>
+<section id="profile-driven-server-and-mason-policy">
+<h3>Profile-driven server and Mason policy<a class="headerlink" href="#profile-driven-server-and-mason-policy" title="Link to this heading">#</a></h3>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">lsp.lua</span><a class="headerlink" href="#id4" title="Link to this code">#</a></div>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="linenos">195</span><span class="kd">local</span><span class="w"> </span><span class="nv">lsp_setup</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">()</span>
+<span class="linenos">196</span><span class="w">  </span><span class="kd">local</span><span class="w"> </span><span class="nv">profile_config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="p">(</span><span class="s2">&quot;vvn.profile_config&quot;</span><span class="p">)</span>
+<span class="hll"><span class="linenos">197</span><span class="w">  </span><span class="kd">local</span><span class="w"> </span><span class="nv">enabled_servers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">profile_config</span><span class="p">.</span><span class="nf">get_enabled_lsp_servers</span><span class="p">()</span>
+</span><span class="linenos">198</span>
+<span class="linenos">199</span><span class="w">  </span><span class="kd">local</span><span class="w"> </span><span class="nv">server_configs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">get_server_configs</span><span class="p">()</span>
+<span class="linenos">200</span><span class="w">  </span><span class="nf">restrict_lsp_configs_to_allowlist</span><span class="p">(</span><span class="nv">enabled_servers</span><span class="p">)</span>
+<span class="linenos">201</span><span class="w">  </span><span class="nf">update_server_configs</span><span class="p">(</span><span class="nv">server_configs</span><span class="p">)</span>
+<span class="linenos">202</span><span class="w">  </span><span class="nf">enable_servers</span><span class="p">(</span><span class="nv">enabled_servers</span><span class="p">,</span><span class="w"> </span><span class="nv">server_configs</span><span class="p">)</span>
+<span class="linenos">203</span>
+<span class="linenos">204</span><span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="nv">profile_config</span><span class="p">.</span><span class="nf">enable_mason_installs</span><span class="p">()</span><span class="w"> </span><span class="kr">then</span>
+<span class="linenos">205</span><span class="w">    </span><span class="nf">install_mason_packages</span><span class="p">(</span><span class="nv">profile_config</span><span class="p">.</span><span class="nf">get_mason_packages</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<p>The Mason plugin reads its install root from <code class="docutils literal notranslate"><span class="pre">vvn.profile_config</span></code> through
+<code class="docutils literal notranslate"><span class="pre">get_mason_install_root_dir()</span></code>.</p>
+</section>
+<section id="relevant-changelogs">
+<h3>Relevant changelogs<a class="headerlink" href="#relevant-changelogs" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="../reference/project/2025_use_native_lsp_setup.html#changelog-2025-11-nov-use-native-lsp-setup"><span class="std std-ref">2025 Use native lsp setup</span></a></p></li>
+<li><p><a class="reference internal" href="../reference/project/2026_config_profiles.html#changelog-2026-02-feb-runtime-config-profiles"><span class="std std-ref">2026 Config profiles</span></a></p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="scripting.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Scripting neovim config</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="telescope-setup.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Telescope Setup and Flow</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-workflow">Basic workflow</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#runtime-flow-in-this-config">Runtime flow in this config</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lspattach-autocommand">LspAttach autocommand</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#profile-driven-server-and-mason-policy">Profile-driven server and Mason policy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#relevant-changelogs">Relevant changelogs</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/explanation/lsp-setup.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Prateek Raman.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
